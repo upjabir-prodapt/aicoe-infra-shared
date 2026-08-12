@@ -1,0 +1,20 @@
+# gclt-aicoe-dev-st
+parent: ${folder_dev_usecases}
+labels:
+  usecase: sales-translation
+  cost-centre: aicoe
+  owner: platform-team
+services:
+  - run.googleapis.com
+  - compute.googleapis.com
+  - artifactregistry.googleapis.com
+  - cloudtasks.googleapis.com
+  - bigquery.googleapis.com
+  - storage.googleapis.com
+  - aiplatform.googleapis.com
+  - dlp.googleapis.com
+  - cloudkms.googleapis.com
+  - firestore.googleapis.com
+  - binaryauthorization.googleapis.com
+shared_vpc_service_config:
+  host_project: gclt-aicoe-dev-network

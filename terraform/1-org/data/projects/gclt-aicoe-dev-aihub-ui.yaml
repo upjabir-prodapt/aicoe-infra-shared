@@ -1,0 +1,17 @@
+# gclt-aicoe-dev-aihub-ui
+parent: ${folder_shared_aihub}
+labels:
+  usecase: aihub-bff
+  cost-centre: aicoe
+  owner: platform-team
+services:
+  - run.googleapis.com
+  - compute.googleapis.com
+  - artifactregistry.googleapis.com
+  - firestore.googleapis.com
+  - secretmanager.googleapis.com
+  - cloudkms.googleapis.com
+  - iap.googleapis.com
+  - binaryauthorization.googleapis.com
+shared_vpc_service_config:
+  host_project: gclt-aicoe-dev-network

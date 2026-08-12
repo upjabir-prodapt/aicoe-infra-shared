@@ -1,0 +1,88 @@
+# Reusable job definitions.
+
+.tf_base:
+  image: hashicorp/terraform:${TF_VERSION}
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: "https://gitlab.example.colt.net"     # must match the WIF provider
+  before_script:
+    - apk add --no-cache curl jq bash
+    - echo "${GITLAB_OIDC_TOKEN}" > /tmp/oidc-token
+    - |
+      cat > /tmp/wif.json <<JSON
+      {
+        "type": "external_account",
+        "audience": "//iam.googleapis.com/${WIF_PROVIDER}",
+        "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",
+        "token_url": "https://sts.googleapis.com/v1/token",
+        "service_account_impersonation_url":
+          "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/tf-deployer@${TF_PROJECT}.iam.gserviceaccount.com:generateAccessToken",
+        "credential_source": { "file": "/tmp/oidc-token" }
+      }
+      JSON
+    - export GOOGLE_APPLICATION_CREDENTIALS=/tmp/wif.json
+
+# One stage = one state file = one job.
+#
+# The final step publishes this stage's outputs as a .auto.tfvars.json
+# artifact. Downstream jobs declare needs: artifacts: true and Terraform
+# picks the file up automatically — no stage reads another stage's state.
+
+.tf_stage:
+  extends: .tf_base
+  resource_group: ${STAGE}                      # serialises applies per state
+  variables:
+    # Every stage from 2 onward declares `project_id` as required with no
+    # default, and it is supplied by neither the tfvars file nor the upstream
+    # artifacts — without this the plan fails with "No value for required
+    # variable" under TF_INPUT=false.
+    #
+    # Passed as TF_VAR_ rather than -var deliberately: Terraform errors on a
+    # -var naming a variable the root module does not declare, which would
+    # break 1-org, whereas an unused TF_VAR_ is ignored silently.
+    TF_VAR_project_id: "${TF_PROJECT}"
+  script:
+    - cd "${TF_ROOT}/${STAGE}"
+    - cp ${TF_ROOT}/*.auto.tfvars.json . 2>/dev/null || true
+    - |
+      terraform init -reconfigure \
+        -backend-config="bucket=${TF_STATE_BUCKET}" \
+        -backend-config="prefix=${STAGE}"
+    - |
+      set +e
+      terraform plan -var-file="${TF_ROOT}/envs/${ENVIRONMENT}/terraform.tfvars" \
+                     -out=tfplan -detailed-exitcode
+      CODE=$?
+      set -e
+      [ $CODE -eq 1 ] && exit 1
+      echo "PLAN_EXIT=$CODE" >> plan.env
+    - terraform show -no-color tfplan > plan.txt
+    - |
+      if [ "$CI_PIPELINE_SOURCE" = "merge_request_event" ]; then
+        echo "merge request — plan only"
+        exit 0
+      fi
+    - terraform apply -auto-approve tfplan
+    # publish outputs for downstream stages
+    - |
+      OUT="${TF_ROOT}/$(basename ${STAGE}).auto.tfvars.json"
+      terraform output -json | jq 'map_values(.value)' > "${OUT}"
+      echo "published $(jq -r 'keys | join(", ")' "${OUT}")"
+  artifacts:
+    when: always
+    paths:
+      - "${TF_ROOT}/*.auto.tfvars.json"
+      - "${TF_ROOT}/${STAGE}/plan.txt"
+    expire_in: 30 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - ${STAGE}/**/*
+        - modules/**/*
+        - envs/**/*
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - ${STAGE}/**/*
+        - modules/**/*
+        - envs/**/*
+    - if: $BOOTSTRAP == "true"                  # full green-field run

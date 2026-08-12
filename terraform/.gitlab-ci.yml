@@ -1,0 +1,197 @@
+# AI CoE platform — Terraform pipeline
+#
+# The dependency graph is expressed three ways:
+#   1. stages         — numbered, matching the directory names
+#   2. needs:         — the real DAG, with artifact handoff
+#   3. rules:changes: — only stages whose files changed actually run
+#
+# HANDOFF
+# No stage reads another stage's Terraform state. Each publishes its outputs
+# as a .auto.tfvars.json artifact; downstream stages consume it via
+# needs: artifacts: true, and Terraform loads it automatically. A stage's
+# service account therefore needs access to its own state and nothing else.
+#
+# 0-bootstrap is absent on purpose. It creates the state bucket and the CI
+# identity, so it cannot run here. Applied once, manually. See its README.
+#
+# REPOSITORY ROOT
+# This file must live at the root of the GitLab repository. That means the
+# terraform/ directory in the design package IS your repository — copy its
+# CONTENTS to the repo root, not the folder itself. TF_ROOT is therefore
+# CI_PROJECT_DIR, with no subdirectory.
+#
+# If you prefer terraform/ as a subdirectory of a larger repo, move this
+# file to that repo's root and set TF_ROOT back to "${CI_PROJECT_DIR}/terraform".
+#
+# NAMING
+# Directories and job names carry the full project identifier, so a pipeline
+# view names the project it touches. Note this pins the tree to dev — see
+# README.md, "Naming and environments".
+
+include:
+  - local: ci/job-templates.yml
+
+variables:
+  TF_VERSION:       "1.9.8"
+  TF_ROOT:          "${CI_PROJECT_DIR}"
+  TF_IN_AUTOMATION: "true"
+  TF_INPUT:         "false"
+  ENVIRONMENT:      "dev"
+
+stages:
+  - validate
+  - 1-org
+  - 2-foundations
+  - 3-network
+  - 4-apigee          # slow, immutable, manual gate
+  - 5-network-psc     # needs the Apigee service attachment
+  - 6-workloads       # 6a and 6b in parallel, then 6c
+  - 6c-ingress        # the cross-project join
+  - 7-apigee-runtime
+  - proxies
+
+# ── validate ────────────────────────────────────────────────────────────
+validate:
+  extends: .tf_base
+  stage: validate
+  script:
+    - terraform -chdir="${TF_ROOT}" fmt -recursive -check -diff
+    - ci/validate-all.sh
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+policy:
+  extends: .tf_base
+  stage: validate
+  script:
+    - ci/policy-check.sh
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# ── 1 · organisation, folders, project factory ──────────────────────────
+1-org:
+  extends: .tf_stage
+  stage: 1-org
+  variables:
+    STAGE:      "1-org"
+    TF_PROJECT: "${SEED_PROJECT}"
+
+# ── 2 · per-project foundations ─────────────────────────────────────────
+2-foundations:
+  extends: .tf_stage
+  stage: 2-foundations
+  variables:
+    STAGE:      "2-foundations"
+    TF_PROJECT: "${SEED_PROJECT}"
+  needs:
+    - job: 1-org
+      artifacts: true
+
+# ── 3 · network ─────────────────────────────────────────────────────────
+3-network:
+  extends: .tf_stage
+  stage: 3-network
+  variables:
+    STAGE:      "3-network"
+    TF_PROJECT: "gclt-aicoe-dev-network"
+  needs:
+    - job: 2-foundations
+      artifacts: true
+
+# ── 4 · Apigee · slow and largely irreversible ──────────────────────────
+4-apigee:
+  extends: .tf_stage
+  stage: 4-apigee
+  variables:
+    STAGE:      "4-apigee"
+    TF_PROJECT: "gclt-aicoe-dev-apigee"
+  needs:
+    - job: 2-foundations
+      artifacts: true
+    - job: 3-network
+      artifacts: true
+  timeout: 2h
+  when: manual
+  allow_failure: false
+
+# ── 5 · PSC endpoints · cannot exist before stage 4 ─────────────────────
+5-network-psc:
+  extends: .tf_stage
+  stage: 5-network-psc
+  variables:
+    STAGE:      "5-network-psc"
+    TF_PROJECT: "gclt-aicoe-dev-network"
+  needs:
+    - job: 3-network
+      artifacts: true
+    - job: 4-apigee
+      artifacts: true
+
+# ── 6a and 6b · workload backends, in parallel ──────────────────────────
+6a-gclt-aicoe-dev-aihub-ui:
+  extends: .tf_stage
+  stage: 6-workloads
+  variables:
+    STAGE:      "6-workloads/6a-gclt-aicoe-dev-aihub-ui"
+    TF_PROJECT: "gclt-aicoe-dev-aihub-ui"
+  needs:
+    - job: 5-network-psc
+      artifacts: true
+
+6b-gclt-aicoe-dev-st:
+  extends: .tf_stage
+  stage: 6-workloads
+  variables:
+    STAGE:      "6-workloads/6b-gclt-aicoe-dev-st"
+    TF_PROJECT: "gclt-aicoe-dev-st"
+  needs:
+    - job: 5-network-psc
+      artifacts: true
+
+# ── 6c · THE CROSS-PROJECT JOIN ─────────────────────────────────────────
+# The URL maps here reference backend services created by 6a and 6b. A
+# serverless NEG must live with its Cloud Run service, so those backend
+# services are in the workload projects and this stage joins them.
+#
+# Without these needs, a green pipeline can leave a load balancer pointing
+# at nothing.
+
+6c-gclt-aicoe-dev-ingress:
+  extends: .tf_stage
+  stage: 6c-ingress
+  variables:
+    STAGE:      "6-workloads/6c-gclt-aicoe-dev-ingress"
+    TF_PROJECT: "gclt-aicoe-dev-ingress"
+  needs:
+    - job: 3-network
+      artifacts: true
+    - job: 6a-gclt-aicoe-dev-aihub-ui
+      artifacts: true
+    - job: 6b-gclt-aicoe-dev-st
+      artifacts: true
+
+# ── 7 · Apigee runtime wiring ───────────────────────────────────────────
+7-apigee-runtime:
+  extends: .tf_stage
+  stage: 7-apigee-runtime
+  variables:
+    STAGE:      "7-apigee-runtime"
+    TF_PROJECT: "gclt-aicoe-dev-apigee"
+  needs:
+    - job: 4-apigee
+      artifacts: true
+    - job: 6c-gclt-aicoe-dev-ingress
+      artifacts: true
+
+# ── proxies · not Terraform ─────────────────────────────────────────────
+apigee-proxies:
+  extends: .tf_base
+  stage: proxies
+  needs: [ "7-apigee-runtime" ]
+  script:
+    - ci/deploy-apigee-config.sh
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes: [ "apigee/**/*" ]

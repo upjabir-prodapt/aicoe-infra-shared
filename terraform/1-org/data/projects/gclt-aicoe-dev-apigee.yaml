@@ -1,0 +1,11 @@
+# gclt-aicoe-dev-apigee
+parent: ${folder_shared_apigee}
+labels:
+  usecase: apigee
+  cost-centre: aicoe
+  owner: platform-team
+services:
+  - apigee.googleapis.com
+  - apigeeconnect.googleapis.com
+  - compute.googleapis.com
+  - cloudkms.googleapis.com

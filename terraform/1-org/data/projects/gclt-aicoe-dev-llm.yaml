@@ -1,0 +1,11 @@
+# gclt-aicoe-dev-llm
+parent: ${folder_shared_llm}
+labels:
+  usecase: llm-gateway
+  cost-centre: aicoe
+  owner: platform-team
+services:
+  - aiplatform.googleapis.com
+  - modelarmor.googleapis.com
+  - cloudkms.googleapis.com
+  - dlp.googleapis.com

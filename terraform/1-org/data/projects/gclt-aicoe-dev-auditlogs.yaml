@@ -1,0 +1,11 @@
+# gclt-aicoe-dev-auditlogs
+parent: ${folder_shared}
+labels:
+  usecase: logging
+  cost-centre: aicoe
+  owner: platform-team
+services:
+  - logging.googleapis.com
+  - bigquery.googleapis.com
+  - pubsub.googleapis.com
+  - cloudkms.googleapis.com

@@ -1,0 +1,14 @@
+# gclt-aicoe-dev-ingress
+parent: ${folder_shared_ingress}
+labels:
+  usecase: ingress
+  cost-centre: aicoe
+  owner: platform-team
+services:
+  - compute.googleapis.com
+  - iap.googleapis.com
+  - cloudkms.googleapis.com
+  - certificatemanager.googleapis.com
+  - binaryauthorization.googleapis.com
+shared_vpc_service_config:
+  host_project: gclt-aicoe-dev-network

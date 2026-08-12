@@ -1,0 +1,10 @@
+# gclt-aicoe-dev-network
+parent: ${folder_shared_network}
+labels:
+  usecase: network
+  cost-centre: aicoe
+  owner: platform-team
+services:
+  - compute.googleapis.com
+  - dns.googleapis.com
+  - cloudkms.googleapis.com
