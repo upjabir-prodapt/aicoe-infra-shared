@@ -6,9 +6,9 @@
 # concurrently unless told otherwise, so every binding carries an explicit
 # depends_on and consumers depend on this module's output.
 
-variable "project_id"        { type = string }
-variable "location"          { type = string }
-variable "ring_name"         { type = string }
+variable "project_id" { type = string }
+variable "location" { type = string }
+variable "ring_name" { type = string }
 variable "keys" {
   type = map(object({
     rotation_period = optional(string, "7776000s") # 90 days
@@ -46,15 +46,23 @@ resource "google_kms_crypto_key" "key" {
 }
 
 locals {
+  # Filter out null members. A service-agent email is null at plan time when
+  # the agent has not been created yet (fresh or partial state); building a
+  # string from null fails the whole plan. The grant is created on the apply
+  # that follows the agent's creation, once the email is known.
   grants = flatten([
     for key_name, members in var.key_grants : [
-      for m in members : { key = key_name, member = m }
+      for m in members : { key = key_name, member = m } if m != null
     ]
   ])
 }
 
 resource "google_kms_crypto_key_iam_member" "grant" {
-  for_each      = { for g in local.grants : "${g.key}:${g.member}" => g }
+  # for_each keys must be known at plan time. g.member is a service-agent
+  # email that only exists after apply, so it cannot be part of the key —
+  # use the static key name plus the element index instead, and keep the
+  # email in the value where apply-time data is allowed.
+  for_each      = { for i, g in local.grants : "${g.key}:${i}" => g }
   crypto_key_id = google_kms_crypto_key.key[each.value.key].id
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member        = "serviceAccount:${each.value.member}"

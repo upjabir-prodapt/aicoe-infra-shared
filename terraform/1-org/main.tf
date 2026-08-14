@@ -114,18 +114,18 @@ output "project_numbers" {
 # the consuming stage's VARIABLE name exactly. The `project_ids` map above
 # cannot satisfy 2-foundations' per-project variables, so each is republished
 # under the name that stage declares.
-output "gclt_aicoe_dev_network_project_id"   { value = data.google_project.p["network"].project_id }
-output "gclt_aicoe_dev_ingress_project_id"   { value = data.google_project.p["ingress"].project_id }
-output "gclt_aicoe_dev_apigee_project_id"    { value = data.google_project.p["apigee"].project_id }
-output "gclt_aicoe_dev_aihub_ui_project_id"  { value = data.google_project.p["aihub-ui"].project_id }
-output "gclt_aicoe_dev_st_project_id"        { value = data.google_project.p["st"].project_id }
-output "gclt_aicoe_dev_llm_project_id"       { value = data.google_project.p["llm"].project_id }
+output "gclt_aicoe_dev_network_project_id" { value = data.google_project.p["network"].project_id }
+output "gclt_aicoe_dev_ingress_project_id" { value = data.google_project.p["ingress"].project_id }
+output "gclt_aicoe_dev_apigee_project_id" { value = data.google_project.p["apigee"].project_id }
+output "gclt_aicoe_dev_aihub_ui_project_id" { value = data.google_project.p["aihub-ui"].project_id }
+output "gclt_aicoe_dev_st_project_id" { value = data.google_project.p["st"].project_id }
+output "gclt_aicoe_dev_llm_project_id" { value = data.google_project.p["llm"].project_id }
 output "gclt_aicoe_dev_auditlogs_project_id" { value = data.google_project.p["auditlogs"].project_id }
 
 # Consumed by 4-apigee and 6c-ingress, which reference the network and Apigee
 # projects by these names.
 output "network_project_id" { value = data.google_project.p["network"].project_id }
-output "apigee_project_id"  { value = data.google_project.p["apigee"].project_id }
+output "apigee_project_id" { value = data.google_project.p["apigee"].project_id }
 
 # Consumed by 3-network for Shared VPC service-project attachment.
 output "service_projects" {

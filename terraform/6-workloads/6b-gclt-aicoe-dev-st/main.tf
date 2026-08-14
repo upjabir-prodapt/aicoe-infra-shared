@@ -12,10 +12,10 @@ terraform {
   }
 }
 
-variable "project_id"            { type = string }
-variable "region"                { type = string }
-variable "apigee_runtime_sa"     { type = string }
-variable "worker_invoker_sa"     { type = string }
+variable "project_id" { type = string }
+variable "region" { type = string }
+variable "apigee_runtime_sa" { type = string }
+variable "worker_invoker_sa" { type = string }
 
 module "bs_translation" {
   source            = "../../modules/cloudrun-backend"
@@ -23,7 +23,7 @@ module "bs_translation" {
   region            = var.region
   name              = "bs-translation"
   cloud_run_service = "translation-api-service"
-  enable_iap        = false     # Cloud Run IAM handles this hop
+  enable_iap        = false # Cloud Run IAM handles this hop
 }
 
 module "bs_sales" {
@@ -64,12 +64,63 @@ data "google_cloud_run_v2_service" "translation" {
   name     = "translation-api-service"
 }
 
+# Read the live IAM policy and assert no public principal is bound. This is
+# a real check over real state, not the assert-true placeholder it replaces.
+# The data source exports the policy as JSON in policy_data, so decode it.
+data "google_cloud_run_v2_service_iam_policy" "translation" {
+  project  = var.project_id
+  location = var.region
+  name     = data.google_cloud_run_v2_service.translation.name
+}
+
+locals {
+  translation_policy_members = flatten([
+    for b in jsondecode(data.google_cloud_run_v2_service_iam_policy.translation.policy_data).bindings : b.members
+  ])
+}
+
 check "no_public_invoker" {
   assert {
-    condition     = true # replace with a policy check in CI, see ci/policy/
+    condition     = !contains(local.translation_policy_members, "allUsers") && !contains(local.translation_policy_members, "allAuthenticatedUsers")
     error_message = "A Cloud Run service must never grant allUsers or allAuthenticatedUsers."
   }
 }
 
 output "translation_backend_service_self_link" { value = module.bs_translation.self_link }
-output "sales_backend_service_self_link"       { value = module.bs_sales.self_link }
+output "sales_backend_service_self_link" { value = module.bs_sales.self_link }
+
+# ── async fan-out · translation worker ──────────────────────────────────
+# The translation worker path depends on a Cloud Tasks queue, per the LLD's
+# service integration matrix. The queue dispatches to the worker over OIDC:
+# the worker_invoker_sa holds run.invoker on translation-worker-service, and
+# each task carries an ID token whose audience is the worker's service URL.
+# The queue is created here; the per-task http_target and oidc_token are set
+# by the application when it enqueues, because the target URL is only known
+# once the worker service exists.
+
+resource "google_cloud_tasks_queue" "translation" {
+  project  = var.project_id
+  location = var.region
+  name     = "translation-jobs"
+
+  rate_limits {
+    max_concurrent_dispatches = 10
+    max_dispatches_per_second = 5
+  }
+
+  retry_config {
+    max_attempts       = 5
+    min_backoff        = "10s"
+    max_backoff        = "300s"
+    max_doublings      = 4
+    max_retry_duration = "600s"
+  }
+
+  # No public dispatch. Tasks are enqueued by the translation-api service
+  # account and dispatched to the worker as worker_invoker_sa.
+}
+
+output "translation_queue_id" {
+  description = "Fully qualified queue id the translation-api enqueues to."
+  value       = google_cloud_tasks_queue.translation.id
+}

@@ -6,10 +6,33 @@
 # with an explicit dependency. Getting this wrong produces a sink that
 # silently drops everything.
 
+# API enablement. This project has no project-baseline module (it needs no
+# service accounts), so the APIs it does need are enabled directly here.
+# cloudkms must exist before the key ring below; logging/pubsub/bigquery
+# serve the bucket, the sink, and the linked dataset.
+resource "google_project_service" "gclt_aicoe_dev_auditlogs_apis" {
+  for_each = toset([
+    "cloudkms.googleapis.com",
+    "logging.googleapis.com",
+    "pubsub.googleapis.com",
+    "bigquery.googleapis.com",
+  ])
+  project            = var.gclt_aicoe_dev_auditlogs_project_id
+  service            = each.value
+  disable_on_destroy = false
+}
+
 module "gclt_aicoe_dev_auditlogs_agents" {
   source     = "../modules/service-agents"
   project_id = var.gclt_aicoe_dev_auditlogs_project_id
-  services   = ["logging.googleapis.com", "pubsub.googleapis.com"]
+  services   = ["logging.googleapis.com"]
+}
+
+# Cloud Logging's CMEK service account. Reading the project settings
+# provisions it if it does not exist yet; the log-bucket key grant goes to
+# this account, which is what actually encrypts the bucket.
+data "google_logging_project_settings" "gclt_aicoe_dev_auditlogs" {
+  project = var.gclt_aicoe_dev_auditlogs_project_id
 }
 
 module "gclt_aicoe_dev_auditlogs_kms" {
@@ -18,7 +41,9 @@ module "gclt_aicoe_dev_auditlogs_kms" {
   location   = var.region
   ring_name  = "logs"
   keys       = { "log-bucket" = {} }
-  key_grants = { "log-bucket" = [module.gclt_aicoe_dev_auditlogs_agents.emails["logging.googleapis.com"]] }
+  key_grants = { "log-bucket" = [data.google_logging_project_settings.gclt_aicoe_dev_auditlogs.kms_service_account_id] }
+
+  depends_on = [google_project_service.gclt_aicoe_dev_auditlogs_apis]
 }
 
 resource "google_logging_project_bucket_config" "gclt_aicoe_dev_auditlogs_main" {
@@ -38,11 +63,24 @@ resource "google_logging_project_bucket_config" "gclt_aicoe_dev_auditlogs_main" 
   depends_on = [module.gclt_aicoe_dev_auditlogs_kms]
 }
 
+# The linked BigQuery dataset is the half that makes Log Analytics queryable.
+# enable_analytics on the bucket alone stores the data; without this there is
+# no dataset to run SQL against — "SQL over logs, no second cost" per the
+# logging architecture.
+resource "google_logging_linked_dataset" "gclt_aicoe_dev_auditlogs_main" {
+  parent      = "projects/${var.gclt_aicoe_dev_auditlogs_project_id}"
+  location    = var.region
+  bucket      = google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main.bucket_id
+  link_id     = "aicoe_dev_logs"
+  description = "SQL over the 400-day central log bucket"
+  depends_on  = [google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main]
+}
+
 # ── sink 1 · everything, to the 400-day bucket ──────────────────────────
 resource "google_logging_folder_sink" "gclt_aicoe_dev_auditlogs_aicoe_400d" {
   name             = "aicoe-400d"
   folder           = var.folder_id
-  include_children = true                 # without this you capture nothing
+  include_children = true # without this you capture nothing
   destination      = "logging.googleapis.com/${google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main.id}"
 
   exclusions {
@@ -61,47 +99,14 @@ resource "google_project_iam_member" "gclt_aicoe_dev_auditlogs_sink_400d_writer"
   role    = "roles/logging.bucketWriter"
   member  = google_logging_folder_sink.gclt_aicoe_dev_auditlogs_aicoe_400d.writer_identity
 
-  depends_on = [google_logging_folder_sink.aicoe_400d]
+  depends_on = [google_logging_folder_sink.gclt_aicoe_dev_auditlogs_aicoe_400d]
 }
 
-# ── sink 2 · to the enterprise logging project ──────────────────────────
-# A separate sink, not a shared one. Each is a copy with its own filter, so
-# your retention requirement and their platform standard stay decoupled.
-resource "google_logging_folder_sink" "gclt_aicoe_dev_auditlogs_to_org" {
-  name             = "aicoe-to-org"
-  folder           = var.folder_id
-  include_children = true
-  destination      = "logging.googleapis.com/projects/${var.org_log_project}/locations/${var.region}/buckets/_Default"
-}
-
-# ── sink 3 · security subset to Pub/Sub for the SIEM ────────────────────
-resource "google_pubsub_topic" "gclt_aicoe_dev_auditlogs_siem" {
-  project = var.gclt_aicoe_dev_auditlogs_project_id
-  name    = "aicoe-security-logs"
-}
-
-resource "google_logging_folder_sink" "gclt_aicoe_dev_auditlogs_siem" {
-  name             = "aicoe-siem"
-  folder           = var.folder_id
-  include_children = true
-  destination      = "pubsub.googleapis.com/${google_pubsub_topic.gclt_aicoe_dev_auditlogs_siem.id}"
-
-  # SIEMs charge by volume ingested. Security-relevant only.
-  filter = <<-EOT
-    logName:"cloudaudit.googleapis.com" OR
-    logName:"iap.googleapis.com" OR
-    protoPayload.serviceName="apigee.googleapis.com"
-  EOT
-}
-
-resource "google_pubsub_topic_iam_member" "gclt_aicoe_dev_auditlogs_siem_writer" {
-  project = var.gclt_aicoe_dev_auditlogs_project_id
-  topic   = google_pubsub_topic.gclt_aicoe_dev_auditlogs_siem.name
-  role    = "roles/pubsub.publisher"
-  member  = google_logging_folder_sink.gclt_aicoe_dev_auditlogs_siem.writer_identity
-
-  depends_on = [google_logging_folder_sink.siem]
-}
+# ── sinks 2 and 3 REMOVED (decision 2026-08-12) ─────────────────────────
+# Sink 2 (aicoe-to-org, copy to the enterprise logging project) and sink 3
+# (aicoe-siem, security subset to Pub/Sub for Sentinel) are not required:
+# logs go only to the 400-day bucket above. The Pub/Sub topic, its writer
+# binding, and the org_log_project variable went with them.
 
 # ── Data Access audit logs ──────────────────────────────────────────────
 # Off by default for most services. Without these there is no IAP DATA_READ,
@@ -116,7 +121,6 @@ resource "google_folder_iam_audit_config" "gclt_aicoe_dev_auditlogs_data_access"
     "secretmanager.googleapis.com",
     "cloudkms.googleapis.com",
     "run.googleapis.com",
-    "firestore.googleapis.com",
   ])
   folder  = var.folder_id
   service = each.value

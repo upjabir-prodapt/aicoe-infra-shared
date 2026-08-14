@@ -10,9 +10,9 @@
 # So this module lives with the workload, and the ingress stack consumes its
 # self_link output across the project boundary.
 
-variable "project_id"       { type = string }
-variable "region"           { type = string }
-variable "name"             { type = string }
+variable "project_id" { type = string }
+variable "region" { type = string }
+variable "name" { type = string }
 variable "cloud_run_service" { type = string }
 variable "enable_iap" {
   type    = bool

@@ -5,15 +5,15 @@
 
 terraform {
   required_version = ">= 1.9"
-  backend "gcs" {}                       # bucket and prefix from -backend-config
+  backend "gcs" {} # bucket and prefix from -backend-config
   required_providers {
-    google      = { source = "hashicorp/google",      version = "~> 6.0" }
+    google      = { source = "hashicorp/google", version = "~> 6.0" }
     google-beta = { source = "hashicorp/google-beta", version = "~> 6.0" }
   }
 }
 
-variable "project_id"       { type = string }
-variable "region"           { type = string }
+variable "project_id" { type = string }
+variable "region" { type = string }
 variable "analytics_region" { type = string }
 variable "billing_type" {
   type    = string
@@ -45,7 +45,7 @@ module "kms" {
 
 # ── step 3 · the organisation ────────────────────────────────────────────
 resource "google_apigee_organization" "org" {
-  project_id      = var.project_id
+  project_id       = var.project_id
   analytics_region = var.analytics_region
   billing_type     = var.billing_type
 
@@ -109,13 +109,13 @@ resource "google_apigee_instance_attachment" "llm" {
 resource "google_apigee_envgroup" "aihub" {
   org_id    = google_apigee_organization.org.id
   name      = "aihub-int"
-  hostnames = ["aihub-api.aicoe-dev-int.colt.net"]
+  hostnames = ["aihub-api.aicoedev-int.colt.net"]
 }
 
 resource "google_apigee_envgroup" "llm" {
   org_id    = google_apigee_organization.org.id
   name      = "llm-int"
-  hostnames = ["llm.aicoe-dev-int.colt.net"]
+  hostnames = ["llm.aicoedev-int.colt.net"]
 }
 
 resource "google_apigee_envgroup_attachment" "aihub" {

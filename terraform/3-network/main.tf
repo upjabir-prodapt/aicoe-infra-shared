@@ -13,7 +13,7 @@ terraform {
 }
 
 variable "project_id" { type = string }
-variable "region"     { type = string }
+variable "region" { type = string }
 variable "service_projects" {
   type        = list(string)
   description = "Projects attached to the Shared VPC."
@@ -44,23 +44,23 @@ resource "google_compute_subnetwork" "subnet_ew1" {
 
   log_config {
     aggregation_interval = "INTERVAL_15_MIN"
-    flow_sampling        = 0.1      # full-rate flow logs cost more than the workload
+    flow_sampling        = 0.1 # full-rate flow logs cost more than the workload
     metadata             = "INCLUDE_ALL_METADATA"
   }
 }
 
 # ── everything below has NO route from the Colt network ─────────────────
 resource "google_compute_subnetwork" "cloudrun" {
-  project       = var.project_id
-  name          = "gclt-aicoe-dev-cloudrun-ew1"
-  region        = var.region
-  network       = google_compute_network.vpc.id
+  project = var.project_id
+  name    = "gclt-aicoe-dev-cloudrun-ew1"
+  region  = var.region
+  network = google_compute_network.vpc.id
   # 508 usable → 127 instance ceiling, at ~2 addresses per instance and a 4x
   # rollout peak. Cannot be grown in place: widening a subnet preserves its
   # network address, so the only /22 this can become is 192.168.4.0/22 — the
   # whole unrouted range. A new use case gets its own subnet cut from
   # 192.168.7.0/24 instead.
-  ip_cidr_range = "192.168.4.0/23"
+  ip_cidr_range            = "192.168.4.0/23"
   private_ip_google_access = false
 
   log_config {
@@ -75,7 +75,7 @@ resource "google_compute_subnetwork" "proxy" {
   name          = "gclt-aicoe-dev-proxy-ew1"
   region        = var.region
   network       = google_compute_network.vpc.id
-  ip_cidr_range = "192.168.6.0/26"          # /26 is the documented minimum
+  ip_cidr_range = "192.168.6.0/26" # /26 is the documented minimum
 
   # ONE active proxy-only subnet per region per VPC. Both load balancers
   # share this. Do not create a second ACTIVE one.
@@ -105,11 +105,11 @@ resource "google_compute_subnetwork" "pscnat" {
 }
 
 resource "google_compute_subnetwork" "internal" {
-  project       = var.project_id
-  name          = "gclt-aicoe-dev-internal-ew1"
-  region        = var.region
-  network       = google_compute_network.vpc.id
-  ip_cidr_range = "192.168.6.144/28"        # .145 Backend ILB, .146 Apigee, .147 Vector Search
+  project                  = var.project_id
+  name                     = "gclt-aicoe-dev-internal-ew1"
+  region                   = var.region
+  network                  = google_compute_network.vpc.id
+  ip_cidr_range            = "192.168.6.144/28" # .145 Backend ILB, .146 Apigee, .147 Vector Search
   private_ip_google_access = false
 }
 
@@ -138,12 +138,12 @@ resource "google_compute_firewall" "egress_allow_psc" {
   name      = "egress-allow-psc"
   network   = google_compute_network.vpc.name
   direction = "EGRESS"
-  priority  = 1000                          # lower number wins
+  priority  = 1000 # lower number wins
 
   destination_ranges = [
-    "192.168.6.164/32",   # Google APIs
-    "192.168.6.146/32",   # Apigee
-    "192.168.6.147/32",   # Vector Search
+    "192.168.6.164/32", # Google APIs
+    "192.168.6.146/32", # Apigee
+    "192.168.6.147/32", # Vector Search
   ]
 
   allow {
@@ -178,8 +178,8 @@ resource "google_compute_firewall" "ingress_proxy_subnet" {
 # ── private DNS ─────────────────────────────────────────────────────────
 resource "google_dns_managed_zone" "internal" {
   project     = var.project_id
-  name        = "aicoe-dev-int"
-  dns_name    = "aicoe-dev-int.colt.net."
+  name        = "aicoedev-int"
+  dns_name    = "aicoedev-int.colt.net."
   visibility  = "private"
   description = "Platform hostnames, resolvable only inside the VPC"
 
@@ -191,7 +191,7 @@ resource "google_dns_managed_zone" "internal" {
 resource "google_dns_record_set" "aihub" {
   project      = var.project_id
   managed_zone = google_dns_managed_zone.internal.name
-  name         = "aihub.aicoe-dev-int.colt.net."
+  name         = "aihub.aicoedev-int.colt.net."
   type         = "A"
   ttl          = 300
   rrdatas      = ["10.110.73.20"]
@@ -212,10 +212,10 @@ resource "google_dns_managed_zone" "googleapis" {
 }
 
 resource "google_dns_managed_zone" "runapp" {
-  project    = var.project_id
-  name       = "run-app-private"
-  dns_name   = "run.app."
-  visibility = "private"
+  project     = var.project_id
+  name        = "run-app-private"
+  dns_name    = "run.app."
+  visibility  = "private"
   description = "Internal Cloud Run URLs, used by Cloud Tasks to reach the worker"
 
   private_visibility_config {
@@ -235,11 +235,11 @@ resource "google_compute_shared_vpc_service_project" "service" {
 }
 
 # ── outputs consumed by network/psc, infra/ingress, infra/st ────────────
-output "vpc_self_link"              { value = google_compute_network.vpc.self_link }
-output "subnet_ew1_self_link"       { value = google_compute_subnetwork.subnet_ew1.self_link }
-output "cloudrun_subnet_self_link"  { value = google_compute_subnetwork.cloudrun.self_link }
-output "proxy_subnet_self_link"     { value = google_compute_subnetwork.proxy.self_link }
-output "pscnat_subnet_self_link"    { value = google_compute_subnetwork.pscnat.self_link }
-output "internal_subnet_self_link"  { value = google_compute_subnetwork.internal.self_link }
-output "private_zone_name"          { value = google_dns_managed_zone.internal.name }
-output "googleapis_zone_name"       { value = google_dns_managed_zone.googleapis.name }
+output "vpc_self_link" { value = google_compute_network.vpc.self_link }
+output "subnet_ew1_self_link" { value = google_compute_subnetwork.subnet_ew1.self_link }
+output "cloudrun_subnet_self_link" { value = google_compute_subnetwork.cloudrun.self_link }
+output "proxy_subnet_self_link" { value = google_compute_subnetwork.proxy.self_link }
+output "pscnat_subnet_self_link" { value = google_compute_subnetwork.pscnat.self_link }
+output "internal_subnet_self_link" { value = google_compute_subnetwork.internal.self_link }
+output "private_zone_name" { value = google_dns_managed_zone.internal.name }
+output "googleapis_zone_name" { value = google_dns_managed_zone.googleapis.name }

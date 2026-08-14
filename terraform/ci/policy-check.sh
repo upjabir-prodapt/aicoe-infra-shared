@@ -12,8 +12,10 @@ say() { echo "  ✗ $1"; FAIL=1; }
 echo "── policy checks"
 
 # 1 · no public IAM members, anywhere
-if grep -rEn '"(allUsers|allAuthenticatedUsers)"' --include='*.tf' . >/dev/null 2>&1; then
-  grep -rEn '"(allUsers|allAuthenticatedUsers)"' --include='*.tf' .
+# Match grants only — a `check` block asserting their *absence* also contains
+# the string, so exclude assertion lines from the match.
+if grep -rEn '"(allUsers|allAuthenticatedUsers)"' --include='*.tf' . 2>/dev/null | grep -v 'contains(' >/dev/null 2>&1; then
+  grep -rEn '"(allUsers|allAuthenticatedUsers)"' --include='*.tf' . | grep -v 'contains('
   say "public IAM member found — blocked by domain-restricted sharing anyway, and never correct here"
 fi
 
@@ -31,7 +33,10 @@ for res in google_storage_bucket google_bigquery_dataset google_artifact_registr
 done
 
 # 4 · destructive-resistance on the things that must not vanish
-for f in $(grep -rl 'google_storage_bucket" "state"\|google_apigee_organization\|google_compute_address" "aihub_vip"' --include='*.tf' . 2>/dev/null || true); do
+# Match actual resource declarations only — a comment mentioning the resource
+# type (e.g. 2-foundations explaining why the org is not created there) must
+# not pull the file into this check.
+for f in $(grep -rlE '^resource "google_storage_bucket" "state"\|^resource "google_apigee_organization"\|^resource "google_compute_address" "aihub_vip"' --include='*.tf' . 2>/dev/null || true); do
   grep -q 'prevent_destroy' "$f" || say "$f holds an irreplaceable resource without prevent_destroy"
 done
 

@@ -12,13 +12,12 @@ module "gclt_aicoe_dev_llm_baseline" {
     "cloudkms.googleapis.com",
     "dlp.googleapis.com",
   ]
-  agent_services   = ["aiplatform.googleapis.com"]
+  agent_services = ["aiplatform.googleapis.com"]
   service_accounts = {
     "llm-breakglass" = {
       display_name = "Break-glass direct Vertex AI access"
       description  = "Granted via PAM with approval. Every use is alerted on."
     }
-    "tf-deployer" = { display_name = "Terraform deployer, llm" }
   }
 }
 
@@ -29,13 +28,13 @@ module "gclt_aicoe_dev_llm_baseline" {
 resource "google_project_iam_member" "gclt_aicoe_dev_llm_apigee_vertex" {
   project = var.gclt_aicoe_dev_llm_project_id
   role    = "roles/aiplatform.user"
-  member  = "serviceAccount:${var.apigee_llm_runtime_sa}"
+  member  = "serviceAccount:${module.gclt_aicoe_dev_apigee_baseline.service_accounts["apigee-llm-runtime"]}"
 }
 
 resource "google_project_iam_member" "gclt_aicoe_dev_llm_apigee_modelarmor" {
   project = var.gclt_aicoe_dev_llm_project_id
   role    = "roles/modelarmor.user"
-  member  = "serviceAccount:${var.apigee_llm_runtime_sa}"
+  member  = "serviceAccount:${module.gclt_aicoe_dev_apigee_baseline.service_accounts["apigee-llm-runtime"]}"
 }
 
 # Break-glass. An emergency route nobody notices being used is not a control,

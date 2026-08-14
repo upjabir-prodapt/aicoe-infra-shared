@@ -8,8 +8,8 @@ terraform {
   }
 }
 
-variable "project_id"     { type = string }
-variable "region"         { type = string }
+variable "project_id" { type = string }
+variable "region" { type = string }
 variable "ui_user_group" {
   type        = string
   description = "Entra group object id for App-AICoE-UI-Users"
@@ -24,7 +24,7 @@ module "bs_bff" {
   cloud_run_service = "aihub-bff"
 
   # The one IAP in the platform. Authenticates people, at the front door.
-  enable_iap  = true
+  enable_iap = true
   iap_members = [
     "principalSet://iam.googleapis.com/locations/global/workforcePools/${var.workforce_pool}/group/${var.ui_user_group}"
   ]

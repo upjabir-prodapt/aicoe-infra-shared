@@ -3,12 +3,12 @@
 # not exist yet; these values are placeholders to be filled in when it does.
 environment      = "prod"
 region           = "europe-west1"
-analytics_region = "europe-west2"     # EU, per the residency policy
+analytics_region = "europe-west2" # EU, per the residency policy
 
 # ── 0-bootstrap ──────────────────────────────────────────────────────────
 # Whether production shares aicoe-sharedwif or gets its own bootstrap
 # project is an open decision — see the LLD's Production Promotion Model. Placeholder assumes shared.
-seed_project_id  = "aicoe-sharedwif"
+seed_project_id = "aicoe-sharedwif"
 
 target_projects = [
   "aicoe-sharedwif",

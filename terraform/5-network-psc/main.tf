@@ -14,12 +14,12 @@ terraform {
   }
 }
 
-variable "project_id"   { type = string }
-variable "region"       { type = string }
+variable "project_id" { type = string }
+variable "region" { type = string }
 # ── inputs from upstream stages ─────────────────────────────────────────
-variable "vpc_self_link"             { type = string }
+variable "vpc_self_link" { type = string }
 variable "internal_subnet_self_link" { type = string }
-variable "private_zone_name"         { type = string }
+variable "private_zone_name" { type = string }
 variable "instance_service_attachment" {
   type        = string
   description = "From stage 4. This is why the network layer is split."
@@ -38,7 +38,7 @@ resource "google_compute_global_address" "google_apis" {
 resource "google_compute_global_forwarding_rule" "google_apis" {
   project               = var.project_id
   name                  = "psc-google-apis"
-  target                = "vpc-sc"          # not all-apis: only perimeter-supported APIs
+  target                = "vpc-sc" # not all-apis: only perimeter-supported APIs
   network               = var.vpc_self_link
   ip_address            = google_compute_global_address.google_apis.id
   load_balancing_scheme = ""
@@ -69,7 +69,7 @@ resource "google_compute_forwarding_rule" "apigee_endpoint" {
 resource "google_dns_record_set" "aihub_api" {
   project      = var.project_id
   managed_zone = var.private_zone_name
-  name         = "aihub-api.aicoe-dev-int.colt.net."
+  name         = "aihub-api.aicoedev-int.colt.net."
   type         = "A"
   ttl          = 300
   rrdatas      = [google_compute_address.apigee_endpoint.address]
@@ -78,7 +78,7 @@ resource "google_dns_record_set" "aihub_api" {
 resource "google_dns_record_set" "llm" {
   project      = var.project_id
   managed_zone = var.private_zone_name
-  name         = "llm.aicoe-dev-int.colt.net."
+  name         = "llm.aicoedev-int.colt.net."
   type         = "A"
   ttl          = 300
   rrdatas      = [google_compute_address.apigee_endpoint.address]
@@ -88,4 +88,35 @@ resource "google_dns_record_set" "llm" {
 # environment from the Host header, so the hostname is functional.
 
 output "apigee_endpoint_ip" { value = google_compute_address.apigee_endpoint.address }
-output "google_apis_ip"     { value = google_compute_global_address.google_apis.address }
+output "google_apis_ip" { value = google_compute_global_address.google_apis.address }
+
+# ── Vector Search · automatic service connection policy ─────────────────
+# The LLD records Private Service Connect in AUTOMATIC mode for Vector
+# Search in both environments. Without a service connection policy, every
+# index deployment needs a manually created endpoint — the exact outcome
+# automatic mode was chosen to avoid. The policy names a subnet from which
+# endpoint addresses are allocated, so it lives in the network layer.
+#
+# service_class "gcp-memorystore-redis" is NOT this; Vector Search publishes
+# under its own producer service class. The class below is the Vertex AI
+# Vector Search producer. Confirm against the live service class before
+# apply — a wrong class silently creates a policy that matches nothing.
+
+variable "vector_search_subnet_self_link" {
+  type        = string
+  description = "Subnet from which Vector Search PSC endpoint addresses are allocated. The internal subnet (192.168.6.144/28) holds .147 for this."
+}
+
+resource "google_network_connectivity_service_connection_policy" "vector_search" {
+  project       = var.project_id
+  location      = var.region
+  name          = "vector-search-auto"
+  service_class = "gcp-vertex-ai-vector-search"
+  network       = var.vpc_self_link
+
+  psc_config {
+    subnetworks = [var.vector_search_subnet_self_link]
+  }
+}
+
+output "vector_search_policy_id" { value = google_network_connectivity_service_connection_policy.vector_search.id }

@@ -14,22 +14,22 @@ terraform {
   }
 }
 
-variable "project_id"         { type = string }
+variable "project_id" { type = string }
 variable "network_project_id" { type = string }
-variable "region"             { type = string }
+variable "region" { type = string }
 
 # ── inputs from upstream stages ─────────────────────────────────────────
 # Supplied as .auto.tfvars.json artifacts by stages 3 and 6a/6b. No stage
 # reads another stage's state file, so each service account needs access to
 # its own state and nothing else.
 
-variable "bff_backend_service_self_link"         { type = string }
+variable "bff_backend_service_self_link" { type = string }
 variable "translation_backend_service_self_link" { type = string }
-variable "sales_backend_service_self_link"       { type = string }
-variable "vpc_self_link"                         { type = string }
-variable "subnet_ew1_self_link"                  { type = string }
-variable "internal_subnet_self_link"             { type = string }
-variable "pscnat_subnet_self_link"               { type = string }
+variable "sales_backend_service_self_link" { type = string }
+variable "vpc_self_link" { type = string }
+variable "subnet_ew1_self_link" { type = string }
+variable "internal_subnet_self_link" { type = string }
+variable "pscnat_subnet_self_link" { type = string }
 
 locals {
   bff         = var.bff_backend_service_self_link
@@ -54,9 +54,9 @@ resource "google_compute_address" "aihub_vip" {
 }
 
 resource "google_compute_region_url_map" "aihub" {
-  project         = var.project_id
-  name            = "aihub-urlmap"
-  region          = var.region
+  project = var.project_id
+  name    = "aihub-urlmap"
+  region  = var.region
 
   # One rule. The BFF serves the interface, /auth/* and /api/* from a single
   # origin, which is what lets the session cookie work with no CORS.
@@ -64,10 +64,10 @@ resource "google_compute_region_url_map" "aihub" {
 }
 
 resource "google_compute_region_target_https_proxy" "aihub" {
-  project          = var.project_id
-  name             = "aihub-proxy"
-  region           = var.region
-  url_map          = google_compute_region_url_map.aihub.id
+  project                          = var.project_id
+  name                             = "aihub-proxy"
+  region                           = var.region
+  url_map                          = google_compute_region_url_map.aihub.id
   certificate_manager_certificates = [var.aihub_certificate_id]
 }
 
@@ -100,9 +100,9 @@ resource "google_compute_address" "backend_vip" {
 }
 
 resource "google_compute_region_url_map" "backend" {
-  project = var.project_id
-  name    = "backend-urlmap"
-  region  = var.region
+  project         = var.project_id
+  name            = "backend-urlmap"
+  region          = var.region
   default_service = local.translation
 
   host_rule {
@@ -125,10 +125,10 @@ resource "google_compute_region_url_map" "backend" {
 }
 
 resource "google_compute_region_target_https_proxy" "backend" {
-  project = var.project_id
-  name    = "backend-proxy"
-  region  = var.region
-  url_map = google_compute_region_url_map.backend.id
+  project                          = var.project_id
+  name                             = "backend-proxy"
+  region                           = var.region
+  url_map                          = google_compute_region_url_map.backend.id
   certificate_manager_certificates = [var.backend_certificate_id]
 }
 

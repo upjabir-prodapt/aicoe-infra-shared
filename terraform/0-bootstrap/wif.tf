@@ -12,9 +12,9 @@ variable "gitlab_issuer" {
   description = "GitLab instance issuer URL, for example https://amsgit01.colt.net"
 }
 variable "gitlab_audience" { type = string }
-variable "allowed_repository" {
-  type        = string
-  description = "GitLab project_path permitted to impersonate, e.g. aicoe/terraform"
+variable "allowed_repositories" {
+  type        = list(string)
+  description = "GitLab project_paths permitted to impersonate, e.g. [\"code-scanning-toolset/aicoe-terraform\"]. The Terraform repo plus every use-case app repo that deploys through this pool."
 }
 
 resource "google_iam_workload_identity_pool" "gitlab" {
@@ -38,6 +38,14 @@ resource "google_iam_workload_identity_pool_provider" "gitlab" {
   oidc {
     issuer_uri        = var.gitlab_issuer
     allowed_audiences = [var.gitlab_audience]
+
+    # amsgit01 is internal-only: Google cannot fetch the OIDC discovery
+    # document or JWKS over the internet, so the signing keys are embedded
+    # here — the same pattern as the proven-working gitlab-pool in aicoedev.
+    # OPERATIONAL CONSEQUENCE: when GitLab rotates its token-signing keys,
+    # this file must be updated (re-fetch /oauth/discovery/keys) or token
+    # exchange starts failing. The keys below were captured 2026-08-12.
+    jwks_json = file("${path.module}/gitlab-jwks.json")
   }
 
   attribute_mapping = {
@@ -51,14 +59,18 @@ resource "google_iam_workload_identity_pool_provider" "gitlab" {
   # THE control. Without a condition, any repository on this GitLab instance
   # that can mint a token for the audience can impersonate any service
   # account bound to the pool — including production ones.
+  # Covers the Terraform repo and the use-case app repos (translation,
+  # sales-agent) that deploy through this pool. App repos additionally need
+  # an SA binding (workloadIdentityUser) before their pipelines can
+  # impersonate — that arrives with stage 6b.
   attribute_condition = <<-EOT
-    attribute.project_path == "${var.allowed_repository}" &&
+    attribute.project_path in ${jsonencode(var.allowed_repositories)} &&
     attribute.ref_protected == "true"
   EOT
 }
 
-output "pool_name"        { value = google_iam_workload_identity_pool.gitlab.name }
-output "provider_name"    { value = google_iam_workload_identity_pool_provider.gitlab.name }
+output "pool_name" { value = google_iam_workload_identity_pool.gitlab.name }
+output "provider_name" { value = google_iam_workload_identity_pool_provider.gitlab.name }
 output "wif_project_number" { value = data.google_project.this.number }
 
 data "google_project" "this" { project_id = var.seed_project_id }

@@ -50,6 +50,6 @@ resource "google_service_account" "sa" {
   depends_on = [google_project_service.api]
 }
 
-output "agent_emails"      { value = module.agents.emails }
-output "service_accounts"  { value = { for k, v in google_service_account.sa : k => v.email } }
-output "apis_ready"        { value = join(",", [for a in google_project_service.api : a.id]) }
+output "agent_emails" { value = module.agents.emails }
+output "service_accounts" { value = { for k, v in google_service_account.sa : k => v.email } }
+output "apis_ready" { value = join(",", [for a in google_project_service.api : a.id]) }

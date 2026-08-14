@@ -10,8 +10,8 @@ terraform {
   }
 }
 
-variable "project_id"   { type = string }
-variable "region"       { type = string }
+variable "project_id" { type = string }
+variable "region" { type = string }
 # ── inputs from upstream stages ─────────────────────────────────────────
 variable "org_id" {
   type        = string
@@ -23,10 +23,10 @@ variable "backend_service_attachment_id" {
 }
 
 resource "google_apigee_endpoint_attachment" "backends" {
-  org_id             = var.org_id
+  org_id                 = var.org_id
   endpoint_attachment_id = "backends-attachment"
-  location           = var.region
-  service_attachment = var.backend_service_attachment_id
+  location               = var.region
+  service_attachment     = var.backend_service_attachment_id
 }
 
 # Key value maps. Values are managed by the proxy pipeline, not here —
