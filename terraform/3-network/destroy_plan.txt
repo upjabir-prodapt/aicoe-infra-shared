@@ -1,0 +1,439 @@
+google_compute_shared_vpc_host_project.host: Refreshing state... [id=gclt-aicoe-dev-network]
+google_compute_network.vpc: Refreshing state... [id=projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc]
+google_compute_firewall.egress_deny_all: Refreshing state... [id=projects/gclt-aicoe-dev-network/global/firewalls/egress-deny-all]
+google_compute_subnetwork.proxy: Refreshing state... [id=projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-proxy-ew1]
+google_compute_subnetwork.subnet_ew1: Refreshing state... [id=projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-subnet-ew1]
+google_dns_managed_zone.runapp: Refreshing state... [id=projects/gclt-aicoe-dev-network/managedZones/run-app-private]
+google_compute_subnetwork.pscnat: Refreshing state... [id=projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-pscnat-ew1]
+google_compute_firewall.egress_allow_psc: Refreshing state... [id=projects/gclt-aicoe-dev-network/global/firewalls/egress-allow-psc]
+google_compute_subnetwork.internal: Refreshing state... [id=projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-internal-ew1]
+google_compute_subnetwork.cloudrun: Refreshing state... [id=projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-cloudrun-ew1]
+google_dns_managed_zone.googleapis: Refreshing state... [id=projects/gclt-aicoe-dev-network/managedZones/googleapis-private]
+google_dns_managed_zone.internal: Refreshing state... [id=projects/gclt-aicoe-dev-network/managedZones/aicoedev-int]
+google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-ingress"]: Refreshing state... [id=gclt-aicoe-dev-network/gclt-aicoe-dev-ingress]
+google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-llm"]: Refreshing state... [id=gclt-aicoe-dev-network/gclt-aicoe-dev-llm]
+google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-aihub-ui"]: Refreshing state... [id=gclt-aicoe-dev-network/gclt-aicoe-dev-aihub-ui]
+google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-auditlogs"]: Refreshing state... [id=gclt-aicoe-dev-network/gclt-aicoe-dev-auditlogs]
+google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-st"]: Refreshing state... [id=gclt-aicoe-dev-network/gclt-aicoe-dev-st]
+google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-apigee"]: Refreshing state... [id=gclt-aicoe-dev-network/gclt-aicoe-dev-apigee]
+google_compute_firewall.ingress_proxy_subnet: Refreshing state... [id=projects/gclt-aicoe-dev-network/global/firewalls/ingress-allow-proxy-subnet]
+google_dns_record_set.aihub: Refreshing state... [id=projects/gclt-aicoe-dev-network/managedZones/aicoedev-int/rrsets/aihub.aicoedev-int.colt.net./A]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # google_compute_firewall.egress_allow_psc will be destroyed
+  - resource "google_compute_firewall" "egress_allow_psc" {
+      - creation_timestamp      = "2026-08-14T14:17:10.846-07:00" -> null
+      - destination_ranges      = [
+          - "192.168.6.146/32",
+          - "192.168.6.147/32",
+          - "192.168.6.164/32",
+        ] -> null
+      - direction               = "EGRESS" -> null
+      - disabled                = false -> null
+      - id                      = "projects/gclt-aicoe-dev-network/global/firewalls/egress-allow-psc" -> null
+      - name                    = "egress-allow-psc" -> null
+      - network                 = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+      - priority                = 1000 -> null
+      - project                 = "gclt-aicoe-dev-network" -> null
+      - self_link               = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/firewalls/egress-allow-psc" -> null
+      - source_ranges           = [] -> null
+      - source_service_accounts = [] -> null
+      - source_tags             = [] -> null
+      - target_service_accounts = [] -> null
+      - target_tags             = [] -> null
+        # (1 unchanged attribute hidden)
+
+      - allow {
+          - ports    = [
+              - "443",
+            ] -> null
+          - protocol = "tcp" -> null
+        }
+
+      - log_config {
+          - metadata = "INCLUDE_ALL_METADATA" -> null
+        }
+    }
+
+  # google_compute_firewall.egress_deny_all will be destroyed
+  - resource "google_compute_firewall" "egress_deny_all" {
+      - creation_timestamp      = "2026-08-14T14:17:11.043-07:00" -> null
+      - destination_ranges      = [
+          - "0.0.0.0/0",
+        ] -> null
+      - direction               = "EGRESS" -> null
+      - disabled                = false -> null
+      - id                      = "projects/gclt-aicoe-dev-network/global/firewalls/egress-deny-all" -> null
+      - name                    = "egress-deny-all" -> null
+      - network                 = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+      - priority                = 65000 -> null
+      - project                 = "gclt-aicoe-dev-network" -> null
+      - self_link               = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/firewalls/egress-deny-all" -> null
+      - source_ranges           = [] -> null
+      - source_service_accounts = [] -> null
+      - source_tags             = [] -> null
+      - target_service_accounts = [] -> null
+      - target_tags             = [] -> null
+        # (1 unchanged attribute hidden)
+
+      - deny {
+          - ports    = [] -> null
+          - protocol = "all" -> null
+        }
+
+      - log_config {
+          - metadata = "INCLUDE_ALL_METADATA" -> null
+        }
+    }
+
+  # google_compute_firewall.ingress_proxy_subnet will be destroyed
+  - resource "google_compute_firewall" "ingress_proxy_subnet" {
+      - creation_timestamp      = "2026-08-14T14:17:42.026-07:00" -> null
+      - destination_ranges      = [] -> null
+      - direction               = "INGRESS" -> null
+      - disabled                = false -> null
+      - id                      = "projects/gclt-aicoe-dev-network/global/firewalls/ingress-allow-proxy-subnet" -> null
+      - name                    = "ingress-allow-proxy-subnet" -> null
+      - network                 = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+      - priority                = 1000 -> null
+      - project                 = "gclt-aicoe-dev-network" -> null
+      - self_link               = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/firewalls/ingress-allow-proxy-subnet" -> null
+      - source_ranges           = [
+          - "192.168.6.0/26",
+        ] -> null
+      - source_service_accounts = [] -> null
+      - source_tags             = [] -> null
+      - target_service_accounts = [] -> null
+      - target_tags             = [] -> null
+        # (1 unchanged attribute hidden)
+
+      - allow {
+          - ports    = [
+              - "443",
+            ] -> null
+          - protocol = "tcp" -> null
+        }
+    }
+
+  # google_compute_network.vpc will be destroyed
+  - resource "google_compute_network" "vpc" {
+      - auto_create_subnetworks                   = false -> null
+      - bgp_always_compare_med                    = false -> null
+      - bgp_best_path_selection_mode              = "LEGACY" -> null
+      - delete_default_routes_on_create           = false -> null
+      - enable_ula_internal_ipv6                  = false -> null
+      - id                                        = "projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+      - mtu                                       = 0 -> null
+      - name                                      = "gclt-aicoe-dev-vpc" -> null
+      - network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL" -> null
+      - network_id                                = "592776575885392687" -> null
+      - numeric_id                                = "592776575885392687" -> null
+      - project                                   = "gclt-aicoe-dev-network" -> null
+      - routing_mode                              = "REGIONAL" -> null
+      - self_link                                 = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+        # (5 unchanged attributes hidden)
+    }
+
+  # google_compute_shared_vpc_host_project.host will be destroyed
+  - resource "google_compute_shared_vpc_host_project" "host" {
+      - id      = "gclt-aicoe-dev-network" -> null
+      - project = "gclt-aicoe-dev-network" -> null
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-aihub-ui"] will be destroyed
+  - resource "google_compute_shared_vpc_service_project" "service" {
+      - host_project    = "gclt-aicoe-dev-network" -> null
+      - id              = "gclt-aicoe-dev-network/gclt-aicoe-dev-aihub-ui" -> null
+      - service_project = "gclt-aicoe-dev-aihub-ui" -> null
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-apigee"] will be destroyed
+  - resource "google_compute_shared_vpc_service_project" "service" {
+      - host_project    = "gclt-aicoe-dev-network" -> null
+      - id              = "gclt-aicoe-dev-network/gclt-aicoe-dev-apigee" -> null
+      - service_project = "gclt-aicoe-dev-apigee" -> null
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-ingress"] will be destroyed
+  - resource "google_compute_shared_vpc_service_project" "service" {
+      - host_project    = "gclt-aicoe-dev-network" -> null
+      - id              = "gclt-aicoe-dev-network/gclt-aicoe-dev-ingress" -> null
+      - service_project = "gclt-aicoe-dev-ingress" -> null
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-st"] will be destroyed
+  - resource "google_compute_shared_vpc_service_project" "service" {
+      - host_project    = "gclt-aicoe-dev-network" -> null
+      - id              = "gclt-aicoe-dev-network/gclt-aicoe-dev-st" -> null
+      - service_project = "gclt-aicoe-dev-st" -> null
+    }
+
+  # google_compute_subnetwork.cloudrun will be destroyed
+  - resource "google_compute_subnetwork" "cloudrun" {
+      - creation_timestamp         = "2026-08-14T14:17:11.774-07:00" -> null
+      - enable_flow_logs           = true -> null
+      - gateway_address            = "192.168.4.1" -> null
+      - id                         = "projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-cloudrun-ew1" -> null
+      - ip_cidr_range              = "192.168.4.0/23" -> null
+      - name                       = "gclt-aicoe-dev-cloudrun-ew1" -> null
+      - network                    = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+      - private_ip_google_access   = false -> null
+      - private_ipv6_google_access = "DISABLE_GOOGLE_ACCESS" -> null
+      - project                    = "gclt-aicoe-dev-network" -> null
+      - purpose                    = "PRIVATE" -> null
+      - region                     = "europe-west1" -> null
+      - self_link                  = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-cloudrun-ew1" -> null
+      - stack_type                 = "IPV4_ONLY" -> null
+      - subnetwork_id              = 8089200210717326136 -> null
+        # (9 unchanged attributes hidden)
+
+      - log_config {
+          - aggregation_interval = "INTERVAL_15_MIN" -> null
+          - filter_expr          = "true" -> null
+          - flow_sampling        = 0.1 -> null
+          - metadata             = "INCLUDE_ALL_METADATA" -> null
+          - metadata_fields      = [] -> null
+        }
+    }
+
+  # google_compute_subnetwork.internal will be destroyed
+  - resource "google_compute_subnetwork" "internal" {
+      - creation_timestamp         = "2026-08-14T14:17:14.248-07:00" -> null
+      - enable_flow_logs           = false -> null
+      - gateway_address            = "192.168.6.145" -> null
+      - id                         = "projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-internal-ew1" -> null
+      - ip_cidr_range              = "192.168.6.144/28" -> null
+      - name                       = "gclt-aicoe-dev-internal-ew1" -> null
+      - network                    = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+      - private_ip_google_access   = false -> null
+      - private_ipv6_google_access = "DISABLE_GOOGLE_ACCESS" -> null
+      - project                    = "gclt-aicoe-dev-network" -> null
+      - purpose                    = "PRIVATE" -> null
+      - region                     = "europe-west1" -> null
+      - self_link                  = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-internal-ew1" -> null
+      - stack_type                 = "IPV4_ONLY" -> null
+      - subnetwork_id              = 3144136842204560181 -> null
+        # (9 unchanged attributes hidden)
+    }
+
+  # google_compute_subnetwork.proxy will be destroyed
+  - resource "google_compute_subnetwork" "proxy" {
+      - creation_timestamp         = "2026-08-14T14:17:10.983-07:00" -> null
+      - enable_flow_logs           = false -> null
+      - gateway_address            = "192.168.6.1" -> null
+      - id                         = "projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-proxy-ew1" -> null
+      - ip_cidr_range              = "192.168.6.0/26" -> null
+      - name                       = "gclt-aicoe-dev-proxy-ew1" -> null
+      - network                    = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+      - private_ip_google_access   = false -> null
+      - private_ipv6_google_access = "DISABLE_GOOGLE_ACCESS" -> null
+      - project                    = "gclt-aicoe-dev-network" -> null
+      - purpose                    = "REGIONAL_MANAGED_PROXY" -> null
+      - region                     = "europe-west1" -> null
+      - role                       = "ACTIVE" -> null
+      - self_link                  = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-proxy-ew1" -> null
+      - state                      = "READY" -> null
+      - subnetwork_id              = 2323875264935902009 -> null
+        # (8 unchanged attributes hidden)
+    }
+
+  # google_compute_subnetwork.pscnat will be destroyed
+  - resource "google_compute_subnetwork" "pscnat" {
+      - creation_timestamp         = "2026-08-14T14:17:10.951-07:00" -> null
+      - enable_flow_logs           = false -> null
+      - gateway_address            = "192.168.6.129" -> null
+      - id                         = "projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-pscnat-ew1" -> null
+      - ip_cidr_range              = "192.168.6.128/28" -> null
+      - name                       = "gclt-aicoe-dev-pscnat-ew1" -> null
+      - network                    = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+      - private_ip_google_access   = false -> null
+      - private_ipv6_google_access = "DISABLE_GOOGLE_ACCESS" -> null
+      - project                    = "gclt-aicoe-dev-network" -> null
+      - purpose                    = "PRIVATE_SERVICE_CONNECT" -> null
+      - region                     = "europe-west1" -> null
+      - self_link                  = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-pscnat-ew1" -> null
+      - subnetwork_id              = 8588115337081404217 -> null
+        # (10 unchanged attributes hidden)
+    }
+
+  # google_compute_subnetwork.subnet_ew1 will be destroyed
+  - resource "google_compute_subnetwork" "subnet_ew1" {
+      - creation_timestamp         = "2026-08-14T14:17:12.421-07:00" -> null
+      - enable_flow_logs           = true -> null
+      - gateway_address            = "10.110.73.1" -> null
+      - id                         = "projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-subnet-ew1" -> null
+      - ip_cidr_range              = "10.110.73.0/24" -> null
+      - name                       = "gclt-aicoe-dev-subnet-ew1" -> null
+      - network                    = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+      - private_ip_google_access   = false -> null
+      - private_ipv6_google_access = "DISABLE_GOOGLE_ACCESS" -> null
+      - project                    = "gclt-aicoe-dev-network" -> null
+      - purpose                    = "PRIVATE" -> null
+      - region                     = "europe-west1" -> null
+      - self_link                  = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-subnet-ew1" -> null
+      - stack_type                 = "IPV4_ONLY" -> null
+      - subnetwork_id              = 3785601177208634167 -> null
+        # (9 unchanged attributes hidden)
+
+      - log_config {
+          - aggregation_interval = "INTERVAL_15_MIN" -> null
+          - filter_expr          = "true" -> null
+          - flow_sampling        = 0.1 -> null
+          - metadata             = "INCLUDE_ALL_METADATA" -> null
+          - metadata_fields      = [] -> null
+        }
+    }
+
+  # google_dns_managed_zone.googleapis will be destroyed
+  - resource "google_dns_managed_zone" "googleapis" {
+      - creation_time    = "2026-08-14T21:17:12.313Z" -> null
+      - description      = "Managed by Terraform" -> null
+      - dns_name         = "googleapis.com." -> null
+      - effective_labels = {
+          - "goog-terraform-provisioned" = "true"
+        } -> null
+      - force_destroy    = false -> null
+      - id               = "projects/gclt-aicoe-dev-network/managedZones/googleapis-private" -> null
+      - labels           = {} -> null
+      - managed_zone_id  = 9073442019585152094 -> null
+      - name             = "googleapis-private" -> null
+      - name_servers     = [
+          - "ns-gcp-private.googleapis.com.",
+        ] -> null
+      - project          = "gclt-aicoe-dev-network" -> null
+      - terraform_labels = {
+          - "goog-terraform-provisioned" = "true"
+        } -> null
+      - visibility       = "private" -> null
+
+      - cloud_logging_config {
+          - enable_logging = false -> null
+        }
+
+      - private_visibility_config {
+          - networks {
+              - network_url = "https://compute.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+            }
+        }
+    }
+
+  # google_dns_managed_zone.internal will be destroyed
+  - resource "google_dns_managed_zone" "internal" {
+      - creation_time    = "2026-08-14T21:17:10.669Z" -> null
+      - description      = "Platform hostnames, resolvable only inside the VPC" -> null
+      - dns_name         = "aicoedev-int.colt.net." -> null
+      - effective_labels = {
+          - "goog-terraform-provisioned" = "true"
+        } -> null
+      - force_destroy    = false -> null
+      - id               = "projects/gclt-aicoe-dev-network/managedZones/aicoedev-int" -> null
+      - labels           = {} -> null
+      - managed_zone_id  = 1943333159469350589 -> null
+      - name             = "aicoedev-int" -> null
+      - name_servers     = [
+          - "ns-gcp-private.googleapis.com.",
+        ] -> null
+      - project          = "gclt-aicoe-dev-network" -> null
+      - terraform_labels = {
+          - "goog-terraform-provisioned" = "true"
+        } -> null
+      - visibility       = "private" -> null
+
+      - cloud_logging_config {
+          - enable_logging = false -> null
+        }
+
+      - private_visibility_config {
+          - networks {
+              - network_url = "https://compute.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+            }
+        }
+    }
+
+  # google_dns_managed_zone.runapp will be destroyed
+  - resource "google_dns_managed_zone" "runapp" {
+      - creation_time    = "2026-08-14T21:17:11.254Z" -> null
+      - description      = "Internal Cloud Run URLs, used by Cloud Tasks to reach the worker" -> null
+      - dns_name         = "run.app." -> null
+      - effective_labels = {
+          - "goog-terraform-provisioned" = "true"
+        } -> null
+      - force_destroy    = false -> null
+      - id               = "projects/gclt-aicoe-dev-network/managedZones/run-app-private" -> null
+      - labels           = {} -> null
+      - managed_zone_id  = 5238466814029870371 -> null
+      - name             = "run-app-private" -> null
+      - name_servers     = [
+          - "ns-gcp-private.googleapis.com.",
+        ] -> null
+      - project          = "gclt-aicoe-dev-network" -> null
+      - terraform_labels = {
+          - "goog-terraform-provisioned" = "true"
+        } -> null
+      - visibility       = "private" -> null
+
+      - cloud_logging_config {
+          - enable_logging = false -> null
+        }
+
+      - private_visibility_config {
+          - networks {
+              - network_url = "https://compute.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+            }
+        }
+    }
+
+  # google_dns_record_set.aihub will be destroyed
+  - resource "google_dns_record_set" "aihub" {
+      - id           = "projects/gclt-aicoe-dev-network/managedZones/aicoedev-int/rrsets/aihub.aicoedev-int.colt.net./A" -> null
+      - managed_zone = "aicoedev-int" -> null
+      - name         = "aihub.aicoedev-int.colt.net." -> null
+      - project      = "gclt-aicoe-dev-network" -> null
+      - rrdatas      = [
+          - "10.110.73.20",
+        ] -> null
+      - ttl          = 300 -> null
+      - type         = "A" -> null
+    }
+
+Plan: 0 to add, 0 to change, 18 to destroy.
+
+Changes to Outputs:
+  - cloudrun_subnet_self_link = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-cloudrun-ew1" -> null
+  - googleapis_zone_name      = "googleapis-private" -> null
+  - internal_subnet_self_link = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-internal-ew1" -> null
+  - private_zone_name         = "aicoedev-int" -> null
+  - proxy_subnet_self_link    = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-proxy-ew1" -> null
+  - pscnat_subnet_self_link   = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-pscnat-ew1" -> null
+  - subnet_ew1_self_link      = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/regions/europe-west1/subnetworks/gclt-aicoe-dev-subnet-ew1" -> null
+  - vpc_self_link             = "https://www.googleapis.com/compute/v1/projects/gclt-aicoe-dev-network/global/networks/gclt-aicoe-dev-vpc" -> null
+
+Warning: Value for undeclared variable
+
+The root module does not declare a variable named "seed_project_id" but a value was found in file "../envs/dev/terraform.tfvars". If you meant to
+use this value, add a "variable" block to the configuration.
+
+To silence these warnings, use TF_VAR_... environment variables to provide certain "global" settings to all configurations in your organization. To
+reduce the verbosity of these warnings, use the -compact-warnings option.
+
+Warning: Value for undeclared variable
+
+The root module does not declare a variable named "target_projects" but a value was found in file "../envs/dev/terraform.tfvars". If you meant to
+use this value, add a "variable" block to the configuration.
+
+To silence these warnings, use TF_VAR_... environment variables to provide certain "global" settings to all configurations in your organization. To
+reduce the verbosity of these warnings, use the -compact-warnings option.
+
+Warning: Values for undeclared variables
+
+In addition to the other similar warnings shown, 22 other variable(s) defined without being declared.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

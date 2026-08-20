@@ -45,47 +45,5 @@ resource "google_project_iam_member" "gclt_aicoe_dev_llm_breakglass_vertex" {
   member  = "serviceAccount:${module.gclt_aicoe_dev_llm_baseline.service_accounts["llm-breakglass"]}"
 }
 
-# ── Model Armor templates · europe-west1, contrary to earlier belief ────
-resource "google_model_armor_template" "gclt_aicoe_dev_llm_default" {
-  provider    = google-beta
-  project     = var.gclt_aicoe_dev_llm_project_id
-  location    = var.region
-  template_id = "aicoe-default"
-
-  filter_config {
-    pi_and_jailbreak_filter_settings {
-      filter_enforcement = "ENABLED"
-      confidence_level   = "MEDIUM_AND_ABOVE"
-    }
-    malicious_uri_filter_settings { filter_enforcement = "ENABLED" }
-    sdp_settings {
-      basic_config { filter_enforcement = "ENABLED" }
-    }
-  }
-}
-
-resource "google_model_armor_template" "gclt_aicoe_dev_llm_strict" {
-  provider    = google-beta
-  project     = var.gclt_aicoe_dev_llm_project_id
-  location    = var.region
-  template_id = "aicoe-strict"
-
-  filter_config {
-    pi_and_jailbreak_filter_settings {
-      filter_enforcement = "ENABLED"
-      confidence_level   = "LOW_AND_ABOVE"
-    }
-    malicious_uri_filter_settings { filter_enforcement = "ENABLED" }
-    sdp_settings {
-      basic_config { filter_enforcement = "ENABLED" }
-    }
-  }
-}
-
-output "gclt_aicoe_dev_llm_template_ids" {
-  value = {
-    default = google_model_armor_template.gclt_aicoe_dev_llm_default.template_id
-    strict  = google_model_armor_template.gclt_aicoe_dev_llm_strict.template_id
-  }
-}
+# Model Armor templates moved to Stage 7 (Apigee Runtime) where they can reach the regional PSC endpoint
 output "gclt_aicoe_dev_llm_breakglass_sa" { value = module.gclt_aicoe_dev_llm_baseline.service_accounts["llm-breakglass"] }

@@ -43,7 +43,7 @@
     TF_VAR_project_id: "${TF_PROJECT}"
   script:
     - cd "${TF_ROOT}/${STAGE}"
-    - cp ${TF_ROOT}/*.auto.tfvars.json . 2>/dev/null || true
+    - cp ${TF_ROOT}/vars-handoff/*.auto.tfvars.json . 2>/dev/null || true
     - |
       terraform init -reconfigure \
         -backend-config="bucket=${TF_STATE_BUCKET}" \
@@ -65,13 +65,14 @@
     - terraform apply -auto-approve tfplan
     # publish outputs for downstream stages
     - |
-      OUT="${TF_ROOT}/$(basename ${STAGE}).auto.tfvars.json"
+      mkdir -p "${TF_ROOT}/vars-handoff"
+      OUT="${TF_ROOT}/vars-handoff/$(basename ${STAGE}).auto.tfvars.json"
       terraform output -json | jq 'map_values(.value)' > "${OUT}"
       echo "published $(jq -r 'keys | join(", ")' "${OUT}")"
   artifacts:
     when: always
     paths:
-      - "${TF_ROOT}/*.auto.tfvars.json"
+      - "${TF_ROOT}/vars-handoff/*.auto.tfvars.json"
       - "${TF_ROOT}/${STAGE}/plan.txt"
     expire_in: 30 days
   rules:

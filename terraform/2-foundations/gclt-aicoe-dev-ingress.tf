@@ -20,7 +20,7 @@ module "gclt_aicoe_dev_ingress_baseline" {
 # obvious from the error.
 resource "google_kms_key_ring" "gclt_aicoe_dev_ingress_ingress" {
   project  = var.gclt_aicoe_dev_ingress_project_id
-  name     = "ingress"
+  name     = "ingress-ew3"
   location = var.region
 }
 
@@ -137,7 +137,7 @@ data "google_secret_manager_secret_version" "gclt_aicoe_dev_ingress_key" {
 resource "google_certificate_manager_certificate" "gclt_aicoe_dev_ingress" {
   for_each    = var.certs_enabled ? local.certificate_names : {}
   project     = var.gclt_aicoe_dev_ingress_project_id
-  location    = var.region
+  location    = "europe-west3"
   name        = "cert-${each.key}"
   description = "Self-managed, CA-issued - ${each.value}"
   self_managed {

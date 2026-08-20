@@ -9,6 +9,7 @@ module "gclt_aicoe_dev_network_baseline" {
     "dns.googleapis.com",
     "cloudkms.googleapis.com",
     "servicenetworking.googleapis.com", # enabled but unused — no PSA, no peering
+    "networkconnectivity.googleapis.com",
   ]
   service_accounts = {
   }

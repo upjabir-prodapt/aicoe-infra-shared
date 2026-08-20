@@ -1,0 +1,209 @@
+[0m[1mmodule.kms_disk.google_kms_crypto_key_iam_member.grant["instance-disk:0"]: Destroying... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-714830219716@gcp-sa-apigee.iam.gserviceaccount.com][0m[0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key_iam_member.grant["instance-disk:0"]: Destruction complete after 5s[0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key.key["instance-disk"]: Destroying... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk][0m[0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key.key["instance-disk"]: Destruction complete after 0s[0m
+[0m[1mmodule.kms_disk.google_kms_key_ring.ring: Destroying... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk][0m[0m
+[0m[1mmodule.kms_disk.google_kms_key_ring.ring: Destruction complete after 0s[0m
+[0m[1mmodule.kms_disk.google_kms_key_ring.ring: Creating...[0m[0m
+[0m[1mmodule.kms_disk.google_kms_key_ring.ring: Creation complete after 1s [id=projects/gclt-aicoe-dev-apigee/locations/europe-west3/keyRings/apigee-disk][0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key.key["instance-disk"]: Creating...[0m[0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key.key["instance-disk"]: Creation complete after 0s [id=projects/gclt-aicoe-dev-apigee/locations/europe-west3/keyRings/apigee-disk/cryptoKeys/instance-disk][0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key_iam_member.grant["instance-disk:0"]: Creating...[0m[0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key_iam_member.grant["instance-disk:0"]: Creation complete after 5s [id=projects/gclt-aicoe-dev-apigee/locations/europe-west3/keyRings/apigee-disk/cryptoKeys/instance-disk/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-714830219716@gcp-sa-apigee.iam.gserviceaccount.com][0m
+[0m[1mgoogle_apigee_instance.instance: Creating...[0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [1m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [1m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [1m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [1m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [1m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [1m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [2m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [2m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [2m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [2m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [2m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [2m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [3m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [3m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [3m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [3m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [3m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [3m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [4m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [4m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [4m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [4m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [4m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [4m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [5m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [5m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [5m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [5m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [5m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [5m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [6m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [6m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [6m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [6m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [6m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [6m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [7m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [7m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [7m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [7m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [7m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [7m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [8m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [8m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [8m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [8m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [8m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [8m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [9m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [9m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [9m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [9m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [9m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [9m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [10m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [10m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [10m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [10m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [10m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [10m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [11m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [11m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [11m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [11m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [11m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [11m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [12m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [12m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [12m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [12m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [12m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [12m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [13m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [13m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [13m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [13m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [13m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [13m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [14m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [14m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [14m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [14m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [14m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [14m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [15m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [15m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [15m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [15m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [15m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [15m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [16m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [16m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [16m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [16m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [16m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [16m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [17m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [17m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [17m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [17m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [17m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [17m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [18m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [18m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [18m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [18m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [18m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [18m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [19m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [19m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [19m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [19m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [19m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [19m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [20m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [20m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [20m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [20m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [20m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [20m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [21m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [21m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [21m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [21m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Still creating... [21m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance.instance: Creation complete after 21m44s [id=organizations/gclt-aicoe-dev-apigee/instances/aicoe-dev-ew1][0m
+[0m[1mgoogle_apigee_instance_attachment.int: Creating...[0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Creating...[0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [1m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [1m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [1m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [1m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [1m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [1m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [1m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [1m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [1m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [1m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [1m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [1m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [2m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [2m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [2m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [2m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [2m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [2m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [2m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [2m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [2m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [2m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [2m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [2m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [3m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [3m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Still creating... [3m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [3m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.int: Creation complete after 3m14s [id=organizations/gclt-aicoe-dev-apigee/instances/aicoe-dev-ew1/attachments/4ede2d38-dfee-472d-b6b5-3298aa57d605][0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [3m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [3m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [3m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [3m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [4m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [4m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [4m20s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [4m30s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [4m40s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [4m50s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [5m0s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Still creating... [5m10s elapsed][0m[0m
+[0m[1mgoogle_apigee_instance_attachment.llm: Creation complete after 5m17s [id=organizations/gclt-aicoe-dev-apigee/instances/aicoe-dev-ew1/attachments/19ac884c-0340-4dea-b667-de839976c9b1][0m
+[0m[1m[32m
+Apply complete! Resources: 6 added, 0 changed, 3 destroyed.
+[0m[0m[1m[32m
+Outputs:
+
+[0menvironments = {
+  "int" = "int"
+  "llm" = "llm"
+}
+instance_service_attachment = "projects/o83df7d9adfdf44a7-tp/regions/europe-west3/serviceAttachments/apigee-europe-west3-p5em"
+org_id = "organizations/gclt-aicoe-dev-apigee"

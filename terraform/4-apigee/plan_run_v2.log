@@ -1,0 +1,118 @@
+[0m[1mmodule.agents.google_project_service_identity.agent["apigee.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/services/apigee.googleapis.com][0m
+[0m[1mmodule.kms_disk.google_kms_key_ring.ring: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk][0m
+[0m[1mmodule.kms_db.google_kms_key_ring.ring: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west3/keyRings/apigee-db][0m
+[0m[1mmodule.agents.data.google_project.this: Reading...[0m[0m
+[0m[1mmodule.kms_db.google_kms_crypto_key.key["runtime-db"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west3/keyRings/apigee-db/cryptoKeys/runtime-db][0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key.key["instance-disk"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk][0m
+[0m[1mmodule.agents.data.google_project.this: Read complete after 0s [id=projects/gclt-aicoe-dev-apigee][0m
+[0m[1mmodule.kms_db.google_kms_crypto_key_iam_member.grant["runtime-db:0"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west3/keyRings/apigee-db/cryptoKeys/runtime-db/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-714830219716@gcp-sa-apigee.iam.gserviceaccount.com][0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key_iam_member.grant["instance-disk:0"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-714830219716@gcp-sa-apigee.iam.gserviceaccount.com][0m
+[0m[1mgoogle_apigee_organization.org: Refreshing state... [id=organizations/gclt-aicoe-dev-apigee][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+[31m-[0m/[32m+[0m destroy and then create replacement[0m
+
+Terraform planned the following actions, but then encountered a problem:
+
+[1m  # google_apigee_organization.org[0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_apigee_organization" "org" {
+      [32m+[0m[0m analytics_region                      = "europe-west2" [31m# forces replacement[0m[0m
+      [33m~[0m[0m apigee_project_id                     = "o83df7d9adfdf44a7-tp" -> (known after apply)
+      [33m~[0m[0m ca_certificate                        = "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURTVENDQWpHZ0F3SUJBZ0lRSi8wQUkwUFQvSmNDcGlIUTd6cGd2VEFOQmdrcWhraUc5dzBCQVFzRkFEQXYKTVMwd0t3WURWUVFERXlSaVpqYzBNamt4TVMxbE1UTmlMVFJoWXprdE9UWTRNeTFtTlRNNU1EWXhOMlF6WW1RdwpIaGNOTWpZd09ERTFNVGcxTURBMVdoY05Nell3T0RFeU1UZzFNREExV2pBdk1TMHdLd1lEVlFRREV5UmlaamMwCk1qa3hNUzFsTVROaUxUUmhZemt0T1RZNE15MW1OVE01TURZeE4yUXpZbVF3Z2dFaU1BMEdDU3FHU0liM0RRRUIKQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUUNzWWpiTG5RTjZmNWRFOHMzdUVUZHhlRXl5NUlvSXZ2MVNTZHlHWXNBYQpjME0zTXcvYVdEVnh2VmVQeGN0QTZxS0FFcXl5VFpmemx0OWJiOFVvd2xjUjJzT3VxUW9FRXdWNVg0Y0pZcnJOCnlOQXdmODlDaDBDakROcWZJRnYwZmQxMC83aFBjRlNVYmI0ZlhFb0VnWDBjY0hwM0t5NVNJK21HWU4wc3dJeGIKdHFXWjJpaXZONmxMTE1TcG5DMnUvSUxJcndTclJ6T1h0QU1seVdyNEdZNEtrRVRiVDF1MXRXR1dmRE9ISXUybgovTTJvVVFMd2g4TWdPano2WlM4V2Jpei8vQkttWngyT2llaHg5Sy9ZL2xSZU96TlIyQTcxTFk1UnJjeEVwT0t6Cm5ueWwzM2NRc0NNcjZtdVpmeVFuRDAyWUFtdU00a04ydDZJdjVPc2xoQkxQQWdNQkFBR2pZVEJmTUE0R0ExVWQKRHdFQi93UUVBd0lDcERBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUlLd1lCQlFVSEF3SXdEd1lEVlIwVApBUUgvQkFVd0F3RUIvekFkQmdOVkhRNEVGZ1FVVE10YnZyU0hhUmJDMEltRjQ0VTBtRFNJNm4wd0RRWUpLb1pJCmh2Y05BUUVMQlFBRGdnRUJBSUhRQVQyaVJ3OTRrSnpQVU1tWURpU2lxWG1oWGIrN1Uvei9TRzJQcGlqUTVwekkKS3RMbEowbjZ0aTYwdndVU3NPaXRnWVkxTGVCbkM3cVBkN3g1TlNvZjVjVkZUd0xxREJJYVVtSGxXdlhQbW1PcQpJT0JJcWxmelI3WnpJejFxV3dxRkpLQUdwQ0V5UVNTT0JOTEltU0pLQVhtaXlsSkdnek10SXZ2SHBQTm5ZZW5DCndSZnhLOXNJQWY0ZWpkaGg0aFV4eHM3UGsvQVlHYW9uNXEyTHQ3dDFqanh1QUVaUFQrTWk0Ni9Ta05jbHpVamkKajR6TE1MTFF1a2pjeGZkV1dnWE9zdEJvOHIwZGJRQXZIL2RacjFJV0FvL1plZ3lXYVVCQ2Y3OStxZ3M5bjh6OApmNHhoWFhTa0J5RzdYcy9YZUlVdUNXT1NSR3VxZDltV2dsTUc0dW89Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K" -> (known after apply)
+      [33m~[0m[0m id                                    = "organizations/gclt-aicoe-dev-apigee" -> (known after apply)
+      [33m~[0m[0m name                                  = "gclt-aicoe-dev-apigee" -> (known after apply)
+      [33m~[0m[0m subscription_type                     = "PAID" -> (known after apply)
+        [90m# (12 unchanged attributes hidden)[0m[0m
+
+      [33m~[0m[0m properties (known after apply)
+      [31m-[0m[0m properties {
+          [31m-[0m[0m property {
+              [31m-[0m[0m name  = "features.hybrid.enabled" [90m-> null[0m[0m
+              [31m-[0m[0m value = "true" [90m-> null[0m[0m
+            }
+          [31m-[0m[0m property {
+              [31m-[0m[0m name  = "features.mart.connect.enabled" [90m-> null[0m[0m
+              [31m-[0m[0m value = "true" [90m-> null[0m[0m
+            }
+        }
+    }
+
+[1m  # module.kms_disk.google_kms_crypto_key.key["instance-disk"][0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_kms_crypto_key" "key" {
+      [32m+[0m[0m crypto_key_backend            = (known after apply)
+      [33m~[0m[0m destroy_scheduled_duration    = "2592000s" -> (known after apply)
+      [33m~[0m[0m id                            = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk" -> (known after apply)
+      [33m~[0m[0m import_only                   = false -> (known after apply)
+      [33m~[0m[0m key_ring                      = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk" -> (known after apply) [31m# forces replacement[0m[0m
+      [31m-[0m[0m labels                        = {} [90m-> null[0m[0m
+        name                          = "instance-disk"
+      [33m~[0m[0m primary                       = [
+          [31m-[0m[0m {
+              [31m-[0m[0m name  = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk/cryptoKeyVersions/1"
+              [31m-[0m[0m state = "ENABLED"
+            },
+        ] -> (known after apply)
+      [31m-[0m[0m skip_initial_version_creation = false [90m-> null[0m[0m
+        [90m# (4 unchanged attributes hidden)[0m[0m
+
+        [90m# (1 unchanged block hidden)[0m[0m
+    }
+
+[1m  # module.kms_disk.google_kms_crypto_key_iam_member.grant["instance-disk:0"][0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_kms_crypto_key_iam_member" "grant" {
+      [33m~[0m[0m crypto_key_id = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk" -> (known after apply) [31m# forces replacement[0m[0m
+      [33m~[0m[0m etag          = "BwZZGlePGfQ=" -> (known after apply)
+      [33m~[0m[0m id            = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-714830219716@gcp-sa-apigee.iam.gserviceaccount.com" -> (known after apply)
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.kms_disk.google_kms_key_ring.ring[0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_kms_key_ring" "ring" {
+      [33m~[0m[0m id       = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk" -> (known after apply)
+      [33m~[0m[0m location = "europe-west1" [33m->[0m[0m "europe-west3" [31m# forces replacement[0m[0m
+        name     = "apigee-disk"
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1mPlan:[0m 4 to add, 0 to change, 4 to destroy.
+[0m[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named "backend_certificate_id"
+[33m│[0m [0mbut a value was found in file "../envs/dev/terraform.tfvars". If you meant
+[33m│[0m [0mto use this value, add a "variable" block to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named
+[33m│[0m [0m"gclt_aicoe_dev_network_project_id" but a value was found in file
+[33m│[0m [0m"1-org.auto.tfvars.json". If you meant to use this value, add a "variable"
+[33m│[0m [0mblock to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValues for undeclared variables[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mIn addition to the other similar warnings shown, 21 other variable(s)
+[33m│[0m [0mdefined without being declared.
+[33m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mInstance cannot be destroyed[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  on main.tf line 69:
+[31m│[0m [0m  69: [4mresource "google_apigee_organization" "org"[0m {[0m
+[31m│[0m [0m
+[31m│[0m [0mResource google_apigee_organization.org has lifecycle.prevent_destroy set,
+[31m│[0m [0mbut the plan calls for this resource to be destroyed. To avoid this error
+[31m│[0m [0mand continue with the plan, either disable lifecycle.prevent_destroy or
+[31m│[0m [0mreduce the scope of the plan using the -target option.
+[31m╵[0m[0m

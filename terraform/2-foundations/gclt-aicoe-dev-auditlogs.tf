@@ -39,7 +39,7 @@ module "gclt_aicoe_dev_auditlogs_kms" {
   source     = "../modules/kms-ring"
   project_id = var.gclt_aicoe_dev_auditlogs_project_id
   location   = var.region
-  ring_name  = "logs"
+  ring_name  = "logs-ew3"
   keys       = { "log-bucket" = {} }
   key_grants = { "log-bucket" = [data.google_logging_project_settings.gclt_aicoe_dev_auditlogs.kms_service_account_id] }
 
@@ -71,7 +71,7 @@ resource "google_logging_linked_dataset" "gclt_aicoe_dev_auditlogs_main" {
   parent      = "projects/${var.gclt_aicoe_dev_auditlogs_project_id}"
   location    = var.region
   bucket      = google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main.bucket_id
-  link_id     = "aicoe_dev_logs"
+  link_id     = "aicoe_dev_logs_ew3"
   description = "SQL over the 400-day central log bucket"
   depends_on  = [google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main]
 }

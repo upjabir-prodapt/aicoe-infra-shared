@@ -1,0 +1,442 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_compute_firewall.egress_allow_psc will be created
+  + resource "google_compute_firewall" "egress_allow_psc" {
+      + creation_timestamp = (known after apply)
+      + destination_ranges = [
+          + "192.168.6.146/32",
+          + "192.168.6.147/32",
+          + "192.168.6.164/32",
+        ]
+      + direction          = "EGRESS"
+      + enable_logging     = (known after apply)
+      + id                 = (known after apply)
+      + name               = "egress-allow-psc"
+      + network            = "gclt-aicoe-dev-vpc"
+      + priority           = 1000
+      + project            = "gclt-aicoe-dev-network"
+      + self_link          = (known after apply)
+
+      + allow {
+          + ports    = [
+              + "443",
+            ]
+          + protocol = "tcp"
+        }
+
+      + log_config {
+          + metadata = "INCLUDE_ALL_METADATA"
+        }
+    }
+
+  # google_compute_firewall.egress_deny_all will be created
+  + resource "google_compute_firewall" "egress_deny_all" {
+      + creation_timestamp = (known after apply)
+      + destination_ranges = [
+          + "0.0.0.0/0",
+        ]
+      + direction          = "EGRESS"
+      + enable_logging     = (known after apply)
+      + id                 = (known after apply)
+      + name               = "egress-deny-all"
+      + network            = "gclt-aicoe-dev-vpc"
+      + priority           = 65000
+      + project            = "gclt-aicoe-dev-network"
+      + self_link          = (known after apply)
+
+      + deny {
+          + ports    = []
+          + protocol = "all"
+        }
+
+      + log_config {
+          + metadata = "INCLUDE_ALL_METADATA"
+        }
+    }
+
+  # google_compute_firewall.ingress_proxy_subnet will be created
+  + resource "google_compute_firewall" "ingress_proxy_subnet" {
+      + creation_timestamp = (known after apply)
+      + destination_ranges = (known after apply)
+      + direction          = "INGRESS"
+      + enable_logging     = (known after apply)
+      + id                 = (known after apply)
+      + name               = "ingress-allow-proxy-subnet"
+      + network            = "gclt-aicoe-dev-vpc"
+      + priority           = 1000
+      + project            = "gclt-aicoe-dev-network"
+      + self_link          = (known after apply)
+      + source_ranges      = [
+          + "192.168.6.0/26",
+        ]
+
+      + allow {
+          + ports    = [
+              + "443",
+            ]
+          + protocol = "tcp"
+        }
+    }
+
+  # google_compute_network.vpc will be created
+  + resource "google_compute_network" "vpc" {
+      + auto_create_subnetworks                   = false
+      + bgp_always_compare_med                    = (known after apply)
+      + bgp_best_path_selection_mode              = (known after apply)
+      + bgp_inter_region_cost                     = (known after apply)
+      + delete_default_routes_on_create           = false
+      + gateway_ipv4                              = (known after apply)
+      + id                                        = (known after apply)
+      + internal_ipv6_range                       = (known after apply)
+      + mtu                                       = (known after apply)
+      + name                                      = "gclt-aicoe-dev-vpc"
+      + network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
+      + network_id                                = (known after apply)
+      + numeric_id                                = (known after apply)
+      + project                                   = "gclt-aicoe-dev-network"
+      + routing_mode                              = "REGIONAL"
+      + self_link                                 = (known after apply)
+    }
+
+  # google_compute_shared_vpc_host_project.host will be created
+  + resource "google_compute_shared_vpc_host_project" "host" {
+      + id      = (known after apply)
+      + project = "gclt-aicoe-dev-network"
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-aihub-ui"] will be created
+  + resource "google_compute_shared_vpc_service_project" "service" {
+      + host_project    = "gclt-aicoe-dev-network"
+      + id              = (known after apply)
+      + service_project = "gclt-aicoe-dev-aihub-ui"
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-apigee"] will be created
+  + resource "google_compute_shared_vpc_service_project" "service" {
+      + host_project    = "gclt-aicoe-dev-network"
+      + id              = (known after apply)
+      + service_project = "gclt-aicoe-dev-apigee"
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-auditlogs"] will be created
+  + resource "google_compute_shared_vpc_service_project" "service" {
+      + host_project    = "gclt-aicoe-dev-network"
+      + id              = (known after apply)
+      + service_project = "gclt-aicoe-dev-auditlogs"
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-ingress"] will be created
+  + resource "google_compute_shared_vpc_service_project" "service" {
+      + host_project    = "gclt-aicoe-dev-network"
+      + id              = (known after apply)
+      + service_project = "gclt-aicoe-dev-ingress"
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-llm"] will be created
+  + resource "google_compute_shared_vpc_service_project" "service" {
+      + host_project    = "gclt-aicoe-dev-network"
+      + id              = (known after apply)
+      + service_project = "gclt-aicoe-dev-llm"
+    }
+
+  # google_compute_shared_vpc_service_project.service["gclt-aicoe-dev-st"] will be created
+  + resource "google_compute_shared_vpc_service_project" "service" {
+      + host_project    = "gclt-aicoe-dev-network"
+      + id              = (known after apply)
+      + service_project = "gclt-aicoe-dev-st"
+    }
+
+  # google_compute_subnetwork.cloudrun will be created
+  + resource "google_compute_subnetwork" "cloudrun" {
+      + creation_timestamp         = (known after apply)
+      + enable_flow_logs           = (known after apply)
+      + external_ipv6_prefix       = (known after apply)
+      + fingerprint                = (known after apply)
+      + gateway_address            = (known after apply)
+      + id                         = (known after apply)
+      + internal_ipv6_prefix       = (known after apply)
+      + ip_cidr_range              = "192.168.4.0/23"
+      + ipv6_cidr_range            = (known after apply)
+      + ipv6_gce_endpoint          = (known after apply)
+      + name                       = "gclt-aicoe-dev-cloudrun-ew3"
+      + network                    = (known after apply)
+      + private_ip_google_access   = false
+      + private_ipv6_google_access = (known after apply)
+      + project                    = "gclt-aicoe-dev-network"
+      + purpose                    = (known after apply)
+      + region                     = "europe-west3"
+      + self_link                  = (known after apply)
+      + stack_type                 = (known after apply)
+      + state                      = (known after apply)
+      + subnetwork_id              = (known after apply)
+
+      + log_config {
+          + aggregation_interval = "INTERVAL_15_MIN"
+          + filter_expr          = "true"
+          + flow_sampling        = 0.1
+          + metadata             = "INCLUDE_ALL_METADATA"
+        }
+
+      + secondary_ip_range (known after apply)
+    }
+
+  # google_compute_subnetwork.internal will be created
+  + resource "google_compute_subnetwork" "internal" {
+      + creation_timestamp         = (known after apply)
+      + enable_flow_logs           = (known after apply)
+      + external_ipv6_prefix       = (known after apply)
+      + fingerprint                = (known after apply)
+      + gateway_address            = (known after apply)
+      + id                         = (known after apply)
+      + internal_ipv6_prefix       = (known after apply)
+      + ip_cidr_range              = "192.168.6.144/28"
+      + ipv6_cidr_range            = (known after apply)
+      + ipv6_gce_endpoint          = (known after apply)
+      + name                       = "gclt-aicoe-dev-internal-ew3"
+      + network                    = (known after apply)
+      + private_ip_google_access   = false
+      + private_ipv6_google_access = (known after apply)
+      + project                    = "gclt-aicoe-dev-network"
+      + purpose                    = (known after apply)
+      + region                     = "europe-west3"
+      + self_link                  = (known after apply)
+      + stack_type                 = (known after apply)
+      + state                      = (known after apply)
+      + subnetwork_id              = (known after apply)
+
+      + secondary_ip_range (known after apply)
+    }
+
+  # google_compute_subnetwork.proxy will be created
+  + resource "google_compute_subnetwork" "proxy" {
+      + creation_timestamp         = (known after apply)
+      + enable_flow_logs           = (known after apply)
+      + external_ipv6_prefix       = (known after apply)
+      + fingerprint                = (known after apply)
+      + gateway_address            = (known after apply)
+      + id                         = (known after apply)
+      + internal_ipv6_prefix       = (known after apply)
+      + ip_cidr_range              = "192.168.6.0/26"
+      + ipv6_cidr_range            = (known after apply)
+      + ipv6_gce_endpoint          = (known after apply)
+      + name                       = "gclt-aicoe-dev-proxy-ew3"
+      + network                    = (known after apply)
+      + private_ip_google_access   = (known after apply)
+      + private_ipv6_google_access = (known after apply)
+      + project                    = "gclt-aicoe-dev-network"
+      + purpose                    = "REGIONAL_MANAGED_PROXY"
+      + region                     = "europe-west3"
+      + role                       = "ACTIVE"
+      + self_link                  = (known after apply)
+      + stack_type                 = (known after apply)
+      + state                      = (known after apply)
+      + subnetwork_id              = (known after apply)
+
+      + secondary_ip_range (known after apply)
+    }
+
+  # google_compute_subnetwork.pscnat will be created
+  + resource "google_compute_subnetwork" "pscnat" {
+      + creation_timestamp         = (known after apply)
+      + enable_flow_logs           = (known after apply)
+      + external_ipv6_prefix       = (known after apply)
+      + fingerprint                = (known after apply)
+      + gateway_address            = (known after apply)
+      + id                         = (known after apply)
+      + internal_ipv6_prefix       = (known after apply)
+      + ip_cidr_range              = "192.168.6.128/28"
+      + ipv6_cidr_range            = (known after apply)
+      + ipv6_gce_endpoint          = (known after apply)
+      + name                       = "gclt-aicoe-dev-pscnat-ew3"
+      + network                    = (known after apply)
+      + private_ip_google_access   = (known after apply)
+      + private_ipv6_google_access = (known after apply)
+      + project                    = "gclt-aicoe-dev-network"
+      + purpose                    = "PRIVATE_SERVICE_CONNECT"
+      + region                     = "europe-west3"
+      + self_link                  = (known after apply)
+      + stack_type                 = (known after apply)
+      + state                      = (known after apply)
+      + subnetwork_id              = (known after apply)
+
+      + secondary_ip_range (known after apply)
+    }
+
+  # google_compute_subnetwork.subnet_ew3 will be created
+  + resource "google_compute_subnetwork" "subnet_ew3" {
+      + creation_timestamp         = (known after apply)
+      + enable_flow_logs           = (known after apply)
+      + external_ipv6_prefix       = (known after apply)
+      + fingerprint                = (known after apply)
+      + gateway_address            = (known after apply)
+      + id                         = (known after apply)
+      + internal_ipv6_prefix       = (known after apply)
+      + ip_cidr_range              = "10.110.73.0/24"
+      + ipv6_cidr_range            = (known after apply)
+      + ipv6_gce_endpoint          = (known after apply)
+      + name                       = "gclt-aicoe-dev-subnet-ew3"
+      + network                    = (known after apply)
+      + private_ip_google_access   = false
+      + private_ipv6_google_access = (known after apply)
+      + project                    = "gclt-aicoe-dev-network"
+      + purpose                    = (known after apply)
+      + region                     = "europe-west3"
+      + self_link                  = (known after apply)
+      + stack_type                 = (known after apply)
+      + state                      = (known after apply)
+      + subnetwork_id              = (known after apply)
+
+      + log_config {
+          + aggregation_interval = "INTERVAL_15_MIN"
+          + filter_expr          = "true"
+          + flow_sampling        = 0.1
+          + metadata             = "INCLUDE_ALL_METADATA"
+        }
+
+      + secondary_ip_range (known after apply)
+    }
+
+  # google_dns_managed_zone.googleapis will be created
+  + resource "google_dns_managed_zone" "googleapis" {
+      + creation_time    = (known after apply)
+      + description      = "Managed by Terraform"
+      + dns_name         = "googleapis.com."
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy    = false
+      + id               = (known after apply)
+      + managed_zone_id  = (known after apply)
+      + name             = "googleapis-private"
+      + name_servers     = (known after apply)
+      + project          = "gclt-aicoe-dev-network"
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + visibility       = "private"
+
+      + cloud_logging_config (known after apply)
+
+      + dnssec_config (known after apply)
+
+      + private_visibility_config {
+          + networks {
+              + network_url = (known after apply)
+            }
+        }
+    }
+
+  # google_dns_managed_zone.internal will be created
+  + resource "google_dns_managed_zone" "internal" {
+      + creation_time    = (known after apply)
+      + description      = "Platform hostnames, resolvable only inside the VPC"
+      + dns_name         = "aicoedev-int.colt.net."
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy    = false
+      + id               = (known after apply)
+      + managed_zone_id  = (known after apply)
+      + name             = "aicoedev-int"
+      + name_servers     = (known after apply)
+      + project          = "gclt-aicoe-dev-network"
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + visibility       = "private"
+
+      + cloud_logging_config (known after apply)
+
+      + dnssec_config (known after apply)
+
+      + private_visibility_config {
+          + networks {
+              + network_url = (known after apply)
+            }
+        }
+    }
+
+  # google_dns_managed_zone.runapp will be created
+  + resource "google_dns_managed_zone" "runapp" {
+      + creation_time    = (known after apply)
+      + description      = "Internal Cloud Run URLs, used by Cloud Tasks to reach the worker"
+      + dns_name         = "run.app."
+      + effective_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + force_destroy    = false
+      + id               = (known after apply)
+      + managed_zone_id  = (known after apply)
+      + name             = "run-app-private"
+      + name_servers     = (known after apply)
+      + project          = "gclt-aicoe-dev-network"
+      + terraform_labels = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + visibility       = "private"
+
+      + cloud_logging_config (known after apply)
+
+      + dnssec_config (known after apply)
+
+      + private_visibility_config {
+          + networks {
+              + network_url = (known after apply)
+            }
+        }
+    }
+
+  # google_dns_record_set.aihub will be created
+  + resource "google_dns_record_set" "aihub" {
+      + id           = (known after apply)
+      + managed_zone = "aicoedev-int"
+      + name         = "aihub.aicoedev-int.colt.net."
+      + project      = "gclt-aicoe-dev-network"
+      + rrdatas      = [
+          + "10.110.73.20",
+        ]
+      + ttl          = 300
+      + type         = "A"
+    }
+
+Plan: 20 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + cloudrun_subnet_self_link = (known after apply)
+  + googleapis_zone_name      = "googleapis-private"
+  + internal_subnet_self_link = (known after apply)
+  + private_zone_name         = "aicoedev-int"
+  + proxy_subnet_self_link    = (known after apply)
+  + pscnat_subnet_self_link   = (known after apply)
+  + subnet_ew3_self_link      = (known after apply)
+  + vpc_self_link             = (known after apply)
+
+Warning: Value for undeclared variable
+
+The root module does not declare a variable named "gclt_aicoe_dev_ingress_project_id" but a value was found in file "1-org.auto.tfvars.json". If
+you meant to use this value, add a "variable" block to the configuration.
+
+To silence these warnings, use TF_VAR_... environment variables to provide certain "global" settings to all configurations in your organization. To
+reduce the verbosity of these warnings, use the -compact-warnings option.
+
+Warning: Value for undeclared variable
+
+The root module does not declare a variable named "folder_id" but a value was found in file "../envs/dev/terraform.tfvars". If you meant to use
+this value, add a "variable" block to the configuration.
+
+To silence these warnings, use TF_VAR_... environment variables to provide certain "global" settings to all configurations in your organization. To
+reduce the verbosity of these warnings, use the -compact-warnings option.
+
+Warning: Values for undeclared variables
+
+In addition to the other similar warnings shown, 22 other variable(s) defined without being declared.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

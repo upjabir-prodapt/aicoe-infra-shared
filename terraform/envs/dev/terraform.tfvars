@@ -1,6 +1,6 @@
 environment      = "dev"
-region           = "europe-west1"
-analytics_region = "europe-west2" # EU, per the residency policy
+region           = "europe-west3"
+analytics_region = "europe-west2" # need to change in europe west3 in prod
 
 # ── 0-bootstrap ──────────────────────────────────────────────────────────
 # aicoe-sharedwif IS the seed project. Already exists in GCP — see the LLD's

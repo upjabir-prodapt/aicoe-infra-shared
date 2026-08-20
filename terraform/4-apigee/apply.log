@@ -1,0 +1,27 @@
+nohup: ignoring input
+[0m[1mgoogle_apigee_organization.org: Creating...[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError creating Organization: googleapi: Error 400: Precondition check failed.
+[31m│[0m [0mDetails:
+[31m│[0m [0m[
+[31m│[0m [0m  {
+[31m│[0m [0m    "@type": "type.googleapis.com/google.rpc.PreconditionFailure",
+[31m│[0m [0m    "violations": [
+[31m│[0m [0m      {
+[31m│[0m [0m        "description": "'global' violates constraint `constraints/gcp.resourceLocations` on the resource 'projects/gclt-aicoe-dev-apigee, field name: Control Plane Region'",
+[31m│[0m [0m        "subject": "orgpolicy:projects/gclt-aicoe-dev-apigee?zone=global",
+[31m│[0m [0m        "type": "constraints/gcp.resourceLocations"
+[31m│[0m [0m      }
+[31m│[0m [0m    ]
+[31m│[0m [0m  },
+[31m│[0m [0m  {
+[31m│[0m [0m    "@type": "type.googleapis.com/google.rpc.RequestInfo",
+[31m│[0m [0m    "requestId": "8168822724075214960"
+[31m│[0m [0m  }
+[31m│[0m [0m][0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with google_apigee_organization.org,
+[31m│[0m [0m  on main.tf line 47, in resource "google_apigee_organization" "org":
+[31m│[0m [0m  47: resource "google_apigee_organization" "org" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m

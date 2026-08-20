@@ -19,6 +19,7 @@ variable "region" { type = string }
 # ── inputs from upstream stages ─────────────────────────────────────────
 variable "vpc_self_link" { type = string }
 variable "internal_subnet_self_link" { type = string }
+variable "subnet_ew3_self_link" { type = string }
 variable "private_zone_name" { type = string }
 variable "instance_service_attachment" {
   type        = string
@@ -37,7 +38,7 @@ resource "google_compute_global_address" "google_apis" {
 
 resource "google_compute_global_forwarding_rule" "google_apis" {
   project               = var.project_id
-  name                  = "psc-google-apis"
+  name                  = "pscgoogleapis"
   target                = "vpc-sc" # not all-apis: only perimeter-supported APIs
   network               = var.vpc_self_link
   ip_address            = google_compute_global_address.google_apis.id
@@ -49,9 +50,9 @@ resource "google_compute_address" "apigee_endpoint" {
   project      = var.project_id
   name         = "psc-apigee-ip"
   region       = var.region
-  subnetwork   = var.internal_subnet_self_link
+  subnetwork   = var.subnet_ew3_self_link
   address_type = "INTERNAL"
-  address      = "192.168.6.146"
+  address      = "10.110.73.10"
 }
 
 resource "google_compute_forwarding_rule" "apigee_endpoint" {
@@ -59,7 +60,7 @@ resource "google_compute_forwarding_rule" "apigee_endpoint" {
   name                  = "psc-apigee"
   region                = var.region
   network               = var.vpc_self_link
-  subnetwork            = var.internal_subnet_self_link
+  subnetwork            = var.subnet_ew3_self_link
   ip_address            = google_compute_address.apigee_endpoint.id
   load_balancing_scheme = ""
   target                = var.instance_service_attachment
@@ -101,22 +102,55 @@ output "google_apis_ip" { value = google_compute_global_address.google_apis.addr
 # under its own producer service class. The class below is the Vertex AI
 # Vector Search producer. Confirm against the live service class before
 # apply — a wrong class silently creates a policy that matches nothing.
+#
+# Note: Commented out because the Vertex AI Vector Search service class is not
+# globally available or registered for Service Connection Policies in all regions/projects yet.
+#
+# resource "google_network_connectivity_service_connection_policy" "vector_search" {
+#   project       = var.project_id
+#   location      = var.region
+#   name          = "vector-search-auto"
+#   service_class = "gcp-aiplatform-vector-search"
+#   network       = var.vpc_self_link
+#
+#   psc_config {
+#     subnetworks = [var.internal_subnet_self_link]
+#   }
+# }
+#
+# output "vector_search_policy_id" { value = google_network_connectivity_service_connection_policy.vector_search.id }
 
-variable "vector_search_subnet_self_link" {
-  type        = string
-  description = "Subnet from which Vector Search PSC endpoint addresses are allocated. The internal subnet (192.168.6.144/28) holds .147 for this."
+# ── PSC to Model Armor (Regional Endpoint) ──────────────────────────────
+resource "google_network_connectivity_regional_endpoint" "model_armor" {
+  project           = var.project_id
+  name              = "model-armor-ew3"
+  location          = var.region
+  target_google_api = "modelarmor.europe-west3.rep.googleapis.com"
+  network           = "projects/${var.project_id}/global/networks/gclt-aicoe-dev-vpc"
+  subnetwork        = "projects/${var.project_id}/regions/${var.region}/subnetworks/gclt-aicoe-dev-internal-ew3"
+  address           = "192.168.6.148"
+  access_type       = "REGIONAL"
 }
 
-resource "google_network_connectivity_service_connection_policy" "vector_search" {
-  project       = var.project_id
-  location      = var.region
-  name          = "vector-search-auto"
-  service_class = "gcp-vertex-ai-vector-search"
-  network       = var.vpc_self_link
+resource "google_dns_managed_zone" "modelarmor" {
+  project     = var.project_id
+  name        = "modelarmor-private"
+  dns_name    = "modelarmor.europe-west3.rep.googleapis.com."
+  visibility  = "private"
+  description = "Private zone for regional Model Armor endpoint"
 
-  psc_config {
-    subnetworks = [var.vector_search_subnet_self_link]
+  private_visibility_config {
+    networks { network_url = var.vpc_self_link }
   }
 }
 
-output "vector_search_policy_id" { value = google_network_connectivity_service_connection_policy.vector_search.id }
+resource "google_dns_record_set" "modelarmor" {
+  project      = var.project_id
+  managed_zone = google_dns_managed_zone.modelarmor.name
+  name         = "modelarmor.europe-west3.rep.googleapis.com."
+  type         = "A"
+  ttl          = 300
+  rrdatas      = [google_network_connectivity_regional_endpoint.model_armor.address]
+}
+
+output "model_armor_ip" { value = google_network_connectivity_regional_endpoint.model_armor.address }

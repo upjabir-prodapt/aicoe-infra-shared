@@ -31,9 +31,9 @@ resource "google_compute_network" "vpc" {
 }
 
 # ── the Colt-reachable range · user-facing load balancer VIPs only ──────
-resource "google_compute_subnetwork" "subnet_ew1" {
+resource "google_compute_subnetwork" "subnet_ew3" {
   project       = var.project_id
-  name          = "gclt-aicoe-dev-subnet-ew1"
+  name          = "gclt-aicoe-dev-subnet-ew3"
   region        = var.region
   network       = google_compute_network.vpc.id
   ip_cidr_range = "10.110.73.0/24"
@@ -52,7 +52,7 @@ resource "google_compute_subnetwork" "subnet_ew1" {
 # ── everything below has NO route from the Colt network ─────────────────
 resource "google_compute_subnetwork" "cloudrun" {
   project = var.project_id
-  name    = "gclt-aicoe-dev-cloudrun-ew1"
+  name    = "gclt-aicoe-dev-cloudrun-ew3"
   region  = var.region
   network = google_compute_network.vpc.id
   # 508 usable → 127 instance ceiling, at ~2 addresses per instance and a 4x
@@ -72,7 +72,7 @@ resource "google_compute_subnetwork" "cloudrun" {
 
 resource "google_compute_subnetwork" "proxy" {
   project       = var.project_id
-  name          = "gclt-aicoe-dev-proxy-ew1"
+  name          = "gclt-aicoe-dev-proxy-ew3"
   region        = var.region
   network       = google_compute_network.vpc.id
   ip_cidr_range = "192.168.6.0/26" # /26 is the documented minimum
@@ -94,7 +94,7 @@ resource "google_compute_subnetwork" "proxy" {
 
 resource "google_compute_subnetwork" "pscnat" {
   project       = var.project_id
-  name          = "gclt-aicoe-dev-pscnat-ew1"
+  name          = "gclt-aicoe-dev-pscnat-ew3"
   region        = var.region
   network       = google_compute_network.vpc.id
   ip_cidr_range = "192.168.6.128/28"
@@ -106,7 +106,7 @@ resource "google_compute_subnetwork" "pscnat" {
 
 resource "google_compute_subnetwork" "internal" {
   project                  = var.project_id
-  name                     = "gclt-aicoe-dev-internal-ew1"
+  name                     = "gclt-aicoe-dev-internal-ew3"
   region                   = var.region
   network                  = google_compute_network.vpc.id
   ip_cidr_range            = "192.168.6.144/28" # .145 Backend ILB, .146 Apigee, .147 Vector Search
@@ -142,8 +142,9 @@ resource "google_compute_firewall" "egress_allow_psc" {
 
   destination_ranges = [
     "192.168.6.164/32", # Google APIs
-    "192.168.6.146/32", # Apigee
+    "10.110.73.10/32",  # Apigee (routable)
     "192.168.6.147/32", # Vector Search
+    "192.168.6.148/32", # Model Armor (regional)
   ]
 
   allow {
@@ -236,7 +237,7 @@ resource "google_compute_shared_vpc_service_project" "service" {
 
 # ── outputs consumed by network/psc, infra/ingress, infra/st ────────────
 output "vpc_self_link" { value = google_compute_network.vpc.self_link }
-output "subnet_ew1_self_link" { value = google_compute_subnetwork.subnet_ew1.self_link }
+output "subnet_ew3_self_link" { value = google_compute_subnetwork.subnet_ew3.self_link }
 output "cloudrun_subnet_self_link" { value = google_compute_subnetwork.cloudrun.self_link }
 output "proxy_subnet_self_link" { value = google_compute_subnetwork.proxy.self_link }
 output "pscnat_subnet_self_link" { value = google_compute_subnetwork.pscnat.self_link }

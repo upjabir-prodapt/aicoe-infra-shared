@@ -7,13 +7,6 @@ terraform {
   }
 }
 
-# The sandbox VM reaches Google APIs through a PSC all-apis endpoint whose TLS
-# cert covers *.googleapis.com but not the regional *.rep.googleapis.com
-# hostnames. Model Armor would default to the regional endpoint and fail TLS
-# verification, so override it to the global hostname.
-provider "google-beta" {
-  model_armor_custom_endpoint = "https://modelarmor.googleapis.com/v1beta/"
-}
 
 variable "region" { type = string }
 

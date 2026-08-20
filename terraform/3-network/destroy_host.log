@@ -1,0 +1,54 @@
+[0m[1mgoogle_compute_shared_vpc_host_project.host: Refreshing state... [id=gclt-aicoe-dev-network][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # google_compute_shared_vpc_host_project.host[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "google_compute_shared_vpc_host_project" "host" {
+      [31m-[0m[0m id      = "gclt-aicoe-dev-network" [90m-> null[0m[0m
+      [31m-[0m[0m project = "gclt-aicoe-dev-network" [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m 0 to add, 0 to change, 1 to destroy.
+[0m
+Changes to Outputs:
+  [31m-[0m[0m googleapis_zone_name = "googleapis-private" [90m-> null[0m[0m
+  [31m-[0m[0m private_zone_name    = "aicoedev-int" [90m-> null[0m[0m
+[0m[1mgoogle_compute_shared_vpc_host_project.host: Destroying... [id=gclt-aicoe-dev-network][0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named
+[33m│[0m [0m"gclt_aicoe_dev_ingress_project_id" but a value was found in file
+[33m│[0m [0m"1-org.auto.tfvars.json". If you meant to use this value, add a "variable"
+[33m│[0m [0mblock to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named "project_numbers" but a
+[33m│[0m [0mvalue was found in file "1-org.auto.tfvars.json". If you meant to use this
+[33m│[0m [0mvalue, add a "variable" block to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValues for undeclared variables[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mIn addition to the other similar warnings shown, 22 other variable(s)
+[33m│[0m [0mdefined without being declared.
+[33m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError disabling Shared VPC Host "gclt-aicoe-dev-network": googleapi: Error 400: Cannot disable project as a shared VPC host because it has active service projects., badRequest[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m
+[31m╵[0m[0m

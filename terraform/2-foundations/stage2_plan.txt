@@ -1,0 +1,985 @@
+google_project_service.gclt_aicoe_dev_auditlogs_apis["logging.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-auditlogs/logging.googleapis.com]
+google_project_service.gclt_aicoe_dev_auditlogs_apis["pubsub.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-auditlogs/pubsub.googleapis.com]
+google_project_service.gclt_aicoe_dev_auditlogs_apis["bigquery.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-auditlogs/bigquery.googleapis.com]
+google_project_service.gclt_aicoe_dev_auditlogs_apis["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-auditlogs/cloudkms.googleapis.com]
+google_firestore_database.gclt_aicoe_dev_aihub_ui_sessions: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/databases/(default)]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["certificatemanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/certificatemanager.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/compute.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["binaryauthorization.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/binaryauthorization.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["iap.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/iap.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["secretmanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/secretmanager.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["dns.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/dns.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/compute.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["servicenetworking.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/servicenetworking.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["networkconnectivity.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/networkconnectivity.googleapis.com]
+data.google_logging_project_settings.gclt_aicoe_dev_auditlogs: Reading...
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/cloudkms.googleapis.com]
+data.google_logging_project_settings.gclt_aicoe_dev_auditlogs: Read complete after 1s [id=projects/gclt-aicoe-dev-auditlogs/settings]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["run.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/run.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["aiplatform.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/aiplatform.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["cloudtasks.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/cloudtasks.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["secretmanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/secretmanager.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["binaryauthorization.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/binaryauthorization.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["firestore.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/firestore.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["containeranalysis.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/containeranalysis.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["artifactregistry.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/artifactregistry.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/compute.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["dlp.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/dlp.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["bigquery.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/bigquery.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["storage.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/storage.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["run.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/run.googleapis.com]
+google_secret_manager_secret.gclt_aicoe_dev_ingress_key["aihub"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/secrets/tls-aihub-private-key]
+google_secret_manager_secret.gclt_aicoe_dev_ingress_key["backend"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/secrets/tls-backend-private-key]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["secretmanager.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/secretmanager.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["storage.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/storage.googleapis.com]
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/compute.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["aiplatform.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/aiplatform.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["bigquery.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/bigquery.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["cloudkms.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/cloudkms.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["iap.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/iap.googleapis.com]
+google_secret_manager_secret.gclt_aicoe_dev_ingress_cert["backend"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/secrets/tls-backend-certificate]
+google_secret_manager_secret.gclt_aicoe_dev_ingress_cert["aihub"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/secrets/tls-aihub-certificate]
+google_container_analysis_note.gclt_aicoe_dev_ingress_note: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/notes/aicoe-build-note]
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["servicenetworking.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/servicenetworking.googleapis.com]
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["secretmanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/secretmanager.googleapis.com]
+module.gclt_aicoe_dev_auditlogs_agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["apigee.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/apigee.googleapis.com]
+module.gclt_aicoe_dev_llm_baseline.google_project_service.api["aiplatform.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-llm/aiplatform.googleapis.com]
+module.gclt_aicoe_dev_llm_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-llm/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_llm_baseline.google_project_service.api["dlp.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-llm/dlp.googleapis.com]
+module.gclt_aicoe_dev_llm_baseline.google_project_service.api["modelarmor.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-llm/modelarmor.googleapis.com]
+module.gclt_aicoe_dev_auditlogs_agents.data.google_project.this: Read complete after 1s [id=projects/gclt-aicoe-dev-auditlogs]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["iap.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/iap.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["firestore.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/firestore.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["run.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/run.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["secretmanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/secretmanager.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/compute.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["artifactregistry.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/artifactregistry.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["binaryauthorization.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/binaryauthorization.googleapis.com]
+google_firestore_field.gclt_aicoe_dev_aihub_ui_session_ttl: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/databases/(default)/collectionGroups/sessions/fields/absolute_expires_at]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["containeranalysis.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/containeranalysis.googleapis.com]
+module.gclt_aicoe_dev_auditlogs_agents.google_project_service_identity.agent["logging.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-auditlogs/services/logging.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["translation-worker-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/translation-worker-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["worker-invoker-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/worker-invoker-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["mcp-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/mcp-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["translation-api-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/translation-api-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["salesagent-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/salesagent-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_apigee_baseline.google_service_account.sa["apigee-int-runtime"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/serviceAccounts/apigee-int-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_apigee_baseline.google_service_account.sa["apigee-llm-runtime"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/serviceAccounts/apigee-llm-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_llm_baseline.google_service_account.sa["llm-breakglass"]: Refreshing state... [id=projects/gclt-aicoe-dev-llm/serviceAccounts/llm-breakglass@gclt-aicoe-dev-llm.iam.gserviceaccount.com]
+google_certificate_manager_certificate.gclt_aicoe_dev_ingress["aihub"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/locations/europe-west1/certificates/cert-aihub]
+google_certificate_manager_certificate.gclt_aicoe_dev_ingress["backend"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/locations/europe-west1/certificates/cert-backend]
+module.gclt_aicoe_dev_ingress_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_ingress_baseline.module.agents.google_project_service_identity.agent["iap.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/services/iap.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.module.agents.data.google_project.this: Reading...
+google_binary_authorization_attestor.gclt_aicoe_dev_ingress_build: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/attestors/aicoe-build-attestor]
+module.gclt_aicoe_dev_st_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_st_baseline.module.agents.google_project_service_identity.agent["aiplatform.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/services/aiplatform.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.module.agents.google_project_service_identity.agent["storage.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/services/storage.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.module.agents.google_project_service_identity.agent["artifactregistry.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/services/artifactregistry.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.module.agents.google_project_service_identity.agent["bigquery.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/services/bigquery.googleapis.com]
+google_secret_manager_secret.gclt_aicoe_dev_aihub_ui_bff["entra-bff-client-secret"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/secrets/entra-bff-client-secret]
+google_secret_manager_secret.gclt_aicoe_dev_aihub_ui_bff["apigee-bff-client-key"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/secrets/apigee-bff-client-key]
+module.gclt_aicoe_dev_apigee_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_apigee_baseline.module.agents.google_project_service_identity.agent["apigee.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/services/apigee.googleapis.com]
+module.gclt_aicoe_dev_llm_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_ingress_baseline.module.agents.data.google_project.this: Read complete after 1s [id=projects/gclt-aicoe-dev-ingress]
+module.gclt_aicoe_dev_llm_baseline.module.agents.google_project_service_identity.agent["aiplatform.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-llm/services/aiplatform.googleapis.com]
+google_binary_authorization_policy.gclt_aicoe_dev_st_policy: Refreshing state... [id=projects/gclt-aicoe-dev-st]
+google_binary_authorization_policy.gclt_aicoe_dev_aihub_ui_policy: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui]
+google_project_iam_member.gclt_aicoe_dev_llm_breakglass_vertex: Refreshing state... [id=gclt-aicoe-dev-llm/roles/aiplatform.user/serviceAccount:llm-breakglass@gclt-aicoe-dev-llm.iam.gserviceaccount.com]
+google_project_iam_member.gclt_aicoe_dev_llm_apigee_modelarmor: Refreshing state... [id=gclt-aicoe-dev-llm/roles/modelarmor.user/serviceAccount:apigee-llm-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com]
+google_project_iam_member.gclt_aicoe_dev_llm_apigee_vertex: Refreshing state... [id=gclt-aicoe-dev-llm/roles/aiplatform.user/serviceAccount:apigee-llm-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_network_baseline.module.agents.data.google_project.this: Read complete after 1s [id=projects/gclt-aicoe-dev-network]
+google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main: Refreshing state... [id=projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/buckets/aicoe-dev-logs-400d]
+module.gclt_aicoe_dev_st_baseline.module.agents.data.google_project.this: Read complete after 0s [id=projects/gclt-aicoe-dev-st]
+google_bigquery_dataset.gclt_aicoe_dev_st_jobs: Refreshing state... [id=projects/gclt-aicoe-dev-st/datasets/translation_jobs]
+google_storage_bucket.gclt_aicoe_dev_st_artifacts: Refreshing state... [id=gclt-aicoe-dev-st-artifacts]
+google_artifact_registry_repository.gclt_aicoe_dev_st_containers: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west1/repositories/containers]
+module.gclt_aicoe_dev_apigee_baseline.module.agents.data.google_project.this: Read complete after 0s [id=projects/gclt-aicoe-dev-apigee]
+google_logging_linked_dataset.gclt_aicoe_dev_auditlogs_main: Refreshing state... [id=projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/buckets/aicoe-dev-logs-400d/links/aicoe_dev_logs]
+google_logging_folder_sink.gclt_aicoe_dev_auditlogs_aicoe_400d: Refreshing state... [id=folders/846301442455/sinks/aicoe-400d]
+module.gclt_aicoe_dev_llm_baseline.module.agents.data.google_project.this: Read complete after 0s [id=projects/gclt-aicoe-dev-llm]
+google_project_iam_member.gclt_aicoe_dev_auditlogs_sink_400d_writer: Refreshing state... [id=gclt-aicoe-dev-auditlogs/roles/logging.bucketWriter/serviceAccount:service-folder-846301442455@gcp-sa-logging.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_service_account.sa["aihub-bff-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/serviceAccounts/aihub-bff-sa@gclt-aicoe-dev-aihub-ui.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.google_project_service_identity.agent["iap.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/services/iap.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.google_project_service_identity.agent["firestore.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/services/firestore.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.google_project_service_identity.agent["artifactregistry.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/services/artifactregistry.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.google_project_service_identity.agent["secretmanager.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/services/secretmanager.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.data.google_project.this: Read complete after 1s [id=projects/gclt-aicoe-dev-aihub-ui]
+google_artifact_registry_repository.gclt_aicoe_dev_aihub_ui_containers: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/locations/europe-west1/repositories/containers]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+-/+ destroy and then create replacement
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # data.google_kms_crypto_key_version.gclt_aicoe_dev_ingress_attestor will be read during apply
+  # (config refers to values not yet known)
+ <= data "google_kms_crypto_key_version" "gclt_aicoe_dev_ingress_attestor" {
+      + algorithm        = (known after apply)
+      + crypto_key       = (known after apply)
+      + id               = (known after apply)
+      + name             = (known after apply)
+      + protection_level = (known after apply)
+      + public_key       = (known after apply)
+      + state            = (known after apply)
+    }
+
+  # data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_cert["aihub"] will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "google_secret_manager_secret_version" "gclt_aicoe_dev_ingress_cert" {
+      + create_time  = (known after apply)
+      + destroy_time = (known after apply)
+      + enabled      = (known after apply)
+      + id           = (known after apply)
+      + name         = (known after apply)
+      + project      = "gclt-aicoe-dev-ingress"
+      + secret       = "tls-aihub-certificate"
+      + secret_data  = (sensitive value)
+      + version      = (known after apply)
+    }
+
+  # data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_cert["backend"] will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "google_secret_manager_secret_version" "gclt_aicoe_dev_ingress_cert" {
+      + create_time  = (known after apply)
+      + destroy_time = (known after apply)
+      + enabled      = (known after apply)
+      + id           = (known after apply)
+      + name         = (known after apply)
+      + project      = "gclt-aicoe-dev-ingress"
+      + secret       = "tls-backend-certificate"
+      + secret_data  = (sensitive value)
+      + version      = (known after apply)
+    }
+
+  # data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_key["aihub"] will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "google_secret_manager_secret_version" "gclt_aicoe_dev_ingress_key" {
+      + create_time  = (known after apply)
+      + destroy_time = (known after apply)
+      + enabled      = (known after apply)
+      + id           = (known after apply)
+      + name         = (known after apply)
+      + project      = "gclt-aicoe-dev-ingress"
+      + secret       = "tls-aihub-private-key"
+      + secret_data  = (sensitive value)
+      + version      = (known after apply)
+    }
+
+  # data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_key["backend"] will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "google_secret_manager_secret_version" "gclt_aicoe_dev_ingress_key" {
+      + create_time  = (known after apply)
+      + destroy_time = (known after apply)
+      + enabled      = (known after apply)
+      + id           = (known after apply)
+      + name         = (known after apply)
+      + project      = "gclt-aicoe-dev-ingress"
+      + secret       = "tls-backend-private-key"
+      + secret_data  = (sensitive value)
+      + version      = (known after apply)
+    }
+
+  # google_artifact_registry_repository.gclt_aicoe_dev_aihub_ui_containers must be replaced
+-/+ resource "google_artifact_registry_repository" "gclt_aicoe_dev_aihub_ui_containers" {
+      - cleanup_policy_dry_run = false -> null
+      ~ create_time            = "2026-08-13T10:42:46.169597Z" -> (known after apply)
+      ~ id                     = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west1/repositories/containers" -> (known after apply)
+      ~ kms_key_name           = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west1/keyRings/aihub/cryptoKeys/artifacts" -> (known after apply) # forces replacement
+      - labels                 = {} -> null
+      ~ location               = "europe-west1" -> "europe-west3" # forces replacement
+      ~ name                   = "containers" -> (known after apply)
+      ~ update_time            = "2026-08-13T10:42:46.169597Z" -> (known after apply)
+        # (7 unchanged attributes hidden)
+
+      ~ vulnerability_scanning_config (known after apply)
+      - vulnerability_scanning_config {
+          - enablement_state        = "SCANNING_DISABLED" -> null
+          - enablement_state_reason = "API containerscanning.googleapis.com is not enabled." -> null
+            # (1 unchanged attribute hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+  # google_artifact_registry_repository.gclt_aicoe_dev_st_containers must be replaced
+-/+ resource "google_artifact_registry_repository" "gclt_aicoe_dev_st_containers" {
+      - cleanup_policy_dry_run = false -> null
+      ~ create_time            = "2026-08-13T11:23:42.505505Z" -> (known after apply)
+      ~ id                     = "projects/gclt-aicoe-dev-st/locations/europe-west1/repositories/containers" -> (known after apply)
+      ~ kms_key_name           = "projects/gclt-aicoe-dev-st/locations/europe-west1/keyRings/st/cryptoKeys/artifacts" -> (known after apply) # forces replacement
+      - labels                 = {} -> null
+      ~ location               = "europe-west1" -> "europe-west3" # forces replacement
+      ~ name                   = "containers" -> (known after apply)
+      ~ update_time            = "2026-08-13T11:23:42.505505Z" -> (known after apply)
+        # (7 unchanged attributes hidden)
+
+      ~ vulnerability_scanning_config (known after apply)
+      - vulnerability_scanning_config {
+          - enablement_state        = "SCANNING_DISABLED" -> null
+          - enablement_state_reason = "API containerscanning.googleapis.com is not enabled." -> null
+            # (1 unchanged attribute hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
+
+  # google_bigquery_dataset.gclt_aicoe_dev_st_jobs must be replaced
+-/+ resource "google_bigquery_dataset" "gclt_aicoe_dev_st_jobs" {
+      ~ creation_time                   = 1786633405134 -> (known after apply)
+      + default_collation               = (known after apply)
+      - default_partition_expiration_ms = 0 -> null
+      - default_table_expiration_ms     = 0 -> null
+      ~ etag                            = "xQJBB/DEjHzps9tdox4lkw==" -> (known after apply)
+      ~ id                              = "projects/gclt-aicoe-dev-st/datasets/translation_jobs" -> (known after apply)
+      ~ is_case_insensitive             = false -> (known after apply)
+      - labels                          = {} -> null
+      ~ last_modified_time              = 1786633405134 -> (known after apply)
+      ~ location                        = "europe-west1" -> "europe-west3" # forces replacement
+      ~ max_time_travel_hours           = "168" -> (known after apply)
+      - resource_tags                   = {} -> null
+      ~ self_link                       = "https://bigquery.googleapis.com/bigquery/v2/projects/gclt-aicoe-dev-st/datasets/translation_jobs" -> (known after apply)
+      + storage_billing_model           = (known after apply)
+        # (7 unchanged attributes hidden)
+
+      ~ access (known after apply)
+      - access {
+          - role           = "OWNER" -> null
+          - user_by_email  = "jabir.mohammed@colt.net" -> null
+            # (4 unchanged attributes hidden)
+        }
+      - access {
+          - role           = "OWNER" -> null
+          - special_group  = "projectOwners" -> null
+            # (4 unchanged attributes hidden)
+        }
+      - access {
+          - role           = "READER" -> null
+          - special_group  = "projectReaders" -> null
+            # (4 unchanged attributes hidden)
+        }
+      - access {
+          - role           = "WRITER" -> null
+          - special_group  = "projectWriters" -> null
+            # (4 unchanged attributes hidden)
+        }
+
+      ~ default_encryption_configuration {
+          ~ kms_key_name = "projects/gclt-aicoe-dev-st/locations/europe-west1/keyRings/st/cryptoKeys/bq" -> (known after apply)
+        }
+    }
+
+  # google_binary_authorization_attestor.gclt_aicoe_dev_ingress_build will be updated in-place
+  ~ resource "google_binary_authorization_attestor" "gclt_aicoe_dev_ingress_build" {
+        id          = "projects/gclt-aicoe-dev-ingress/attestors/aicoe-build-attestor"
+        name        = "aicoe-build-attestor"
+        # (2 unchanged attributes hidden)
+
+      ~ attestation_authority_note {
+            # (2 unchanged attributes hidden)
+
+          ~ public_keys {
+              ~ id                           = "//cloudkms.googleapis.com/v1/projects/gclt-aicoe-dev-ingress/locations/europe-west1/keyRings/ingress/cryptoKeys/attestor-signing/cryptoKeyVersions/1" -> (known after apply)
+                # (2 unchanged attributes hidden)
+
+              ~ pkix_public_key {
+                  ~ public_key_pem      = <<-EOT
+                        -----BEGIN PUBLIC KEY-----
+                        MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2hfLXL2HsSlzBynUVhKFI2HqqVnr
+                        fXzS6jE/6N5IxVRu95IvX6Y9ENnuyyXHvzYNCcpHmy7jQXv8nOw068Md4w==
+                        -----END PUBLIC KEY-----
+                    EOT -> (known after apply)
+                  ~ signature_algorithm = "ECDSA_P256_SHA256" -> (known after apply)
+                }
+            }
+        }
+    }
+
+  # google_certificate_manager_certificate.gclt_aicoe_dev_ingress["aihub"] must be replaced
+-/+ resource "google_certificate_manager_certificate" "gclt_aicoe_dev_ingress" {
+      ~ id               = "projects/gclt-aicoe-dev-ingress/locations/europe-west1/certificates/cert-aihub" -> (known after apply)
+      - labels           = {} -> null
+      ~ location         = "europe-west1" -> "europe-west3" # forces replacement
+        name             = "cert-aihub"
+      ~ san_dnsnames     = [
+          - "aihub.aicoedev-int.colt.net",
+        ] -> (known after apply)
+        # (5 unchanged attributes hidden)
+
+      ~ self_managed {
+          ~ pem_certificate = (sensitive value) # forces replacement
+          ~ pem_private_key = (sensitive value) # forces replacement
+            # (2 unchanged attributes hidden)
+        }
+    }
+
+  # google_certificate_manager_certificate.gclt_aicoe_dev_ingress["backend"] must be replaced
+-/+ resource "google_certificate_manager_certificate" "gclt_aicoe_dev_ingress" {
+      ~ id               = "projects/gclt-aicoe-dev-ingress/locations/europe-west1/certificates/cert-backend" -> (known after apply)
+      - labels           = {} -> null
+      ~ location         = "europe-west1" -> "europe-west3" # forces replacement
+        name             = "cert-backend"
+      ~ san_dnsnames     = [
+          - "backend.aicoedev-int.colt.net",
+        ] -> (known after apply)
+        # (5 unchanged attributes hidden)
+
+      ~ self_managed {
+          ~ pem_certificate = (sensitive value) # forces replacement
+          ~ pem_private_key = (sensitive value) # forces replacement
+            # (2 unchanged attributes hidden)
+        }
+    }
+
+  # google_firestore_database.gclt_aicoe_dev_aihub_ui_sessions must be replaced
+-/+ resource "google_firestore_database" "gclt_aicoe_dev_aihub_ui_sessions" {
+      ~ app_engine_integration_mode       = "DISABLED" -> (known after apply)
+      ~ concurrency_mode                  = "PESSIMISTIC" -> (known after apply)
+      + create_time                       = (known after apply)
+      ~ database_edition                  = "STANDARD" -> (known after apply)
+      ~ earliest_version_time             = "2026-08-16T10:13:14.249625Z" -> (known after apply)
+      ~ etag                              = "IJ3lpp6CpZYDMOPs7Y+XoJYD" -> (known after apply)
+      ~ id                                = "projects/gclt-aicoe-dev-aihub-ui/databases/(default)" -> (known after apply)
+      + key_prefix                        = (known after apply)
+      ~ location_id                       = "europe-west1" -> "europe-west3" # forces replacement
+        name                              = "(default)"
+      ~ uid                               = "69124934-a243-4f10-9bf2-c2552b2bb1e3" -> (known after apply)
+      + update_time                       = (known after apply)
+      ~ version_retention_period          = "3600s" -> (known after apply)
+        # (5 unchanged attributes hidden)
+    }
+
+  # google_kms_crypto_key.gclt_aicoe_dev_ingress_attestor will be created
+  + resource "google_kms_crypto_key" "gclt_aicoe_dev_ingress_attestor" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "attestor-signing"
+      + primary                    = (known after apply)
+      + purpose                    = "ASYMMETRIC_SIGN"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "EC_SIGN_P256_SHA256"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # google_kms_key_ring.gclt_aicoe_dev_ingress_ingress will be created
+  + resource "google_kms_key_ring" "gclt_aicoe_dev_ingress_ingress" {
+      + id       = (known after apply)
+      + location = "europe-west3"
+      + name     = "ingress-ew3"
+      + project  = "gclt-aicoe-dev-ingress"
+    }
+
+  # google_logging_folder_sink.gclt_aicoe_dev_auditlogs_aicoe_400d will be updated in-place
+  ~ resource "google_logging_folder_sink" "gclt_aicoe_dev_auditlogs_aicoe_400d" {
+      ~ destination        = "logging.googleapis.com/projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/buckets/aicoe-dev-logs-400d" -> (known after apply)
+        id                 = "folders/846301442455/sinks/aicoe-400d"
+        name               = "aicoe-400d"
+        # (7 unchanged attributes hidden)
+
+        # (2 unchanged blocks hidden)
+    }
+
+  # google_logging_linked_dataset.gclt_aicoe_dev_auditlogs_main must be replaced
+-/+ resource "google_logging_linked_dataset" "gclt_aicoe_dev_auditlogs_main" {
+      ~ create_time     = "2026-08-13T20:46:06.473666169Z" -> (known after apply)
+      ~ id              = "projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/buckets/aicoe-dev-logs-400d/links/aicoe_dev_logs" -> (known after apply)
+      ~ lifecycle_state = "FAILED" -> (known after apply)
+      ~ location        = "europe-west1" -> "europe-west3" # forces replacement
+      ~ name            = "projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/buckets/aicoe-dev-logs-400d/links/aicoe_dev_logs" -> (known after apply)
+        # (4 unchanged attributes hidden)
+
+      ~ bigquery_dataset (known after apply)
+      - bigquery_dataset {
+          - dataset_id = "bigquery.googleapis.com/projects/gclt-aicoe-dev-auditlogs/datasets/aicoe_dev_logs" -> null
+        }
+    }
+
+  # google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main must be replaced
+-/+ resource "google_logging_project_bucket_config" "gclt_aicoe_dev_auditlogs_main" {
+      + description      = (known after apply)
+      ~ id               = "projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/buckets/aicoe-dev-logs-400d" -> (known after apply)
+      ~ lifecycle_state  = "ACTIVE" -> (known after apply)
+      ~ location         = "europe-west1" -> "europe-west3" # forces replacement
+      ~ name             = "projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/buckets/aicoe-dev-logs-400d" -> (known after apply)
+        # (5 unchanged attributes hidden)
+
+      ~ cmek_settings {
+          ~ kms_key_name         = "projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/keyRings/logs/cryptoKeys/log-bucket" -> (known after apply)
+          ~ kms_key_version_name = "projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/keyRings/logs/cryptoKeys/log-bucket/cryptoKeyVersions/1" -> (known after apply)
+          + name                 = (known after apply)
+          ~ service_account_id   = "service-443520964249@gcp-sa-logging.iam.gserviceaccount.com" -> (known after apply)
+        }
+    }
+
+  # google_secret_manager_secret.gclt_aicoe_dev_aihub_ui_bff["apigee-bff-client-key"] must be replaced
+-/+ resource "google_secret_manager_secret" "gclt_aicoe_dev_aihub_ui_bff" {
+      - annotations           = {} -> null
+      ~ create_time           = "2026-08-13T20:43:02.734642Z" -> (known after apply)
+      ~ effective_annotations = {} -> (known after apply)
+      + expire_time           = (known after apply)
+      ~ id                    = "projects/gclt-aicoe-dev-aihub-ui/secrets/apigee-bff-client-key" -> (known after apply)
+      - labels                = {} -> null
+      ~ name                  = "projects/1042134323793/secrets/apigee-bff-client-key" -> (known after apply)
+      - version_aliases       = {} -> null
+        # (6 unchanged attributes hidden)
+
+      ~ replication {
+          ~ user_managed {
+              ~ replicas {
+                  ~ location = "europe-west1" -> "europe-west3" # forces replacement
+
+                  ~ customer_managed_encryption {
+                      ~ kms_key_name = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west1/keyRings/aihub/cryptoKeys/session" -> (known after apply)
+                    }
+                }
+            }
+        }
+    }
+
+  # google_secret_manager_secret.gclt_aicoe_dev_aihub_ui_bff["entra-bff-client-secret"] must be replaced
+-/+ resource "google_secret_manager_secret" "gclt_aicoe_dev_aihub_ui_bff" {
+      - annotations           = {} -> null
+      ~ create_time           = "2026-08-13T20:43:02.736066Z" -> (known after apply)
+      ~ effective_annotations = {} -> (known after apply)
+      + expire_time           = (known after apply)
+      ~ id                    = "projects/gclt-aicoe-dev-aihub-ui/secrets/entra-bff-client-secret" -> (known after apply)
+      - labels                = {} -> null
+      ~ name                  = "projects/1042134323793/secrets/entra-bff-client-secret" -> (known after apply)
+      - version_aliases       = {} -> null
+        # (6 unchanged attributes hidden)
+
+      ~ replication {
+          ~ user_managed {
+              ~ replicas {
+                  ~ location = "europe-west1" -> "europe-west3" # forces replacement
+
+                  ~ customer_managed_encryption {
+                      ~ kms_key_name = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west1/keyRings/aihub/cryptoKeys/session" -> (known after apply)
+                    }
+                }
+            }
+        }
+    }
+
+  # google_secret_manager_secret.gclt_aicoe_dev_ingress_cert["aihub"] must be replaced
+-/+ resource "google_secret_manager_secret" "gclt_aicoe_dev_ingress_cert" {
+      - annotations           = {} -> null
+      ~ create_time           = "2026-08-13T11:23:14.157716Z" -> (known after apply)
+      ~ effective_annotations = {} -> (known after apply)
+      + expire_time           = (known after apply)
+      ~ id                    = "projects/gclt-aicoe-dev-ingress/secrets/tls-aihub-certificate" -> (known after apply)
+      ~ name                  = "projects/35737771619/secrets/tls-aihub-certificate" -> (known after apply)
+      - version_aliases       = {} -> null
+        # (7 unchanged attributes hidden)
+
+      ~ replication {
+          ~ user_managed {
+              ~ replicas {
+                  ~ location = "europe-west1" -> "europe-west3" # forces replacement
+                }
+            }
+        }
+    }
+
+  # google_secret_manager_secret.gclt_aicoe_dev_ingress_cert["backend"] must be replaced
+-/+ resource "google_secret_manager_secret" "gclt_aicoe_dev_ingress_cert" {
+      - annotations           = {} -> null
+      ~ create_time           = "2026-08-13T11:23:14.154878Z" -> (known after apply)
+      ~ effective_annotations = {} -> (known after apply)
+      + expire_time           = (known after apply)
+      ~ id                    = "projects/gclt-aicoe-dev-ingress/secrets/tls-backend-certificate" -> (known after apply)
+      ~ name                  = "projects/35737771619/secrets/tls-backend-certificate" -> (known after apply)
+      - version_aliases       = {} -> null
+        # (7 unchanged attributes hidden)
+
+      ~ replication {
+          ~ user_managed {
+              ~ replicas {
+                  ~ location = "europe-west1" -> "europe-west3" # forces replacement
+                }
+            }
+        }
+    }
+
+  # google_secret_manager_secret.gclt_aicoe_dev_ingress_key["aihub"] must be replaced
+-/+ resource "google_secret_manager_secret" "gclt_aicoe_dev_ingress_key" {
+      - annotations           = {} -> null
+      ~ create_time           = "2026-08-13T11:23:14.159969Z" -> (known after apply)
+      ~ effective_annotations = {} -> (known after apply)
+      + expire_time           = (known after apply)
+      ~ id                    = "projects/gclt-aicoe-dev-ingress/secrets/tls-aihub-private-key" -> (known after apply)
+      ~ name                  = "projects/35737771619/secrets/tls-aihub-private-key" -> (known after apply)
+      - version_aliases       = {} -> null
+        # (7 unchanged attributes hidden)
+
+      ~ replication {
+          ~ user_managed {
+              ~ replicas {
+                  ~ location = "europe-west1" -> "europe-west3" # forces replacement
+                }
+            }
+        }
+    }
+
+  # google_secret_manager_secret.gclt_aicoe_dev_ingress_key["backend"] must be replaced
+-/+ resource "google_secret_manager_secret" "gclt_aicoe_dev_ingress_key" {
+      - annotations           = {} -> null
+      ~ create_time           = "2026-08-13T11:23:14.153723Z" -> (known after apply)
+      ~ effective_annotations = {} -> (known after apply)
+      + expire_time           = (known after apply)
+      ~ id                    = "projects/gclt-aicoe-dev-ingress/secrets/tls-backend-private-key" -> (known after apply)
+      ~ name                  = "projects/35737771619/secrets/tls-backend-private-key" -> (known after apply)
+      - version_aliases       = {} -> null
+        # (7 unchanged attributes hidden)
+
+      ~ replication {
+          ~ user_managed {
+              ~ replicas {
+                  ~ location = "europe-west1" -> "europe-west3" # forces replacement
+                }
+            }
+        }
+    }
+
+  # google_storage_bucket.gclt_aicoe_dev_st_artifacts must be replaced
+-/+ resource "google_storage_bucket" "gclt_aicoe_dev_st_artifacts" {
+      - default_event_based_hold    = false -> null
+      - enable_object_retention     = false -> null
+      ~ id                          = "gclt-aicoe-dev-st-artifacts" -> (known after apply)
+      - labels                      = {} -> null
+      ~ location                    = "EUROPE-WEST1" -> "EUROPE-WEST3" # forces replacement
+        name                        = "gclt-aicoe-dev-st-artifacts"
+      ~ project_number              = 499193286543 -> (known after apply)
+      ~ public_access_prevention    = "inherited" -> (known after apply)
+      - requester_pays              = false -> null
+      + rpo                         = (known after apply)
+      ~ self_link                   = "https://www.googleapis.com/storage/v1/b/gclt-aicoe-dev-st-artifacts" -> (known after apply)
+      ~ time_created                = "2026-08-13T15:03:26.163Z" -> (known after apply)
+      ~ updated                     = "2026-08-13T15:03:26.163Z" -> (known after apply)
+      ~ url                         = "gs://gclt-aicoe-dev-st-artifacts" -> (known after apply)
+        # (6 unchanged attributes hidden)
+
+      ~ encryption {
+          ~ default_kms_key_name = "projects/gclt-aicoe-dev-st/locations/europe-west1/keyRings/st/cryptoKeys/app-gcs" -> (known after apply)
+        }
+
+      - hierarchical_namespace {
+          - enabled = false -> null
+        }
+
+      ~ lifecycle_rule {
+          - condition {
+              - age                                     = 90 -> null
+              - days_since_custom_time                  = 0 -> null
+              - days_since_noncurrent_time              = 0 -> null
+              - matches_prefix                          = [] -> null
+              - matches_storage_class                   = [] -> null
+              - matches_suffix                          = [] -> null
+              - num_newer_versions                      = 0 -> null
+              - send_age_if_zero                        = false -> null
+              - send_days_since_custom_time_if_zero     = false -> null
+              - send_days_since_noncurrent_time_if_zero = false -> null
+              - send_num_newer_versions_if_zero         = false -> null
+              - with_state                              = "ANY" -> null
+                # (3 unchanged attributes hidden)
+            }
+          + condition {
+              + age                    = 90
+              + matches_prefix         = []
+              + matches_storage_class  = []
+              + matches_suffix         = []
+              + with_state             = (known after apply)
+                # (3 unchanged attributes hidden)
+            }
+
+            # (1 unchanged block hidden)
+        }
+
+      ~ soft_delete_policy (known after apply)
+      - soft_delete_policy {
+          - effective_time             = "2026-08-13T15:03:26.163Z" -> null
+          - retention_duration_seconds = 604800 -> null
+        }
+
+      ~ website (known after apply)
+
+        # (1 unchanged block hidden)
+    }
+
+  # module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key.key["artifacts"] will be created
+  + resource "google_kms_crypto_key" "key" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "artifacts"
+      + primary                    = (known after apply)
+      + purpose                    = "ENCRYPT_DECRYPT"
+      + rotation_period            = "7776000s"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key.key["firestore"] will be created
+  + resource "google_kms_crypto_key" "key" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "firestore"
+      + primary                    = (known after apply)
+      + purpose                    = "ENCRYPT_DECRYPT"
+      + rotation_period            = "7776000s"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key.key["session"] will be created
+  + resource "google_kms_crypto_key" "key" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "session"
+      + primary                    = (known after apply)
+      + purpose                    = "ENCRYPT_DECRYPT"
+      + rotation_period            = "7776000s"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key_iam_member.grant["artifacts:0"] will be created
+  + resource "google_kms_crypto_key_iam_member" "grant" {
+      + crypto_key_id = (known after apply)
+      + etag          = (known after apply)
+      + id            = (known after apply)
+      + member        = "serviceAccount:service-1042134323793@gcp-sa-artifactregistry.iam.gserviceaccount.com"
+      + role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    }
+
+  # module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key_iam_member.grant["firestore:1"] will be created
+  + resource "google_kms_crypto_key_iam_member" "grant" {
+      + crypto_key_id = (known after apply)
+      + etag          = (known after apply)
+      + id            = (known after apply)
+      + member        = "serviceAccount:service-1042134323793@gcp-sa-firestore.iam.gserviceaccount.com"
+      + role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    }
+
+  # module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key_iam_member.grant["session:2"] will be created
+  + resource "google_kms_crypto_key_iam_member" "grant" {
+      + crypto_key_id = (known after apply)
+      + etag          = (known after apply)
+      + id            = (known after apply)
+      + member        = "serviceAccount:service-1042134323793@gcp-sa-secretmanager.iam.gserviceaccount.com"
+      + role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    }
+
+  # module.gclt_aicoe_dev_aihub_ui_kms.google_kms_key_ring.ring will be created
+  + resource "google_kms_key_ring" "ring" {
+      + id       = (known after apply)
+      + location = "europe-west3"
+      + name     = "aihub-ew3"
+      + project  = "gclt-aicoe-dev-aihub-ui"
+    }
+
+  # module.gclt_aicoe_dev_auditlogs_kms.google_kms_crypto_key.key["log-bucket"] will be created
+  + resource "google_kms_crypto_key" "key" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "log-bucket"
+      + primary                    = (known after apply)
+      + purpose                    = "ENCRYPT_DECRYPT"
+      + rotation_period            = "7776000s"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # module.gclt_aicoe_dev_auditlogs_kms.google_kms_crypto_key_iam_member.grant["log-bucket:0"] will be created
+  + resource "google_kms_crypto_key_iam_member" "grant" {
+      + crypto_key_id = (known after apply)
+      + etag          = (known after apply)
+      + id            = (known after apply)
+      + member        = "serviceAccount:service-443520964249@gcp-sa-logging.iam.gserviceaccount.com"
+      + role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    }
+
+  # module.gclt_aicoe_dev_auditlogs_kms.google_kms_key_ring.ring will be created
+  + resource "google_kms_key_ring" "ring" {
+      + id       = (known after apply)
+      + location = "europe-west3"
+      + name     = "logs-ew3"
+      + project  = "gclt-aicoe-dev-auditlogs"
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["app-gcs"] will be created
+  + resource "google_kms_crypto_key" "key" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "app-gcs"
+      + primary                    = (known after apply)
+      + purpose                    = "ENCRYPT_DECRYPT"
+      + rotation_period            = "7776000s"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["artifacts"] will be created
+  + resource "google_kms_crypto_key" "key" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "artifacts"
+      + primary                    = (known after apply)
+      + purpose                    = "ENCRYPT_DECRYPT"
+      + rotation_period            = "7776000s"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["bq"] will be created
+  + resource "google_kms_crypto_key" "key" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "bq"
+      + primary                    = (known after apply)
+      + purpose                    = "ENCRYPT_DECRYPT"
+      + rotation_period            = "7776000s"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["secrets"] will be created
+  + resource "google_kms_crypto_key" "key" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "secrets"
+      + primary                    = (known after apply)
+      + purpose                    = "ENCRYPT_DECRYPT"
+      + rotation_period            = "7776000s"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["vxai-index"] will be created
+  + resource "google_kms_crypto_key" "key" {
+      + crypto_key_backend         = (known after apply)
+      + destroy_scheduled_duration = (known after apply)
+      + effective_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+      + id                         = (known after apply)
+      + import_only                = (known after apply)
+      + key_ring                   = (known after apply)
+      + name                       = "vxai-index"
+      + primary                    = (known after apply)
+      + purpose                    = "ENCRYPT_DECRYPT"
+      + rotation_period            = "7776000s"
+      + terraform_labels           = {
+          + "goog-terraform-provisioned" = "true"
+        }
+
+      + version_template {
+          + algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+          + protection_level = "SOFTWARE"
+        }
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_crypto_key_iam_member.grant["app-gcs:0"] will be created
+  + resource "google_kms_crypto_key_iam_member" "grant" {
+      + crypto_key_id = (known after apply)
+      + etag          = (known after apply)
+      + id            = (known after apply)
+      + member        = "serviceAccount:service-499193286543@gs-project-accounts.iam.gserviceaccount.com"
+      + role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_crypto_key_iam_member.grant["artifacts:1"] will be created
+  + resource "google_kms_crypto_key_iam_member" "grant" {
+      + crypto_key_id = (known after apply)
+      + etag          = (known after apply)
+      + id            = (known after apply)
+      + member        = "serviceAccount:service-499193286543@gcp-sa-artifactregistry.iam.gserviceaccount.com"
+      + role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_crypto_key_iam_member.grant["bq:2"] will be created
+  + resource "google_kms_crypto_key_iam_member" "grant" {
+      + crypto_key_id = (known after apply)
+      + etag          = (known after apply)
+      + id            = (known after apply)
+      + member        = "serviceAccount:bq-499193286543@bigquery-encryption.iam.gserviceaccount.com"
+      + role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_crypto_key_iam_member.grant["vxai-index:3"] will be created
+  + resource "google_kms_crypto_key_iam_member" "grant" {
+      + crypto_key_id = (known after apply)
+      + etag          = (known after apply)
+      + id            = (known after apply)
+      + member        = "serviceAccount:service-499193286543@gcp-sa-aiplatform.iam.gserviceaccount.com"
+      + role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+    }
+
+  # module.gclt_aicoe_dev_st_kms.google_kms_key_ring.ring will be created
+  + resource "google_kms_key_ring" "ring" {
+      + id       = (known after apply)
+      + location = "europe-west3"
+      + name     = "st-ew3"
+      + project  = "gclt-aicoe-dev-st"
+    }
+
+Plan: 37 to add, 2 to change, 15 to destroy.
+
+Changes to Outputs:
+  ~ aihub_certificate_id                        = "projects/gclt-aicoe-dev-ingress/locations/europe-west1/certificates/cert-aihub" -> (known after apply)
+  ~ backend_certificate_id                      = "projects/gclt-aicoe-dev-ingress/locations/europe-west1/certificates/cert-backend" -> (known after apply)
+  ~ gclt_aicoe_dev_aihub_ui_kms_key_ids         = {
+      ~ artifacts = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west1/keyRings/aihub/cryptoKeys/artifacts" -> (known after apply)
+      ~ firestore = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west1/keyRings/aihub/cryptoKeys/firestore" -> (known after apply)
+      ~ session   = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west1/keyRings/aihub/cryptoKeys/session" -> (known after apply)
+    }
+  ~ gclt_aicoe_dev_auditlogs_log_bucket_id      = "projects/gclt-aicoe-dev-auditlogs/locations/europe-west1/buckets/aicoe-dev-logs-400d" -> (known after apply)
+  ~ gclt_aicoe_dev_st_kms_key_ids               = {
+      ~ app-gcs    = "projects/gclt-aicoe-dev-st/locations/europe-west1/keyRings/st/cryptoKeys/app-gcs" -> (known after apply)
+      ~ artifacts  = "projects/gclt-aicoe-dev-st/locations/europe-west1/keyRings/st/cryptoKeys/artifacts" -> (known after apply)
+      ~ bq         = "projects/gclt-aicoe-dev-st/locations/europe-west1/keyRings/st/cryptoKeys/bq" -> (known after apply)
+      ~ secrets    = "projects/gclt-aicoe-dev-st/locations/europe-west1/keyRings/st/cryptoKeys/secrets" -> (known after apply)
+      ~ vxai-index = "projects/gclt-aicoe-dev-st/locations/europe-west1/keyRings/st/cryptoKeys/vxai-index" -> (known after apply)
+    }
+
+Warning: Value for undeclared variable
+
+The root module does not declare a variable named "existing_projects" but a value was found in file "../envs/dev/terraform.tfvars". If you meant to
+use this value, add a "variable" block to the configuration.
+
+To silence these warnings, use TF_VAR_... environment variables to provide certain "global" settings to all configurations in your organization. To
+reduce the verbosity of these warnings, use the -compact-warnings option.
+
+Warning: Value for undeclared variable
+
+The root module does not declare a variable named "ui_user_group" but a value was found in file "../envs/dev/terraform.tfvars". If you meant to use
+this value, add a "variable" block to the configuration.
+
+To silence these warnings, use TF_VAR_... environment variables to provide certain "global" settings to all configurations in your organization. To
+reduce the verbosity of these warnings, use the -compact-warnings option.
+
+Warning: Values for undeclared variables
+
+In addition to the other similar warnings shown, 15 other variable(s) defined without being declared.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

@@ -1,0 +1,85 @@
+[0m[1mmodule.agents.data.google_project.this: Reading...[0m[0m
+[0m[1mmodule.kms_disk.google_kms_key_ring.ring: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk][0m
+[0m[1mmodule.kms_db.google_kms_key_ring.ring: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west3/keyRings/apigee-db][0m
+[0m[1mmodule.agents.google_project_service_identity.agent["apigee.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/services/apigee.googleapis.com][0m
+[0m[1mmodule.kms_disk.google_kms_crypto_key.key["instance-disk"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk][0m
+[0m[1mmodule.kms_db.google_kms_crypto_key.key["runtime-db"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west3/keyRings/apigee-db/cryptoKeys/runtime-db][0m
+[0m[1mmodule.agents.data.google_project.this: Read complete after 1s [id=projects/gclt-aicoe-dev-apigee][0m
+[0m[1mmodule.kms_db.google_kms_crypto_key_iam_member.grant["runtime-db:0"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/locations/europe-west3/keyRings/apigee-db/cryptoKeys/runtime-db/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-714830219716@gcp-sa-apigee.iam.gserviceaccount.com][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+[31m-[0m/[32m+[0m destroy and then create replacement[0m
+
+Terraform planned the following actions, but then encountered a problem:
+
+[1m  # module.kms_disk.google_kms_crypto_key.key["instance-disk"][0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_kms_crypto_key" "key" {
+      [32m+[0m[0m crypto_key_backend            = (known after apply)
+      [33m~[0m[0m destroy_scheduled_duration    = "2592000s" -> (known after apply)
+      [33m~[0m[0m id                            = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk" -> (known after apply)
+      [33m~[0m[0m import_only                   = false -> (known after apply)
+      [33m~[0m[0m key_ring                      = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk" -> (known after apply) [31m# forces replacement[0m[0m
+      [31m-[0m[0m labels                        = {} [90m-> null[0m[0m
+        name                          = "instance-disk"
+      [33m~[0m[0m primary                       = [
+          [31m-[0m[0m {
+              [31m-[0m[0m name  = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk/cryptoKeys/instance-disk/cryptoKeyVersions/1"
+              [31m-[0m[0m state = "ENABLED"
+            },
+        ] -> (known after apply)
+      [31m-[0m[0m skip_initial_version_creation = false [90m-> null[0m[0m
+        [90m# (4 unchanged attributes hidden)[0m[0m
+
+        [90m# (1 unchanged block hidden)[0m[0m
+    }
+
+[1m  # module.kms_disk.google_kms_key_ring.ring[0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_kms_key_ring" "ring" {
+      [33m~[0m[0m id       = "projects/gclt-aicoe-dev-apigee/locations/europe-west1/keyRings/apigee-disk" -> (known after apply)
+      [33m~[0m[0m location = "europe-west1" [33m->[0m[0m "europe-west3" [31m# forces replacement[0m[0m
+        name     = "apigee-disk"
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1mPlan:[0m 2 to add, 0 to change, 2 to destroy.
+[0m[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named "backend_certificate_id"
+[33m│[0m [0mbut a value was found in file "../envs/dev/terraform.tfvars". If you meant
+[33m│[0m [0mto use this value, add a "variable" block to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named "existing_projects" but a
+[33m│[0m [0mvalue was found in file "../envs/dev/terraform.tfvars". If you meant to use
+[33m│[0m [0mthis value, add a "variable" block to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValues for undeclared variables[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mIn addition to the other similar warnings shown, 21 other variable(s)
+[33m│[0m [0mdefined without being declared.
+[33m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mInstance cannot be destroyed[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  on ../modules/kms-ring/main.tf line 31:
+[31m│[0m [0m  31: [4mresource "google_kms_crypto_key" "key"[0m {[0m
+[31m│[0m [0m
+[31m│[0m [0mResource module.kms_disk.google_kms_crypto_key.key["instance-disk"] has
+[31m│[0m [0mlifecycle.prevent_destroy set, but the plan calls for this resource to be
+[31m│[0m [0mdestroyed. To avoid this error and continue with the plan, either disable
+[31m│[0m [0mlifecycle.prevent_destroy or reduce the scope of the plan using the -target
+[31m│[0m [0moption.
+[31m╵[0m[0m

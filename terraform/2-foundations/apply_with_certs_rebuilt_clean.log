@@ -1,0 +1,234 @@
+module.gclt_aicoe_dev_auditlogs_agents.google_project_service_identity.agent["logging.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-auditlogs/services/logging.googleapis.com]
+module.gclt_aicoe_dev_auditlogs_agents.data.google_project.this: Reading...
+google_kms_key_ring.gclt_aicoe_dev_ingress_ingress: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/locations/europe-west3/keyRings/ingress-ew3]
+module.gclt_aicoe_dev_llm_baseline.google_project_service.api["dlp.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-llm/dlp.googleapis.com]
+module.gclt_aicoe_dev_llm_baseline.google_project_service.api["modelarmor.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-llm/modelarmor.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["dns.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/dns.googleapis.com]
+module.gclt_aicoe_dev_llm_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-llm/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_llm_baseline.google_project_service.api["aiplatform.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-llm/aiplatform.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["networkconnectivity.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/networkconnectivity.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/compute.googleapis.com]
+module.gclt_aicoe_dev_network_baseline.google_project_service.api["servicenetworking.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-network/servicenetworking.googleapis.com]
+module.gclt_aicoe_dev_auditlogs_agents.data.google_project.this: Read complete after 1s [id=projects/gclt-aicoe-dev-auditlogs]
+module.gclt_aicoe_dev_aihub_ui_kms.google_kms_key_ring.ring: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["run.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/run.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["secretmanager.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/secretmanager.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["storage.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/storage.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["aiplatform.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/aiplatform.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["bigquery.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/bigquery.googleapis.com]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["cloudkms.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/cloudkms.googleapis.com]
+google_secret_manager_secret.gclt_aicoe_dev_ingress_cert["backend"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/secrets/tls-backend-certificate]
+google_folder_iam_audit_config.gclt_aicoe_dev_auditlogs_data_access["iap.googleapis.com"]: Refreshing state... [id=folders/846301442455/audit_config/iap.googleapis.com]
+google_secret_manager_secret.gclt_aicoe_dev_ingress_cert["aihub"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/secrets/tls-aihub-certificate]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["containeranalysis.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/containeranalysis.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["firestore.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/firestore.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/compute.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["binaryauthorization.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/binaryauthorization.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["run.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/run.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["artifactregistry.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/artifactregistry.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["iap.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/iap.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.google_project_service.api["secretmanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-aihub-ui/secretmanager.googleapis.com]
+google_secret_manager_secret.gclt_aicoe_dev_ingress_key["aihub"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/secrets/tls-aihub-private-key]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["bigquery.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/bigquery.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["run.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/run.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["aiplatform.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/aiplatform.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["binaryauthorization.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/binaryauthorization.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["dlp.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/dlp.googleapis.com]
+google_secret_manager_secret.gclt_aicoe_dev_ingress_key["backend"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/secrets/tls-backend-private-key]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["artifactregistry.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/artifactregistry.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["cloudtasks.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/cloudtasks.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["firestore.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/firestore.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/compute.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["storage.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/storage.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["containeranalysis.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/containeranalysis.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.google_project_service.api["secretmanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-st/secretmanager.googleapis.com]
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["servicenetworking.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/servicenetworking.googleapis.com]
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/compute.googleapis.com]
+data.google_logging_project_settings.gclt_aicoe_dev_auditlogs: Reading...
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["apigee.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/apigee.googleapis.com]
+module.gclt_aicoe_dev_apigee_baseline.google_project_service.api["secretmanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-apigee/secretmanager.googleapis.com]
+google_project_service.gclt_aicoe_dev_auditlogs_apis["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-auditlogs/cloudkms.googleapis.com]
+google_container_analysis_note.gclt_aicoe_dev_ingress_note: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/notes/aicoe-build-note]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["iap.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/iap.googleapis.com]
+data.google_logging_project_settings.gclt_aicoe_dev_auditlogs: Read complete after 0s [id=projects/gclt-aicoe-dev-auditlogs/settings]
+google_project_service.gclt_aicoe_dev_auditlogs_apis["logging.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-auditlogs/logging.googleapis.com]
+google_project_service.gclt_aicoe_dev_auditlogs_apis["pubsub.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-auditlogs/pubsub.googleapis.com]
+google_project_service.gclt_aicoe_dev_auditlogs_apis["bigquery.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-auditlogs/bigquery.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["binaryauthorization.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/binaryauthorization.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["certificatemanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/certificatemanager.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["secretmanager.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/secretmanager.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["cloudkms.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/cloudkms.googleapis.com]
+module.gclt_aicoe_dev_ingress_baseline.google_project_service.api["compute.googleapis.com"]: Refreshing state... [id=gclt-aicoe-dev-ingress/compute.googleapis.com]
+module.gclt_aicoe_dev_st_kms.google_kms_key_ring.ring: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3]
+google_kms_crypto_key.gclt_aicoe_dev_ingress_attestor: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/locations/europe-west3/keyRings/ingress-ew3/cryptoKeys/attestor-signing]
+module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key.key["artifacts"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3/cryptoKeys/artifacts]
+module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key.key["firestore"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3/cryptoKeys/firestore]
+module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key.key["session"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3/cryptoKeys/session]
+data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_cert["aihub"]: Reading...
+module.gclt_aicoe_dev_llm_baseline.google_service_account.sa["llm-breakglass"]: Refreshing state... [id=projects/gclt-aicoe-dev-llm/serviceAccounts/llm-breakglass@gclt-aicoe-dev-llm.iam.gserviceaccount.com]
+data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_cert["backend"]: Reading...
+module.gclt_aicoe_dev_aihub_ui_baseline.google_service_account.sa["aihub-bff-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/serviceAccounts/aihub-bff-sa@gclt-aicoe-dev-aihub-ui.iam.gserviceaccount.com]
+data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_cert["aihub"]: Read complete after 0s [id=projects/35737771619/secrets/tls-aihub-certificate/versions/1]
+data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_key["backend"]: Reading...
+data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_cert["backend"]: Read complete after 0s [id=projects/35737771619/secrets/tls-backend-certificate/versions/1]
+data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_key["aihub"]: Reading...
+data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_key["aihub"]: Read complete after 0s [id=projects/35737771619/secrets/tls-aihub-private-key/versions/1]
+google_firestore_field.gclt_aicoe_dev_aihub_ui_session_ttl: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/databases/(default)/collectionGroups/sessions/fields/absolute_expires_at]
+data.google_secret_manager_secret_version.gclt_aicoe_dev_ingress_key["backend"]: Read complete after 0s [id=projects/35737771619/secrets/tls-backend-private-key/versions/1]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["translation-worker-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/translation-worker-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["worker-invoker-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/worker-invoker-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["mcp-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/mcp-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["salesagent-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/salesagent-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_baseline.google_service_account.sa["translation-api-sa"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/serviceAccounts/translation-api-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_apigee_baseline.google_service_account.sa["apigee-int-runtime"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/serviceAccounts/apigee-int-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_apigee_baseline.google_service_account.sa["apigee-llm-runtime"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/serviceAccounts/apigee-llm-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com]
+data.google_kms_crypto_key_version.gclt_aicoe_dev_ingress_attestor: Reading...
+module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["app-gcs"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/app-gcs]
+module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["artifacts"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/artifacts]
+module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["bq"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/bq]
+module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["secrets"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/secrets]
+data.google_kms_crypto_key_version.gclt_aicoe_dev_ingress_attestor: Read complete after 0s [id=//cloudkms.googleapis.com/v1/projects/gclt-aicoe-dev-ingress/locations/europe-west3/keyRings/ingress-ew3/cryptoKeys/attestor-signing/cryptoKeyVersions/1]
+module.gclt_aicoe_dev_st_kms.google_kms_crypto_key.key["vxai-index"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/vxai-index]
+google_certificate_manager_certificate.gclt_aicoe_dev_ingress["aihub"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/locations/europe-west3/certificates/cert-aihub]
+google_certificate_manager_certificate.gclt_aicoe_dev_ingress["backend"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/locations/europe-west3/certificates/cert-backend]
+google_binary_authorization_attestor.gclt_aicoe_dev_ingress_build: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/attestors/aicoe-build-attestor]
+module.gclt_aicoe_dev_network_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_llm_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_llm_baseline.module.agents.google_project_service_identity.agent["aiplatform.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-llm/services/aiplatform.googleapis.com]
+google_secret_manager_secret.gclt_aicoe_dev_aihub_ui_bff["apigee-bff-client-key"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/secrets/apigee-bff-client-key]
+google_secret_manager_secret.gclt_aicoe_dev_aihub_ui_bff["entra-bff-client-secret"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/secrets/entra-bff-client-secret]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_network_baseline.module.agents.data.google_project.this: Read complete after 0s [id=projects/gclt-aicoe-dev-network]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.google_project_service_identity.agent["firestore.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/services/firestore.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.google_project_service_identity.agent["iap.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/services/iap.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.google_project_service_identity.agent["secretmanager.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/services/secretmanager.googleapis.com]
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.google_project_service_identity.agent["artifactregistry.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/services/artifactregistry.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_st_baseline.module.agents.google_project_service_identity.agent["storage.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/services/storage.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.module.agents.google_project_service_identity.agent["aiplatform.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/services/aiplatform.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.module.agents.google_project_service_identity.agent["artifactregistry.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/services/artifactregistry.googleapis.com]
+module.gclt_aicoe_dev_st_baseline.module.agents.google_project_service_identity.agent["bigquery.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/services/bigquery.googleapis.com]
+google_project_iam_member.gclt_aicoe_dev_llm_breakglass_vertex: Refreshing state... [id=gclt-aicoe-dev-llm/roles/aiplatform.user/serviceAccount:llm-breakglass@gclt-aicoe-dev-llm.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_llm_baseline.module.agents.data.google_project.this: Read complete after 1s [id=projects/gclt-aicoe-dev-llm]
+module.gclt_aicoe_dev_apigee_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_aihub_ui_baseline.module.agents.data.google_project.this: Read complete after 1s [id=projects/gclt-aicoe-dev-aihub-ui]
+module.gclt_aicoe_dev_apigee_baseline.module.agents.google_project_service_identity.agent["apigee.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-apigee/services/apigee.googleapis.com]
+google_project_iam_member.gclt_aicoe_dev_llm_apigee_modelarmor: Refreshing state... [id=gclt-aicoe-dev-llm/roles/modelarmor.user/serviceAccount:apigee-llm-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com]
+google_project_iam_member.gclt_aicoe_dev_llm_apigee_vertex: Refreshing state... [id=gclt-aicoe-dev-llm/roles/aiplatform.user/serviceAccount:apigee-llm-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com]
+google_binary_authorization_policy.gclt_aicoe_dev_aihub_ui_policy: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui]
+module.gclt_aicoe_dev_st_baseline.module.agents.data.google_project.this: Read complete after 1s [id=projects/gclt-aicoe-dev-st]
+google_binary_authorization_policy.gclt_aicoe_dev_st_policy: Refreshing state... [id=projects/gclt-aicoe-dev-st]
+module.gclt_aicoe_dev_apigee_baseline.module.agents.data.google_project.this: Read complete after 0s [id=projects/gclt-aicoe-dev-apigee]
+module.gclt_aicoe_dev_auditlogs_kms.google_kms_key_ring.ring: Refreshing state... [id=projects/gclt-aicoe-dev-auditlogs/locations/europe-west3/keyRings/logs-ew3]
+module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key_iam_member.grant["firestore:1"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3/cryptoKeys/firestore/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-1042134323793@gcp-sa-firestore.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key_iam_member.grant["session:2"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3/cryptoKeys/session/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-1042134323793@gcp-sa-secretmanager.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_aihub_ui_kms.google_kms_crypto_key_iam_member.grant["artifacts:0"]: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3/cryptoKeys/artifacts/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-1042134323793@gcp-sa-artifactregistry.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_auditlogs_kms.google_kms_crypto_key.key["log-bucket"]: Refreshing state... [id=projects/gclt-aicoe-dev-auditlogs/locations/europe-west3/keyRings/logs-ew3/cryptoKeys/log-bucket]
+module.gclt_aicoe_dev_st_kms.google_kms_crypto_key_iam_member.grant["vxai-index:3"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/vxai-index/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-499193286543@gcp-sa-aiplatform.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_kms.google_kms_crypto_key_iam_member.grant["app-gcs:0"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/app-gcs/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-499193286543@gs-project-accounts.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_kms.google_kms_crypto_key_iam_member.grant["bq:2"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/bq/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:bq-499193286543@bigquery-encryption.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_st_kms.google_kms_crypto_key_iam_member.grant["artifacts:1"]: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/artifacts/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-499193286543@gcp-sa-artifactregistry.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_auditlogs_kms.google_kms_crypto_key_iam_member.grant["log-bucket:0"]: Refreshing state... [id=projects/gclt-aicoe-dev-auditlogs/locations/europe-west3/keyRings/logs-ew3/cryptoKeys/log-bucket/roles/cloudkms.cryptoKeyEncrypterDecrypter/serviceAccount:service-443520964249@gcp-sa-logging.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_ingress_baseline.module.agents.data.google_project.this: Reading...
+module.gclt_aicoe_dev_ingress_baseline.module.agents.google_project_service_identity.agent["iap.googleapis.com"]: Refreshing state... [id=projects/gclt-aicoe-dev-ingress/services/iap.googleapis.com]
+google_artifact_registry_repository.gclt_aicoe_dev_aihub_ui_containers: Refreshing state... [id=projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/repositories/containers]
+google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main: Refreshing state... [id=projects/gclt-aicoe-dev-auditlogs/locations/europe-west3/buckets/aicoe-dev-logs-400d]
+google_artifact_registry_repository.gclt_aicoe_dev_st_containers: Refreshing state... [id=projects/gclt-aicoe-dev-st/locations/europe-west3/repositories/containers]
+google_bigquery_dataset.gclt_aicoe_dev_st_jobs: Refreshing state... [id=projects/gclt-aicoe-dev-st/datasets/translation_jobs]
+google_storage_bucket.gclt_aicoe_dev_st_artifacts: Refreshing state... [id=gclt-aicoe-dev-st-artifacts]
+google_logging_folder_sink.gclt_aicoe_dev_auditlogs_aicoe_400d: Refreshing state... [id=folders/846301442455/sinks/aicoe-400d]
+google_project_iam_member.gclt_aicoe_dev_auditlogs_sink_400d_writer: Refreshing state... [id=gclt-aicoe-dev-auditlogs/roles/logging.bucketWriter/serviceAccount:service-folder-846301442455@gcp-sa-logging.iam.gserviceaccount.com]
+module.gclt_aicoe_dev_ingress_baseline.module.agents.data.google_project.this: Read complete after 0s [id=projects/gclt-aicoe-dev-ingress]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_firestore_database.gclt_aicoe_dev_aihub_ui_sessions will be created
+  + resource "google_firestore_database" "gclt_aicoe_dev_aihub_ui_sessions" {
+      + app_engine_integration_mode       = (known after apply)
+      + concurrency_mode                  = (known after apply)
+      + create_time                       = (known after apply)
+      + database_edition                  = (known after apply)
+      + delete_protection_state           = "DELETE_PROTECTION_DISABLED"
+      + deletion_policy                   = "ABANDON"
+      + earliest_version_time             = (known after apply)
+      + etag                              = (known after apply)
+      + id                                = (known after apply)
+      + key_prefix                        = (known after apply)
+      + location_id                       = "europe-west3"
+      + name                              = "(default)"
+      + point_in_time_recovery_enablement = "POINT_IN_TIME_RECOVERY_DISABLED"
+      + project                           = "gclt-aicoe-dev-aihub-ui"
+      + type                              = "FIRESTORE_NATIVE"
+      + uid                               = (known after apply)
+      + update_time                       = (known after apply)
+      + version_retention_period          = (known after apply)
+    }
+
+  # google_logging_linked_dataset.gclt_aicoe_dev_auditlogs_main will be created
+  + resource "google_logging_linked_dataset" "gclt_aicoe_dev_auditlogs_main" {
+      + bucket          = "aicoe-dev-logs-400d"
+      + create_time     = (known after apply)
+      + description     = "SQL over the 400-day central log bucket"
+      + id              = (known after apply)
+      + lifecycle_state = (known after apply)
+      + link_id         = "aicoe_dev_logs"
+      + location        = "europe-west3"
+      + name            = (known after apply)
+      + parent          = "projects/gclt-aicoe-dev-auditlogs"
+
+      + bigquery_dataset (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+google_logging_linked_dataset.gclt_aicoe_dev_auditlogs_main: Creating...
+google_firestore_database.gclt_aicoe_dev_aihub_ui_sessions: Creating...
+google_logging_linked_dataset.gclt_aicoe_dev_auditlogs_main: Still creating... [10s elapsed]
+google_logging_linked_dataset.gclt_aicoe_dev_auditlogs_main: Still creating... [20s elapsed]
+google_logging_linked_dataset.gclt_aicoe_dev_auditlogs_main: Still creating... [30s elapsed]
+
+Warning: Value for undeclared variable
+
+The root module does not declare a variable named "environment" but a value
+was found in file "../envs/dev/terraform.tfvars". If you meant to use this
+value, add a "variable" block to the configuration.
+
+To silence these warnings, use TF_VAR_... environment variables to provide
+certain "global" settings to all configurations in your organization. To
+reduce the verbosity of these warnings, use the -compact-warnings option.
+
+Warning: Value for undeclared variable
+
+The root module does not declare a variable named "gitlab_issuer" but a value
+was found in file "../envs/dev/terraform.tfvars". If you meant to use this
+value, add a "variable" block to the configuration.
+
+To silence these warnings, use TF_VAR_... environment variables to provide
+certain "global" settings to all configurations in your organization. To
+reduce the verbosity of these warnings, use the -compact-warnings option.
+
+Warning: Values for undeclared variables
+
+In addition to the other similar warnings shown, 15 other variable(s) defined
+without being declared.
+
+Error: Error creating Database: googleapi: Error 409: Database already exists. Please use another database_id
+
+  with google_firestore_database.gclt_aicoe_dev_aihub_ui_sessions,
+  on gclt-aicoe-dev-aihub-ui.tf line 63, in resource "google_firestore_database" "gclt_aicoe_dev_aihub_ui_sessions":
+  63: resource "google_firestore_database" "gclt_aicoe_dev_aihub_ui_sessions" {
+
+
+Error: Error waiting to create LinkedDataset: Error waiting for Creating LinkedDataset: Error code 7, message: Failed to create log link.
+
+  with google_logging_linked_dataset.gclt_aicoe_dev_auditlogs_main,
+  on gclt-aicoe-dev-auditlogs.tf line 70, in resource "google_logging_linked_dataset" "gclt_aicoe_dev_auditlogs_main":
+  70: resource "google_logging_linked_dataset" "gclt_aicoe_dev_auditlogs_main" {
+

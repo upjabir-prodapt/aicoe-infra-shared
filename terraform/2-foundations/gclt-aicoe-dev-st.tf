@@ -40,7 +40,7 @@ module "gclt_aicoe_dev_st_kms" {
   source     = "../modules/kms-ring"
   project_id = var.gclt_aicoe_dev_st_project_id
   location   = var.region
-  ring_name  = "st"
+  ring_name  = "st-ew3"
   keys = {
     "app-gcs"    = {}
     "bq"         = {}

@@ -29,7 +29,7 @@ module "gclt_aicoe_dev_aihub_ui_kms" {
   source     = "../modules/kms-ring"
   project_id = var.gclt_aicoe_dev_aihub_ui_project_id
   location   = var.region
-  ring_name  = "aihub"
+  ring_name  = "aihub-ew3"
   keys = {
     "artifacts" = {}
     "firestore" = {}

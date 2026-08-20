@@ -1,0 +1,39 @@
+aihub_certificate_id = "projects/gclt-aicoe-dev-ingress/locations/europe-west3/certificates/cert-aihub"
+apigee_llm_runtime_sa = "apigee-llm-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com"
+apigee_runtime_sa = "apigee-int-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com"
+backend_certificate_id = "projects/gclt-aicoe-dev-ingress/locations/europe-west3/certificates/cert-backend"
+gclt_aicoe_dev_aihub_ui_kms_key_ids = {
+  "artifacts" = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3/cryptoKeys/artifacts"
+  "firestore" = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3/cryptoKeys/firestore"
+  "session" = "projects/gclt-aicoe-dev-aihub-ui/locations/europe-west3/keyRings/aihub-ew3/cryptoKeys/session"
+}
+gclt_aicoe_dev_aihub_ui_service_accounts = {
+  "aihub-bff-sa" = "aihub-bff-sa@gclt-aicoe-dev-aihub-ui.iam.gserviceaccount.com"
+}
+gclt_aicoe_dev_apigee_apis_ready = "gclt-aicoe-dev-apigee/apigee.googleapis.com,gclt-aicoe-dev-apigee/cloudkms.googleapis.com,gclt-aicoe-dev-apigee/compute.googleapis.com,gclt-aicoe-dev-apigee/secretmanager.googleapis.com,gclt-aicoe-dev-apigee/servicenetworking.googleapis.com"
+gclt_aicoe_dev_apigee_service_accounts = {
+  "apigee-int-runtime" = "apigee-int-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com"
+  "apigee-llm-runtime" = "apigee-llm-runtime@gclt-aicoe-dev-apigee.iam.gserviceaccount.com"
+}
+gclt_aicoe_dev_auditlogs_log_bucket_id = "projects/gclt-aicoe-dev-auditlogs/locations/europe-west3/buckets/aicoe-dev-logs-400d"
+gclt_aicoe_dev_ingress_attestor_name = "aicoe-build-attestor"
+gclt_aicoe_dev_ingress_service_accounts = {}
+gclt_aicoe_dev_llm_breakglass_sa = "llm-breakglass@gclt-aicoe-dev-llm.iam.gserviceaccount.com"
+gclt_aicoe_dev_network_service_accounts = {}
+gclt_aicoe_dev_st_artifacts_bucket = "gclt-aicoe-dev-st-artifacts"
+gclt_aicoe_dev_st_bq_dataset_id = "translation_jobs"
+gclt_aicoe_dev_st_kms_key_ids = {
+  "app-gcs" = "projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/app-gcs"
+  "artifacts" = "projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/artifacts"
+  "bq" = "projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/bq"
+  "secrets" = "projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/secrets"
+  "vxai-index" = "projects/gclt-aicoe-dev-st/locations/europe-west3/keyRings/st-ew3/cryptoKeys/vxai-index"
+}
+gclt_aicoe_dev_st_workload_service_accounts = {
+  "mcp-sa" = "mcp-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com"
+  "salesagent-sa" = "salesagent-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com"
+  "translation-api-sa" = "translation-api-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com"
+  "translation-worker-sa" = "translation-worker-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com"
+  "worker-invoker-sa" = "worker-invoker-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com"
+}
+worker_invoker_sa = "worker-invoker-sa@gclt-aicoe-dev-st.iam.gserviceaccount.com"

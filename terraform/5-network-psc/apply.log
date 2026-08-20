@@ -1,0 +1,50 @@
+[0m[1mgoogle_network_connectivity_regional_endpoint.model_armor: Refreshing state... [id=projects/gclt-aicoe-dev-network/locations/europe-west3/regionalEndpoints/model-armor-ew3][0m
+[0m[1mgoogle_compute_global_address.google_apis: Refreshing state... [id=projects/gclt-aicoe-dev-network/global/addresses/psc-google-apis-ip][0m
+[0m[1mgoogle_dns_managed_zone.modelarmor: Refreshing state... [id=projects/gclt-aicoe-dev-network/managedZones/modelarmor-private][0m
+[0m[1mgoogle_compute_address.apigee_endpoint: Refreshing state... [id=projects/gclt-aicoe-dev-network/regions/europe-west3/addresses/psc-apigee-ip][0m
+[0m[1mgoogle_dns_record_set.modelarmor: Refreshing state... [id=projects/gclt-aicoe-dev-network/managedZones/modelarmor-private/rrsets/modelarmor.europe-west3.rep.googleapis.com./A][0m
+[0m[1mgoogle_dns_record_set.llm: Refreshing state... [id=projects/gclt-aicoe-dev-network/managedZones/aicoedev-int/rrsets/llm.aicoedev-int.colt.net./A][0m
+[0m[1mgoogle_dns_record_set.aihub_api: Refreshing state... [id=projects/gclt-aicoe-dev-network/managedZones/aicoedev-int/rrsets/aihub-api.aicoedev-int.colt.net./A][0m
+[0m[1mgoogle_compute_forwarding_rule.apigee_endpoint: Refreshing state... [id=projects/gclt-aicoe-dev-network/regions/europe-west3/forwardingRules/psc-apigee][0m
+[0m[1mgoogle_compute_global_forwarding_rule.google_apis: Refreshing state... [id=projects/gclt-aicoe-dev-network/global/forwardingRules/pscgoogleapis][0m
+
+[0m[1m[32mNo changes.[0m[1m Your infrastructure matches the configuration.[0m
+
+[0mTerraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named "target_projects" but a
+[33m│[0m [0mvalue was found in file "../envs/dev/terraform.tfvars". If you meant to use
+[33m│[0m [0mthis value, add a "variable" block to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named "allowed_repositories"
+[33m│[0m [0mbut a value was found in file "../envs/dev/terraform.tfvars". If you meant
+[33m│[0m [0mto use this value, add a "variable" block to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValues for undeclared variables[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mIn addition to the other similar warnings shown, 17 other variable(s)
+[33m│[0m [0mdefined without being declared.
+[33m╵[0m[0m
+[0m[1m[32m
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+[0m[0m[1m[32m
+Outputs:
+
+[0mapigee_endpoint_ip = "10.110.73.10"
+google_apis_ip = "192.168.6.164"
+model_armor_ip = "192.168.6.148"

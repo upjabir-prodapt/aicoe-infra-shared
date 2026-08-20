@@ -1,0 +1,4 @@
+name: projects/gclt-aicoe-dev-apigee/policies/gcp.resourceLocations
+spec:
+  rules:
+  - allowAll: true
