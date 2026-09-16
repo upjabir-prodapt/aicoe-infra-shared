@@ -1,0 +1,67 @@
+<TargetEndpoint name="backends">
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response/>
+  </PreFlow>
+
+  <!--
+    LoadBalancer + Server name references the "backends" Target Server
+    (terraform/7-apigee-runtime/main.tf, google_apigee_target_server.backends),
+    whose host is the PSC endpoint attachment's own address — never a
+    literal IP or a public *.run.app URL here. This is Google's own
+    documented pattern for Apigee X -> Cloud Run over PSC:
+    https://cloud.google.com/blog/products/serverless/connecting-to-cloud-run-from-apigee-x-using-psc
+
+    The Audience element uses ref=, not inline {variable} templating —
+    GoogleIDToken's Audience element explicitly rejects the latter
+    ("The Audience element must not contain variables"). The referenced
+    flow variable (audience) is set by whichever KVM-Get*Audience step
+    matched in the ProxyEndpoint PreFlow, from the backend-audiences KVM
+    (terraform creates the empty container; apigee/kvm/backend-audiences.json
+    supplies the real per-backend Cloud Run URLs via ci/deploy-apigee-config.sh).
+  -->
+  <HTTPTargetConnection>
+    <LoadBalancer>
+      <Server name="backends"/>
+    </LoadBalancer>
+    <!--
+      Apigee does NOT forward its own BasePath (/api, see proxies/default.xml)
+      to the target: the target path is <Path> + proxy.pathsuffix, and
+      pathsuffix excludes the BasePath. Without this element the backends
+      receive /translation/v1/translate, while both apps mount their routes
+      under API_PREFIX = /api/translation/v1 and /api/sales/v1 respectively
+      (Translation/.env.api.prod, Sales-Agent/.env.api.prod) — so every call
+      404'd at the Cloud Run service, having passed cleanly through the whole
+      proxy. docs/20 §6.4 asserted the two matched "with no path rewrite";
+      that was wrong, and it stayed invisible because no request had ever
+      reached a backend before 2026-09-11.
+
+      This MUST stay in step with backend-urlmap's path rules
+      (terraform/6-workloads/6c-gclt-aicoe-dev-ingress/main.tf), which match
+      on /api/translation/* and /api/sales/*. If this element is removed or
+      the rules are reverted to /translation/*, neither rule matches and
+      everything silently falls through to that url map's default_service
+      (translation) — Sales-Agent traffic would be answered by the
+      Translation service rather than failing. See docs/BUILD-LOG.md #38.
+    -->
+    <Path>/api</Path>
+    <Authentication>
+      <GoogleIDToken>
+        <Audience ref="audience"/>
+        <!--
+          Google omits the `email` claim from a minted ID token unless it is
+          explicitly requested. Both backends check that claim against their
+          APIGEE_RUNTIME_SA_EMAIL setting (src/api/core/apigee_auth.py) to prove
+          the caller really is Apigee and not some other holder of a valid
+          run.invoker token — so without this the claim arrives empty and every
+          request is rejected with "Apigee identity token email mismatch: got
+          '', expected 'apigee-int-runtime@...'", surfacing to the user as
+          "Unexpected caller identity". Confirmed live 2026-09-11; the audience
+          check passes at that point, so it is specifically the identity half
+          of the backend's authorization that fails. See docs/BUILD-LOG.md #38.
+        -->
+        <IncludeEmail>true</IncludeEmail>
+      </GoogleIDToken>
+    </Authentication>
+  </HTTPTargetConnection>
+</TargetEndpoint>

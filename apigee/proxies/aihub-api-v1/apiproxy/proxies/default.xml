@@ -1,0 +1,69 @@
+<ProxyEndpoint name="default">
+  <HTTPProxyConnection>
+    <BasePath>/api</BasePath>
+  </HTTPProxyConnection>
+
+  <FaultRules>
+    <FaultRule name="rate-limit-to-429">
+      <Step><Name>AM-RateLimit429</Name></Step>
+      <Condition>(fault.name = "SpikeArrestViolation") or (fault.name = "QuotaViolation")</Condition>
+    </FaultRule>
+  </FaultRules>
+
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step><Name>SA-SpikeArrest</Name></Step>
+      <Step><Name>VJ-EntraToken</Name></Step>
+      <Step><Name>AM-UserClaims</Name></Step>
+      <!--
+        jwt_roles !contains "..." fails live deployment:
+        "expressions.parser.OperandsShouldBeLogical: Both the operands for
+        NOT expression should be logical" — confirmed 2026-09-07, exactly
+        the risk docs/20's own §5.4 note flagged before ever deploying this.
+        Using the documented fallback: NOT (... Matches "*...*"), since
+        Matches already returns a logical boolean and jwt_roles is already
+        a plain string (AM-UserClaims.xml assigns it from the claim),
+        so no separate flattened variable is needed.
+      -->
+      <Step>
+        <Name>RF-TranslationRoleRequired</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/translation/**" AND NOT (jwt_roles Matches "*Translation.User*")</Condition>
+      </Step>
+      <Step>
+        <Name>RF-SalesRoleRequired</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/sales/**" AND NOT (jwt_roles Matches "*SalesAgent.User*")</Condition>
+      </Step>
+      <Step><Name>VA-ApiKey</Name></Step>
+      <Step><Name>Q-PerMinute</Name></Step>
+      <Step><Name>Q-PerDay</Name></Step>
+      <!--
+        Which backend's Google ID token audience to mint is now a runtime
+        KVM lookup, not a build-time choice of TargetEndpoint — both paths
+        route through the SAME "backends" Target Server (PSC, see
+        targets/backends.xml); the internal load balancer's own URL map
+        (terraform/6-workloads/6c-gclt-aicoe-dev-ingress/main.tf) is what
+        actually dispatches /translation/* vs /sales/* to the right Cloud
+        Run service. Apigee's only remaining job is picking the right
+        audience for the ID token it mints for that hop.
+      -->
+      <Step>
+        <Name>KVM-GetTranslationAudience</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/translation/**"</Condition>
+      </Step>
+      <Step>
+        <Name>KVM-GetSalesAudience</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/sales/**"</Condition>
+      </Step>
+      <Step><Name>AM-StripAndInjectHeaders</Name></Step>
+    </Request>
+    <Response/>
+  </PreFlow>
+
+  <RouteRule name="backends">
+    <Condition>proxy.pathsuffix MatchesPath "/translation/**" OR proxy.pathsuffix MatchesPath "/sales/**"</Condition>
+    <TargetEndpoint>backends</TargetEndpoint>
+  </RouteRule>
+  <RouteRule name="no-match">
+    <!-- no condition = default. If neither path matched above, this returns nothing -> 404. -->
+  </RouteRule>
+</ProxyEndpoint>

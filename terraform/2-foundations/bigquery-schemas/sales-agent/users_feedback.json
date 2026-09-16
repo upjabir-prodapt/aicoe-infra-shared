@@ -1,0 +1,29 @@
+[
+  {
+    "name": "job_id",
+    "mode": "REQUIRED",
+    "type": "STRING"
+  },
+  {
+    "name": "user_email",
+    "mode": "REQUIRED",
+    "type": "STRING"
+  },
+  {
+    "name": "rating",
+    "mode": "NULLABLE",
+    "type": "INT64",
+    "description": "Overall rating of the research brief, 1 (poor) to 5 (excellent). Added 2026-09-14 alongside the rating on ResearchFeedbackRequest; NULL on rows written before it existed, and on any future row submitted without one."
+  },
+  {
+    "name": "feedback",
+    "mode": "NULLABLE",
+    "type": "STRING"
+  },
+  {
+    "name": "created_at",
+    "mode": "REQUIRED",
+    "type": "TIMESTAMP",
+    "description": "Insert time. Added 2026-09-11: this table is DAY-partitioned on this column in Terraform (terraform/2-foundations), so it must always be populated - a NULL would land the row in the __NULL__ partition, escaping both partition pruning and any future expiry policy."
+  }
+]

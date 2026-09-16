@@ -1,0 +1,61 @@
+<AssignMessage name="AM-ScanVerdict">
+  <DisplayName>Record Model Armor scan state for logging</DisplayName>
+  <!--
+    MODEL ARMOR IS CURRENTLY REMOVED FROM THIS PROXY (2026-09-15). The scanning
+    policies live in apigee/disabled/model-armor/ awaiting a Model Armor quota
+    increase; see that directory's README and proxies/default.xml.
+
+    This policy is retained on purpose even though there is nothing to read a
+    verdict from. Every field below now resolves to its <Value> default,
+    "disabled", because the referenced policies are not in the flow.
+
+    WHY KEEP IT rather than drop the fields from ML-Attribution:
+
+    1. "disabled" and "unset" mean different things, and the difference is the
+       whole point. This log previously used "unset" to mean "the variable name
+       is wrong for this Apigee version and needs confirming in a debug
+       session" — i.e. a BUG. If the fields simply vanished, or silently read
+       "unset", a future reader could not tell "we deliberately turned scanning
+       off" from "the scan integration is broken". Those demand opposite
+       responses.
+    2. It keeps the llm-gateway-attribution log schema stable, so any query or
+       dashboard built against scan_* keeps working across the removal and the
+       eventual restore.
+    3. It makes the unscanned period explicitly queryable after the fact:
+       scan_prompt="disabled" marks every call that went through with no
+       safety scanning, which is exactly the population anyone auditing this
+       window will need to identify.
+
+    ON RESTORE: revert this file to the verdict-reading version in
+    apigee/disabled/model-armor/ (git history has it), which reads
+    invocationResult and filterMatchState. Those two variable names were
+    CONFIRMED from an Apigee debug session 2026-09-15, not inferred — the
+    per-filter names tried first (raiFilterResult.executionState and friends)
+    exist but are null in this Apigee version. Do not re-derive them.
+  -->
+  <AssignVariable>
+    <Name>ma_prompt_result</Name>
+    <Value>disabled</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_prompt_match</Name>
+    <Value>disabled</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_response_result</Name>
+    <Value>disabled</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_response_match</Name>
+    <Value>disabled</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_prompt_failed</Name>
+    <Value>disabled</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_response_failed</Name>
+    <Value>disabled</Value>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

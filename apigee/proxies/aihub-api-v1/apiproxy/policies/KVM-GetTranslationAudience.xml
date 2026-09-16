@@ -1,0 +1,9 @@
+<KeyValueMapOperations name="KVM-GetTranslationAudience" mapIdentifier="backend-audiences">
+  <DisplayName>Look up Translation's GoogleIDToken audience</DisplayName>
+  <Scope>environment</Scope>
+  <Get assignTo="audience" index="1">
+    <Key>
+      <Parameter>translation</Parameter>
+    </Key>
+  </Get>
+</KeyValueMapOperations>

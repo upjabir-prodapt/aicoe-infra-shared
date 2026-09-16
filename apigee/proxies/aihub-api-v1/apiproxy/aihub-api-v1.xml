@@ -1,0 +1,4 @@
+<APIProxy revision="1" name="aihub-api-v1">
+  <DisplayName>AI Hub — int user API (v1)</DisplayName>
+  <Description>Verifies Entra token + API key, applies quota, calls Translation/Sales backends privately over PSC through the "backends" Target Server. Deployed by ci/deploy-apigee-config.sh, not by hand — see docs/20-apigee-manual-proxy-product-app-guide.md for the manual/public-URL alternative this supersedes for CI-driven environments.</Description>
+</APIProxy>

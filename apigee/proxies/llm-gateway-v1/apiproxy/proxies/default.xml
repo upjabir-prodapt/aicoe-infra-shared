@@ -1,0 +1,130 @@
+<ProxyEndpoint name="default">
+  <!--
+    BasePath is /v1, not /api like aihub-api-v1. This proxy is not part of the
+    AI Hub's own REST surface — it is a Vertex AI look-alike, so it keeps the
+    /v1 prefix Vertex itself uses and the SDK already emits. See docs/21 §4.3.
+
+    The full client-side URL is therefore
+      https://llm.aicoedev-int.colt.net/v1/publishers/google/models/<model>:generateContent
+    (env group llm-int, terraform/4-apigee/main.tf).
+  -->
+  <HTTPProxyConnection>
+    <BasePath>/v1</BasePath>
+  </HTTPProxyConnection>
+
+  <FaultRules>
+    <FaultRule name="rate-limit-to-429">
+      <Step><Name>AM-RateLimit429</Name></Step>
+      <Condition>(fault.name = "SpikeArrestViolation") or (fault.name = "QuotaViolation")</Condition>
+    </FaultRule>
+  </FaultRules>
+
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step><Name>SA-SpikeArrest</Name></Step>
+      <Step><Name>VA-ApiKey</Name></Step>
+      <!--
+        AM-Identity must run before either Quota: both are keyed on the
+        variables it sets, and a Quota whose <Identifier ref> does not resolve
+        falls back to counting every caller under one bucket — i.e. the
+        per-user and per-department limits would silently become global ones.
+      -->
+      <Step><Name>AM-Identity</Name></Step>
+      <Step><Name>Q-PerUserPerMinute</Name></Step>
+      <Step><Name>Q-PerDepartmentPerDay</Name></Step>
+      <Step><Name>PTL-PromptTokenLimit</Name></Step>
+      <!-- Must precede both LTQ policies: they need a model name and the
+           request body has none (the model is in the URL). See
+           EV-ModelFromPath.xml. -->
+      <Step><Name>EV-ModelFromPath</Name></Step>
+      <Step><Name>LTQ-Enforce</Name></Step>
+      <!--
+        MODEL ARMOR IS REMOVED FROM THIS FLOW (2026-09-15). Three request-flow
+        steps used to sit here:
+          EV-PromptAndResponse  (extracted llm.prompt_text)
+          SUP-SanitizeUserPrompt (Model Armor scan)
+          RF-PromptBlocked      (re-raised the block on MATCH_FOUND)
+
+        The policy files are retained, unmodified, in
+        apigee/disabled/model-armor/ together with a README giving the exact
+        steps to restore. They are OUT of apiproxy/policies/ on purpose: a file
+        left in that directory ships inside the bundle even when nothing
+        references it.
+
+        WHY: Model Armor costs two API calls per request against a 1,200 QPM
+        project quota, i.e. a hard ceiling of 600 gateway calls/minute, which
+        measured production traffic already bursts through. The fail-open
+        workaround was rejected because it made blocking depend on reading
+        filterMatchState on the error path, which is UNVERIFIED — if Apigee
+        does not populate it there, flagged prompts pass silently, which is a
+        worse failure than having no scanning at all, because it looks like
+        protection. Reinstate once the Model Armor quota is raised.
+
+        UNTIL THEN THERE IS NO PROMPT OR RESPONSE SAFETY SCANNING on this
+        gateway. That is a known, accepted state, not an oversight.
+      -->
+      <!--
+        Strip last, after every policy that reads these headers. Vertex AI has
+        no use for x-apikey or the Colt identity headers, and forwarding a
+        live Apigee credential to a third party — even a first-party Google
+        API — is exactly the leak the gateway exists to prevent.
+      -->
+      <Step><Name>AM-StripIdentityHeaders</Name></Step>
+    </Request>
+    <Response>
+      <!--
+        MODEL ARMOR REMOVED (2026-09-15) — see the matching note in the Request
+        flow above. Three response-flow steps used to sit here:
+          EV-ModelResponseText      (extracted llm.response_text)
+          SMR-SanitizeModelResponse (Model Armor scan)
+          RF-ResponseBlocked        (re-raised the block on MATCH_FOUND, placed
+                                     after ML-Attribution so blocks were still
+                                     logged — keep that ordering on restore)
+      -->
+      <!-- Must precede LTQ-Count and ML-Attribution: both read the token
+           counts it extracts. LTQ-Count previously parsed the body itself with
+           a message-template jsonPath(), which is the mechanism proven not to
+           work against the Vertex body, so it may have been counting zero on
+           every call. See EV-TokenUsage.xml. -->
+      <Step><Name>EV-TokenUsage</Name></Step>
+      <Step><Name>LTQ-Count</Name></Step>
+      <!-- Retained deliberately while Model Armor is out: it now writes
+           "disabled" into every scan_* field rather than a verdict, which
+           keeps the llm-gateway-attribution log schema stable and makes the
+           no-scanning state explicit and queryable. See AM-ScanVerdict.xml. -->
+      <Step><Name>AM-ScanVerdict</Name></Step>
+      <Step><Name>ML-Attribution</Name></Step>
+    </Response>
+  </PreFlow>
+
+  <!--
+    Two route rules, because the two SDKs address Vertex differently (docs/21
+    D-3), and the difference is in the path the CLIENT sends:
+
+      google-genai (Gemini, both repos)  -> /v1/publishers/google/models/<m>:generateContent
+        google/genai/_api_client.py only prepends projects/{p}/locations/{l}/
+        when project or location is truthy; both gateway helpers pass None for
+        both, so the path arrives bare and vertex-gemini-target supplies the
+        prefix.
+
+      AnthropicVertex (Claude, Translation) -> /v1/projects/<p>/locations/<l>/publishers/anthropic/...
+        This SDK always builds the fully-qualified path itself, so
+        vertex-claude-target must NOT prepend anything or the project/location
+        segment appears twice.
+
+    Order matters only in that the conditions are disjoint by construction —
+    a bare path never starts /projects/.
+  -->
+  <RouteRule name="gemini">
+    <Condition>proxy.pathsuffix MatchesPath "/publishers/**" OR proxy.pathsuffix MatchesPath "/models/**"</Condition>
+    <TargetEndpoint>vertex-gemini-target</TargetEndpoint>
+  </RouteRule>
+  <RouteRule name="claude">
+    <Condition>proxy.pathsuffix MatchesPath "/projects/**"</Condition>
+    <TargetEndpoint>vertex-claude-target</TargetEndpoint>
+  </RouteRule>
+  <RouteRule name="no-match">
+    <!-- No condition = default. Anything neither shape matched returns 404
+         rather than being forwarded to Vertex with a guessed path. -->
+  </RouteRule>
+</ProxyEndpoint>

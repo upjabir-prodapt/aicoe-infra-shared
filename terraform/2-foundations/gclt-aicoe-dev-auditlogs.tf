@@ -16,6 +16,21 @@ resource "google_project_service" "gclt_aicoe_dev_auditlogs_apis" {
     "logging.googleapis.com",
     "pubsub.googleapis.com",
     "bigquery.googleapis.com",
+
+    # Not for Compute resources — this project has none. It is a Shared VPC
+    # service project of gclt-aicoe-dev-network, and the provider reads
+    # google_compute_shared_vpc_service_project through the Compute API
+    # scoped to the *service* project. With the API disabled that read returns
+    # SERVICE_DISABLED, Terraform concludes the attachment was deleted, and
+    # stage 3 plans to recreate an attachment that already exists. Enabling
+    # the API here is what makes the attachment readable.
+    "compute.googleapis.com",
+
+    # See gclt-aicoe-dev-aihub-ui.tf — codified platform-wide 2026-09-02.
+    # Actual API enablement, NOT the service-agents module below: that module
+    # provisions per-service *robot identities*, and cloudresourcemanager has
+    # no such identity (SU_INTERNAL_GENERATE_SERVICE_IDENTITY if attempted).
+    "cloudresourcemanager.googleapis.com",
   ])
   project            = var.gclt_aicoe_dev_auditlogs_project_id
   service            = each.value
@@ -25,7 +40,10 @@ resource "google_project_service" "gclt_aicoe_dev_auditlogs_apis" {
 module "gclt_aicoe_dev_auditlogs_agents" {
   source     = "../modules/service-agents"
   project_id = var.gclt_aicoe_dev_auditlogs_project_id
-  services   = ["logging.googleapis.com"]
+  services = [
+    "logging.googleapis.com",
+    "bigquery.googleapis.com",
+  ]
 }
 
 # Cloud Logging's CMEK service account. Reading the project settings
@@ -41,7 +59,12 @@ module "gclt_aicoe_dev_auditlogs_kms" {
   location   = var.region
   ring_name  = "logs-ew3"
   keys       = { "log-bucket" = {} }
-  key_grants = { "log-bucket" = [data.google_logging_project_settings.gclt_aicoe_dev_auditlogs.kms_service_account_id] }
+  key_grants = {
+    "log-bucket" = [
+      data.google_logging_project_settings.gclt_aicoe_dev_auditlogs.kms_service_account_id,
+      module.gclt_aicoe_dev_auditlogs_agents.emails["bigquery.googleapis.com"],
+    ]
+  }
 
   depends_on = [google_project_service.gclt_aicoe_dev_auditlogs_apis]
 }
@@ -73,7 +96,18 @@ resource "google_logging_linked_dataset" "gclt_aicoe_dev_auditlogs_main" {
   bucket      = google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main.bucket_id
   link_id     = "aicoe_dev_logs_ew3"
   description = "SQL over the 400-day central log bucket"
-  depends_on  = [google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main]
+  depends_on = [
+    google_logging_project_bucket_config.gclt_aicoe_dev_auditlogs_main,
+    google_project_iam_member.gclt_aicoe_dev_auditlogs_logging_bigquery_admin,
+    module.gclt_aicoe_dev_auditlogs_kms,
+  ]
+}
+
+# The logging service agent requires BigQuery Admin on the auditlogs project to provision linked datasets.
+resource "google_project_iam_member" "gclt_aicoe_dev_auditlogs_logging_bigquery_admin" {
+  project = var.gclt_aicoe_dev_auditlogs_project_id
+  role    = "roles/bigquery.admin"
+  member  = "serviceAccount:${module.gclt_aicoe_dev_auditlogs_agents.emails["logging.googleapis.com"]}"
 }
 
 # ── sink 1 · everything, to the 400-day bucket ──────────────────────────

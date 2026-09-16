@@ -1,0 +1,4 @@
+<APIProxy revision="1" name="llm-gateway-v1">
+  <DisplayName>AI Hub — LLM gateway</DisplayName>
+  <Description>The only path any AI CoE workload has to a model. API-key auth, per-user and per-department quotas, model allow-list, then calls Vertex AI in gclt-aicoe-dev-llm as apigee-llm-runtime. NO Model Armor prompt/response scanning as of 2026-09-15 — removed pending a quota increase, see apigee/disabled/model-armor/README.md. See docs/21 (build procedure) and docs/23 (backend contract).</Description>
+</APIProxy>

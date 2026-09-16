@@ -1,0 +1,19 @@
+[
+  {"name": "job_execution_id", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "username", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "email", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "business_unit", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "model_version", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "temperature", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "prompt_template_version", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "input_tokens", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "output_tokens", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "total_tokens", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "search_count", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "search_cost_usd", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "token_cost_usd", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "total_cost_usd", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "latency_seconds", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "cost_usd", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "created_at", "type": "TIMESTAMP", "mode": "REQUIRED"}
+]

@@ -1,0 +1,107 @@
+[
+  {
+    "name": "aicoe-standard",
+    "displayName": "AI CoE Standard",
+    "description": "Gates the int (internal) proxy fronting Translation, Sales-Agent And Other Use-cases for aihub-bff. Internal service-to-service only, no developer portal.",
+    "approvalType": "auto",
+    "environments": [
+      "int"
+    ],
+    "quota": "5000",
+    "quotaInterval": "1",
+    "quotaTimeUnit": "day",
+    "attributes": [
+      {
+        "name": "access",
+        "value": "internal"
+      },
+      {
+        "name": "req_per_min",
+        "value": "60"
+      },
+      {
+        "name": "req_per_day",
+        "value": "5000"
+      },
+      {
+        "name": "llm_tokens_per_day",
+        "value": "200000"
+      }
+    ],
+    "proxies": [
+      "aihub-api-v1"
+    ]
+  },
+  {
+    "name": "aicoe-llm",
+    "displayName": "AI CoE LLM Gateway",
+    "description": "Gates the llm gateway (Vertex AI via apigee-llm-runtime) for Translation's and Sales-Agent's own outbound model calls. Internal service-to-service only, no developer portal. Quota attributes here are read by llm-gateway-v1's Q-* policies. llmOperationGroup below IS the enforced model allow-list: Apigee's own credential/operation matching rejects any request whose path+method matches no entry, before any policy in the proxy runs. The vestigial allowed-models KVM enforces nothing and must not be used for this. NOTE: this product intentionally has no top-level \"proxies\" list -- Apigee rejects a product that sets both that and an llmOperationGroup; the proxy is named by apiSource instead. The three models are not a guess: they are the union actually reachable from Translation's model_selection.json in GCS (150 routes, fallback chains plus A/B variants). gemini-3.5-flash alone would reject every fallback, and fallbacks fire exactly when the primary is struggling. Claude is deliberately absent (D-C) and must also be removed from model_selection.json, or those routes fail here.",
+    "approvalType": "auto",
+    "environments": [
+      "llm"
+    ],
+    "quota": "200000",
+    "quotaInterval": "1",
+    "quotaTimeUnit": "day",
+    "attributes": [
+      {
+        "name": "access",
+        "value": "internal"
+      },
+      {
+        "name": "req_per_min_per_user",
+        "value": "60"
+      },
+      {
+        "name": "req_per_day_per_department",
+        "value": "200000"
+      }
+    ],
+    "llmOperationGroup": {
+      "operationConfigs": [
+        {
+          "apiSource": "llm-gateway-v1",
+          "attributes": [],
+          "llmOperations": [
+            {
+              "model": "gemini-3.5-flash",
+              "resource": "/publishers/google/models/gemini-3.5-flash:generateContent",
+              "methods": [
+                "POST"
+              ]
+            }
+          ]
+        },
+        {
+          "apiSource": "llm-gateway-v1",
+          "attributes": [],
+          "llmOperations": [
+            {
+              "model": "gemini-2.5-flash",
+              "resource": "/publishers/google/models/gemini-2.5-flash:generateContent",
+              "methods": [
+                "POST"
+              ]
+            }
+          ]
+        },
+        {
+          "apiSource": "llm-gateway-v1",
+          "attributes": [],
+          "llmOperations": [
+            {
+              "model": "gemini-2.5-pro",
+              "resource": "/publishers/google/models/gemini-2.5-pro:generateContent",
+              "methods": [
+                "POST"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "llmQuota": "25000000",
+    "llmQuotaInterval": "1",
+    "llmQuotaTimeUnit": "hour"
+  }
+]

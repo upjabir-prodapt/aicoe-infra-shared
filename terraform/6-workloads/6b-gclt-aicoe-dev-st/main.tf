@@ -16,13 +16,15 @@ variable "project_id" { type = string }
 variable "region" { type = string }
 variable "apigee_runtime_sa" { type = string }
 variable "worker_invoker_sa" { type = string }
+variable "translation_api_sa" { type = string }
+variable "salesagent_sa" { type = string }
 
 module "bs_translation" {
   source            = "../../modules/cloudrun-backend"
   project_id        = var.project_id
   region            = var.region
   name              = "bs-translation"
-  cloud_run_service = "translation-api-service"
+  cloud_run_service = "translation-api"
   enable_iap        = false # Cloud Run IAM handles this hop
 }
 
@@ -31,7 +33,7 @@ module "bs_sales" {
   project_id        = var.project_id
   region            = var.region
   name              = "bs-sales"
-  cloud_run_service = "sales-research-application"
+  cloud_run_service = "sales-agent-api"
   enable_iap        = false
 }
 
@@ -41,7 +43,7 @@ module "bs_sales" {
 # No IAP, no OAuth client, no allUsers.
 
 resource "google_cloud_run_v2_service_iam_member" "apigee_invoker" {
-  for_each = toset(["translation-api-service", "sales-research-application"])
+  for_each = toset(["translation-api", "sales-agent-api"])
   project  = var.project_id
   location = var.region
   name     = each.value
@@ -49,10 +51,14 @@ resource "google_cloud_run_v2_service_iam_member" "apigee_invoker" {
   member   = "serviceAccount:${var.apigee_runtime_sa}"
 }
 
+# Both workers are Cloud Tasks-driven, not LB-fronted: they only need
+# run.invoker for worker_invoker_sa (the identity Cloud Tasks' OIDC token
+# carries), not a load balancer backend.
 resource "google_cloud_run_v2_service_iam_member" "worker_invoker" {
+  for_each = toset(["translation-worker", "sales-agent-worker"])
   project  = var.project_id
   location = var.region
-  name     = "translation-worker-service"
+  name     = each.value
   role     = "roles/run.invoker"
   member   = "serviceAccount:${var.worker_invoker_sa}"
 }
@@ -61,7 +67,7 @@ resource "google_cloud_run_v2_service_iam_member" "worker_invoker" {
 data "google_cloud_run_v2_service" "translation" {
   project  = var.project_id
   location = var.region
-  name     = "translation-api-service"
+  name     = "translation-api"
 }
 
 # Read the live IAM policy and assert no public principal is bound. This is
@@ -74,8 +80,15 @@ data "google_cloud_run_v2_service_iam_policy" "translation" {
 }
 
 locals {
+  # try() guards the case where the service currently has zero IAM bindings
+  # (our exact state before this stage's first apply): policy_data is then
+  # the literal string "{}" with no "bindings" key at all, not an empty
+  # list -- indexing .bindings directly on that fails with "this object
+  # does not have an attribute named bindings" rather than evaluating to
+  # an empty policy, which is what a from-scratch or freshly-locked-down
+  # service actually looks like.
   translation_policy_members = flatten([
-    for b in jsondecode(data.google_cloud_run_v2_service_iam_policy.translation.policy_data).bindings : b.members
+    for b in try(jsondecode(data.google_cloud_run_v2_service_iam_policy.translation.policy_data).bindings, []) : b.members
   ])
 }
 
@@ -123,4 +136,55 @@ resource "google_cloud_tasks_queue" "translation" {
 output "translation_queue_id" {
   description = "Fully qualified queue id the translation-api enqueues to."
   value       = google_cloud_tasks_queue.translation.id
+}
+
+# ── async fan-out · sales-agent research worker ──────────────────────────
+# Same shape as the translation queue: sales-agent-api enqueues, the worker
+# dispatches over OIDC as worker_invoker_sa.
+
+resource "google_cloud_tasks_queue" "research" {
+  project  = var.project_id
+  location = var.region
+  name     = "research-jobs"
+
+  rate_limits {
+    max_concurrent_dispatches = 10
+    max_dispatches_per_second = 5
+  }
+
+  retry_config {
+    max_attempts       = 5
+    min_backoff        = "10s"
+    max_backoff        = "300s"
+    max_doublings      = 4
+    max_retry_duration = "600s"
+  }
+
+  # No public dispatch. Tasks are enqueued by the sales-agent-api service
+  # account and dispatched to the worker as worker_invoker_sa.
+}
+
+output "research_queue_id" {
+  description = "Fully qualified queue id the sales-agent-api enqueues to."
+  value       = google_cloud_tasks_queue.research.id
+}
+
+# ── enqueuer IAM ──────────────────────────────────────────────────────────
+# Queue-scoped, granted here rather than in 2-foundations, because the
+# queues are resources of this stage and 2-foundations does not read this
+# stage's state (only the reverse, via vars-handoff).
+resource "google_cloud_tasks_queue_iam_member" "translation_api_enqueuer" {
+  project  = var.project_id
+  location = var.region
+  name     = google_cloud_tasks_queue.translation.name
+  role     = "roles/cloudtasks.enqueuer"
+  member   = "serviceAccount:${var.translation_api_sa}"
+}
+
+resource "google_cloud_tasks_queue_iam_member" "salesagent_enqueuer" {
+  project  = var.project_id
+  location = var.region
+  name     = google_cloud_tasks_queue.research.name
+  role     = "roles/cloudtasks.enqueuer"
+  member   = "serviceAccount:${var.salesagent_sa}"
 }

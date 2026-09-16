@@ -1,0 +1,9 @@
+<KeyValueMapOperations name="KVM-GetSalesAudience" mapIdentifier="backend-audiences">
+  <DisplayName>Look up Sales-Agent's GoogleIDToken audience</DisplayName>
+  <Scope>environment</Scope>
+  <Get assignTo="audience" index="1">
+    <Key>
+      <Parameter>sales</Parameter>
+    </Key>
+  </Get>
+</KeyValueMapOperations>

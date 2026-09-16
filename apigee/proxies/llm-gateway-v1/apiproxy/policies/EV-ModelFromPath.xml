@@ -1,0 +1,39 @@
+<ExtractVariables name="EV-ModelFromPath" continueOnError="false" enabled="true">
+  <DisplayName>Extract the model id from the request path</DisplayName>
+  <!--
+    LLMTokenQuota needs a model name and there is NOWHERE in the request body
+    to get one. A Vertex `generateContent` body is {contents, generationConfig,
+    tools} only; the model lives in the URL:
+
+      /v1/publishers/google/models/gemini-3.5-flash:generateContent
+
+    Both LTQ policies originally used {jsonPath('$.model', request.content)},
+    copied from docs/21. That resolves to nothing, and LLMTokenQuota treats an
+    unresolvable model as a hard error rather than skipping:
+
+      500 policies.llmtokenquota.FailedToResolveModelName
+      "Failed to resolve model name {jsonPath('$.model', request.content, true)}
+       for LLM Token Quota processing"
+
+    which failed every single call. Confirmed live 2026-09-15 on the first real
+    traffic through this gateway, see docs/BUILD-LOG.md #39. The response body
+    is no better: Vertex returns `modelVersion`, not `model`.
+
+    This runs in the request flow and the extracted variable stays in scope for
+    the response flow, so LTQ-Count uses the same value, so request and response
+    cannot then disagree about which model was billed.
+
+    Note this is a legitimate use of ExtractVariables, unlike the EV-UserClaims
+    bug in docs/BUILD-LOG.md #37: it has a real <Pattern> and extracts from
+    message content. Copying an already-decoded value still belongs in an
+    AssignMessage.
+  -->
+  <Source>request</Source>
+  <URIPath>
+    <!-- ** spans the BasePath and any publisher prefix, so this keeps working
+         for publishers/google/... and any future publisher path shape. -->
+    <Pattern ignoreCase="true">/**/models/{model}:{method}</Pattern>
+  </URIPath>
+  <VariablePrefix>llm</VariablePrefix>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

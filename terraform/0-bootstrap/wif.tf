@@ -74,3 +74,24 @@ output "provider_name" { value = google_iam_workload_identity_pool_provider.gitl
 output "wif_project_number" { value = data.google_project.this.number }
 
 data "google_project" "this" { project_id = var.seed_project_id }
+
+# Lets every tf-deployer SA created above actually be impersonated through
+# this pool. Missing this is silent on the Terraform side — `terraform apply`
+# succeeds either way — and only surfaces later in GitLab CI as
+# "unauthorized_client: The given credential is rejected by the attribute
+# condition", which reads exactly like an attribute_condition problem even
+# though the condition may be satisfied fine. Discovered 2026-09-02: none of
+# the eight tf-deployer accounts had ever had this binding, so no CI pipeline
+# using WIF against this pool could have completed a real token exchange.
+#
+# Deliberately one wildcard binding per SA rather than a per-repository
+# principal: the attribute_condition above is the actual security boundary
+# (which repos may authenticate at all), and this only says "callers that
+# clear that boundary may ask to become this project's own deployer" — the
+# same shape already proven in the aicoedev/aicoeprod project-local pools.
+resource "google_service_account_iam_member" "tf_deployer_wif_impersonation" {
+  for_each           = google_service_account.tf
+  service_account_id = each.value.name
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.gitlab.name}/*"
+}

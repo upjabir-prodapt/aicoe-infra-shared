@@ -1,0 +1,36 @@
+<AssignMessage name="AM-UserClaims">
+  <DisplayName>Copy verified claims to short variable names</DisplayName>
+  <!--
+    This was an ExtractVariables policy (EV-UserClaims) until 2026-09-11. That
+    was the wrong policy type: ExtractVariables pattern-matches against message
+    content, so a top-level <Variable name ref> with no <Pattern> child extracts
+    nothing, and its <JWT source="...claim.roles"> block was handed a decoded
+    claim array where a JWT string was expected. Net effect: it silently set
+    ZERO variables, so jwt_roles never resolved, the RF-*RoleRequired conditions
+    evaluated NOT(false) = true, and every request 403'd. Copying an
+    already-decoded claim to a shorter name is assignment, not extraction.
+    See docs/BUILD-LOG.md #37.
+  -->
+  <AssignVariable>
+    <Name>jwt_oid</Name>
+    <Ref>jwt.VJ-EntraToken.decoded.claim.oid</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>jwt_upn</Name>
+    <Ref>jwt.VJ-EntraToken.decoded.claim.preferred_username</Ref>
+  </AssignVariable>
+  <!--
+    jwt.VJ-EntraToken.claim.roles renders as the string
+    ["Platform.Admin","Translation.User"], which is what the
+    RF-*RoleRequired Matches "*Role.Name*" conditions test against.
+  -->
+  <AssignVariable>
+    <Name>jwt_roles</Name>
+    <Ref>jwt.VJ-EntraToken.claim.roles</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>jwt_department</Name>
+    <Ref>jwt.VJ-EntraToken.decoded.claim.department</Ref>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

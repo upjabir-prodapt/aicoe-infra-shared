@@ -1,0 +1,43 @@
+<RaiseFault name="RF-PromptBlocked">
+  <DisplayName>400 — prompt blocked by Model Armor</DisplayName>
+  <!--
+    THIS POLICY IS WHAT KEEPS MODEL ARMOR AN ENFORCEMENT CONTROL.
+
+    SUP-SanitizeUserPrompt runs with continueOnError="true" so that a Model
+    Armor OUTAGE does not kill a real user's LLM call (the fail-open decision,
+    2026-09-15). But Apigee delivers a genuine content match through the SAME
+    channel as an infrastructure failure: a detected prompt injection or
+    jailbreak is raised as a policy error,
+      HTTP 400 steps.sanitize.user.prompt.FilterMatched
+    (docs.cloud.google.com/apigee/.../sanitize-user-prompt-policy).
+
+    So continueOnError="true" on its own does NOT mean "tolerate outages". It
+    means "swallow the match faults too", i.e. flagged prompts sail through to
+    Vertex and Model Armor silently degrades to logging-only. This step exists
+    to re-raise that block explicitly, from the verdict variable rather than
+    from the swallowed fault.
+
+    The split it creates, which is the whole point:
+      filterMatchState = MATCH_FOUND  -> real violation -> block here (fail closed)
+      policy failed, no verdict       -> Model Armor unreachable -> proceed
+                                         unscanned, recorded by AM-ScanVerdict
+                                         (fail open)
+
+    UNVERIFIED ASSUMPTION — CONFIRM BEFORE TRUSTING THIS. This depends on
+    filterMatchState still being populated on the FilterMatched error path.
+    The variable name itself is confirmed (debug session 2026-09-15, see
+    AM-ScanVerdict.xml), but it was confirmed on a CLEAN call, not on a blocked
+    one. If Apigee skips the assignment when it raises FilterMatched, this
+    condition never fires and flagged prompts pass. That must be proven with a
+    deliberately malicious prompt in a debug session before this proxy is
+    relied on for enforcement. Until then, treat prompt blocking as UNPROVEN.
+  -->
+  <FaultResponse>
+    <Set>
+      <StatusCode>400</StatusCode>
+      <ReasonPhrase>Bad Request</ReasonPhrase>
+      <Payload contentType="application/json">{"error":"prompt_blocked","reason":"content_policy"}</Payload>
+    </Set>
+  </FaultResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

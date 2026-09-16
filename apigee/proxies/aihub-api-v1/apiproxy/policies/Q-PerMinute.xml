@@ -1,0 +1,18 @@
+<Quota name="Q-PerMinute" type="calendar">
+  <DisplayName>Quota per minute per user</DisplayName>
+  <!-- StartTime is required for type="calendar" — deployment fails without
+       it (InvalidStartTime/omission both reject at build time). GMT, format
+       yyyy-MM-dd HH:mm:ss exactly. This never actually got deployed under
+       docs/20 (only console steps were completed there), so this
+       requirement was never hit until this proxy's first real deploy
+       attempt 2026-09-07. The literal date is an arbitrary stable anchor,
+       not a meaningful cutover point — calendar quotas only care about the
+       time-of-day/interval phase, not the year. -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval ref="verifyapikey.VA-ApiKey.apiproduct.developer.app.attribute.req_per_min">1</Interval>
+  <TimeUnit>minute</TimeUnit>
+  <Allow countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_min"/>
+  <Identifier ref="jwt_oid"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

@@ -1,0 +1,40 @@
+<ExtractVariables name="EV-ModelResponseText" continueOnError="true" enabled="true">
+  <DisplayName>Extract model response text for Model Armor</DisplayName>
+  <!--
+    Model Armor's UserPromptSource / ModelResponseSource accept a message
+    template, and the obvious thing is a jsonPath() expression. That does NOT
+    work here, and it fails silently in a way that then fails the call loudly.
+
+    Proven from an Apigee debug session 2026-09-15 (rev 7):
+
+      request.content                        len=3569  (the real body)
+      $.contents[0].parts[0].text            None
+      $.contents[-1].parts[-1].functionResponse.response  None   (policy default)
+
+    So the body is present and the paths are correct, but the message-template
+    jsonPath() function returns nothing against it. Three separate syntaxes
+    were tried live and all resolved empty: the policy's own default with
+    negative indices, a quoted path, and an unquoted path with [0]. An empty
+    prompt is fatal to Model Armor rather than a skipped scan:
+
+      500 steps.sanitize.user.prompt.FailedToExtractUserPrompt
+      "Template was resolved to empty string"
+
+    ExtractVariables uses a different JSONPath implementation and it demonstrably
+    works in this same proxy (EV-ModelFromPath). So extraction happens here, in
+    the policy whose job it is, and Model Armor just reads a flow variable.
+
+    continueOnError is true: if a future request shape has no matching field,
+    this must not fail the call on its own. Model Armor will still refuse an
+    empty prompt, which is the behaviour we want, and the error then points at
+    the real problem rather than at this policy.
+  -->
+  <Source>response</Source>
+  <JSONPayload>
+    <Variable name="response_text" type="string">
+      <JSONPath>$.candidates[0].content.parts[0].text</JSONPath>
+    </Variable>
+  </JSONPayload>
+  <VariablePrefix>llm</VariablePrefix>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

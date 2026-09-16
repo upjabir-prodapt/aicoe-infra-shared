@@ -10,6 +10,7 @@ module "gclt_aicoe_dev_network_baseline" {
     "cloudkms.googleapis.com",
     "servicenetworking.googleapis.com", # enabled but unused — no PSA, no peering
     "networkconnectivity.googleapis.com",
+    "cloudresourcemanager.googleapis.com", # see gclt-aicoe-dev-aihub-ui.tf — codified platform-wide 2026-09-02
   ]
   service_accounts = {
   }

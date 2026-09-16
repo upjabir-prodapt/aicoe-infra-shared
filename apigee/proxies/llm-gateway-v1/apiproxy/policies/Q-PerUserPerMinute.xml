@@ -1,0 +1,20 @@
+<Quota name="Q-PerUserPerMinute" type="calendar">
+  <DisplayName>Per-user request quota, per minute</DisplayName>
+  <!-- StartTime is mandatory for type="calendar" — the bundle fails to deploy
+       without it. GMT, "yyyy-MM-dd HH:mm:ss" exactly. The literal date is an
+       arbitrary stable anchor, not a cutover: calendar quotas only use it for
+       interval phase. Same value and same reason as aihub-api-v1's Q-PerMinute. -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>minute</TimeUnit>
+  <!-- count is the fallback, countRef wins when it resolves. Both are set on
+       purpose: if the aicoe-llm product is ever edited and loses the
+       req_per_min_per_user attribute, a countRef-only Quota does not fail — it
+       behaves unpredictably. This pins a known floor instead. -->
+  <Allow count="60" countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_min_per_user"/>
+  <!-- Keyed on the asserted user, not the app: both repos share one app per
+       service, so an app-keyed quota could not distinguish users at all. -->
+  <Identifier ref="llm_user_oid"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

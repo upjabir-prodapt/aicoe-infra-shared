@@ -1,0 +1,56 @@
+<ExtractVariables name="EV-TokenUsage" continueOnError="true" enabled="true">
+  <DisplayName>Extract token usage from the model response</DisplayName>
+  <!--
+    WHY THIS EXISTS, and it is probably a bug fix rather than an addition.
+
+    LTQ-Count previously took its usage straight from a message template:
+
+      <LLMTokenUsageSource>{jsonPath($.usageMetadata.candidatesTokenCount,response.content,true)}</LLMTokenUsageSource>
+
+    That is the SAME mechanism proven NOT to work against the Vertex response
+    body in an Apigee debug session on 2026-09-15: message-template jsonPath()
+    returns nothing here even when the body is present and the path is correct.
+    Three syntaxes were tried live and all resolved empty (see
+    apigee/disabled/model-armor/EV-ModelResponseText.xml for the evidence).
+
+    If that is true for LTQ-Count too, the LLM token quota has been counting
+    ZERO on every call since it was deployed, and the daily budget has never
+    incremented. That would be invisible: the calls succeed, the counter simply
+    never moves, and a quota that never fills looks exactly like a quota that is
+    never reached. CONFIRM THIS in a debug session; it is the single most
+    valuable thing to check when this change is deployed.
+
+    ExtractVariables uses a different JSONPath implementation and demonstrably
+    works in this proxy (EV-ModelFromPath). So extraction happens here and the
+    consumers read plain flow variables.
+
+    Vertex generateContent responses carry:
+      usageMetadata.promptTokenCount      input
+      usageMetadata.candidatesTokenCount  output
+      usageMetadata.totalTokenCount       both
+
+    All three are extracted: total drives the quota, and the input/output split
+    is logged by ML-Attribution because they are billed at different rates, so
+    a single total cannot be turned back into a cost.
+
+    continueOnError is true deliberately. A missing usage field must not fail a
+    call that the model already answered and that the user is already paying
+    for. The cost of that choice is that a broken extraction degrades to
+    counting zero rather than erroring, which is precisely the failure this
+    policy exists to fix, so it must be verified rather than assumed.
+  -->
+  <Source>response</Source>
+  <JSONPayload>
+    <Variable name="prompt_tokens" type="integer">
+      <JSONPath>$.usageMetadata.promptTokenCount</JSONPath>
+    </Variable>
+    <Variable name="candidates_tokens" type="integer">
+      <JSONPath>$.usageMetadata.candidatesTokenCount</JSONPath>
+    </Variable>
+    <Variable name="total_tokens" type="integer">
+      <JSONPath>$.usageMetadata.totalTokenCount</JSONPath>
+    </Variable>
+  </JSONPayload>
+  <VariablePrefix>llm</VariablePrefix>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

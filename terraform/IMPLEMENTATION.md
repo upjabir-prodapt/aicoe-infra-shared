@@ -618,13 +618,13 @@ Every stage is now structurally runnable. What remains is inputs and external de
 | `0-bootstrap` | — | — | `state_bucket`, `deployer_emails`, `pool_name`, `provider_name`, `wif_project_number` |
 | `1-org` | — | — | `project_ids`, `project_numbers` *(currently unconsumed)* |
 | `2-foundations` | — | — | *(stage absent)* |
-| `3-network` | — | — | `vpc_self_link`, `subnet_ew1_self_link`, `cloudrun_subnet_self_link`, `proxy_subnet_self_link`, `pscnat_subnet_self_link`, `internal_subnet_self_link`, `private_zone_name`, `googleapis_zone_name` |
+| `3-network` | — | — | `vpc_self_link`, `subnet_ew3_self_link`, `cloudrun_subnet_self_link`, `proxy_subnet_self_link`, `pscnat_subnet_self_link`, `internal_subnet_self_link`, `private_zone_name`, `googleapis_zone_name` |
 | `4-apigee` | — | — | `org_id`, `instance_service_attachment`, `environments` |
 | `5-network-psc` | `vpc_self_link`, `internal_subnet_self_link`, `private_zone_name` | `3-network` | `apigee_endpoint_ip`, `google_apis_ip` |
 | | `instance_service_attachment` | `4-apigee` | |
 | `6a-aihub-ui` | *(none — ordering only)* | | `bff_backend_service_self_link` |
 | `6b-st` | *(none — ordering only)* | | `translation_backend_service_self_link`, `sales_backend_service_self_link` |
-| `6c-ingress` | `vpc_self_link`, `subnet_ew1_self_link`, `internal_subnet_self_link`, `pscnat_subnet_self_link` | `3-network` | `backend_service_attachment_id` |
+| `6c-ingress` | `vpc_self_link`, `subnet_ew3_self_link`, `internal_subnet_self_link`, `pscnat_subnet_self_link` | `3-network` | `backend_service_attachment_id` |
 | | `bff_backend_service_self_link` | `6a` | |
 | | `translation_…`, `sales_backend_service_self_link` | `6b` | |
 | `7-apigee-runtime` | `org_id` | `4-apigee` | `endpoint_attachment_host` |

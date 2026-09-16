@@ -1,0 +1,28 @@
+<RaiseFault name="RF-ResponseBlocked">
+  <DisplayName>403 — model response blocked by Model Armor</DisplayName>
+  <!--
+    The response-flow twin of RF-PromptBlocked, and it exists for the same
+    reason: SMR-SanitizeModelResponse runs continueOnError="true" to survive a
+    Model Armor outage, which would otherwise also swallow a genuine match and
+    hand the caller content our own safety template just flagged.
+
+    403 rather than 502 deliberately. A 5xx invites the client's retry/backoff
+    path, and both repos retry 5xx — but re-issuing the same prompt will
+    produce the same flagged output, so a retryable code turns one block into a
+    retry loop that burns quota and Model Armor QPM for a guaranteed-identical
+    result. 4xx is a definitive refusal, which is what this is.
+
+    Same UNVERIFIED ASSUMPTION as RF-PromptBlocked: this reads filterMatchState
+    on the error path and that has only been observed on clean calls. Prove it
+    with a deliberately unsafe generation in a debug session before treating
+    response blocking as real.
+  -->
+  <FaultResponse>
+    <Set>
+      <StatusCode>403</StatusCode>
+      <ReasonPhrase>Forbidden</ReasonPhrase>
+      <Payload contentType="application/json">{"error":"response_blocked","reason":"content_policy"}</Payload>
+    </Set>
+  </FaultResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

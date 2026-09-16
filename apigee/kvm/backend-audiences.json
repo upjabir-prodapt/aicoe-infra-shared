@@ -1,0 +1,12 @@
+{
+  "keyValueEntries": [
+    {
+      "name": "translation",
+      "value": "https://translation-api-ss3g75w62q-ey.a.run.app"
+    },
+    {
+      "name": "sales",
+      "value": "https://sales-agent-api-ss3g75w62q-ey.a.run.app"
+    }
+  ]
+}

@@ -58,5 +58,34 @@ if grep -rn 'google_service_account_key' --include='*.tf' . >/dev/null 2>&1; the
   say "service account key resource found — org policy forbids these"
 fi
 
+# 7 · Apigee backend auth is only ever half-configured without this
+# A TargetEndpoint carrying <GoogleIDToken>/<GoogleAccessToken> does not sign
+# that token itself: the Apigee Service Agent mints it AS the environment's
+# runtime service account, which requires roles/iam.serviceAccountTokenCreator
+# on that account. Granting the runtime SA run.invoker on the backend (stage
+# 6b) is the *other* half and is useless alone — with no token minted,
+# run.invoker is never even exercised.
+#
+# This was missing entirely, not merely drifted: every request died in the
+# proxy with GoogleTokenGenerationFailure, surfacing as a bare HTTP 500.
+# See docs/BUILD-LOG.md #37.
+#
+# The binding must be matched specifically, not by the role string alone:
+# 0-bootstrap/wif.tf already grants serviceAccountTokenCreator to the CI
+# identities for an unrelated purpose, so a bare grep for the role name
+# matches even when the Apigee grant is entirely absent — which is exactly
+# how this check first passed against a tree known to be missing it.
+# Require a file that carries the role AND names the Apigee service agent.
+APIGEE_CFG=""
+for cand in ./apigee ../apigee; do [ -d "$cand" ] && APIGEE_CFG="$cand" && break; done
+if [ -n "$APIGEE_CFG" ] && grep -rqE '<Google(IDToken|AccessToken)\b' "$APIGEE_CFG" 2>/dev/null; then
+  found=0
+  for f in $(grep -rl 'roles/iam.serviceAccountTokenCreator' --include='*.tf' . 2>/dev/null || true); do
+    grep -qE 'gcp-sa-apigee|agent_emails\["apigee\.googleapis\.com"\]' "$f" && found=1 && break
+  done
+  [ "$found" -eq 1 ] \
+    || say "an Apigee proxy uses GoogleIDToken/GoogleAccessToken but no serviceAccountTokenCreator binding for the Apigee service agent exists in Terraform — the agent cannot mint the token (HTTP 500, GoogleTokenGenerationFailure)"
+fi
+
 [ $FAIL -eq 0 ] && echo "  ✓ all policy checks passed"
 exit $FAIL

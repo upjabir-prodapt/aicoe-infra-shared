@@ -42,7 +42,7 @@ locals {
     "logging.googleapis.com"          = "service-${data.google_project.this.number}@gcp-sa-logging.iam.gserviceaccount.com"
     "pubsub.googleapis.com"           = "service-${data.google_project.this.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
     "apigee.googleapis.com"           = "service-${data.google_project.this.number}@gcp-sa-apigee.iam.gserviceaccount.com"
-    "secretmanager.googleapis.com"      = "service-${data.google_project.this.number}@gcp-sa-secretmanager.iam.gserviceaccount.com"
+    "secretmanager.googleapis.com"    = "service-${data.google_project.this.number}@gcp-sa-secretmanager.iam.gserviceaccount.com"
   }
 }
 

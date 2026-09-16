@@ -1,0 +1,11 @@
+<RaiseFault name="RF-TranslationRoleRequired">
+  <DisplayName>403 — missing Translation.User role</DisplayName>
+  <FaultResponse>
+    <Set>
+      <StatusCode>403</StatusCode>
+      <ReasonPhrase>Forbidden</ReasonPhrase>
+      <Payload contentType="application/json">{"error":"missing_role","required":"Translation.User"}</Payload>
+    </Set>
+  </FaultResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

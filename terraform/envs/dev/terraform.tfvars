@@ -2,6 +2,11 @@ environment      = "dev"
 region           = "europe-west3"
 analytics_region = "europe-west2" # need to change in europe west3 in prod
 
+# Pinned to the already-live, cosmetically wrong name (GAP-REGISTER R-01) --
+# do not "fix" this to aicoe-dev-ew3, that would try to destroy and rebuild
+# the live, prevent_destroy-protected Apigee instance for a label.
+apigee_instance_name = "aicoe-dev-ew1"
+
 # ── 0-bootstrap ──────────────────────────────────────────────────────────
 # aicoe-sharedwif IS the seed project. Already exists in GCP — see the LLD's
 # Organisation, folder and project structure section for the folder tree. Not created by this Terraform; hosts the state
@@ -36,17 +41,38 @@ existing_projects = {
 
 gitlab_issuer   = "https://amsgit01"
 gitlab_audience = "https://iam.googleapis.com"
-# Real clone paths confirmed 2026-08-12: all three repos live under the
-# code-scanning-toolset group. The Terraform repo plus the two use-case app
-# repos that deploy through this pool.
+# Real clone paths confirmed 2026-08-12: all repos live under the
+# code-scanning-toolset group. The Terraform repo plus every use-case app
+# repo that deploys through this pool.
+# shared-aihub-ui added 2026-09-02: the AI Hub BFF's build-and-push/
+# deploy-cloud-run jobs (.gitlab-ci.yml's .gcp_wif) impersonate tf-deployer
+# via this same pool, and the condition rejects anything not listed here —
+# omitting it fails CI with "unauthorized_client: ... rejected by the
+# attribute condition", not a Terraform error, so it is easy to miss.
 allowed_repositories = [
   "code-scanning-toolset/aicoe-terraform",
-  "code-scanning-toolset/translation",
-  "code-scanning-toolset/sales-agent",
+  # Corrected 2026-09-06: "translation" and "sales-agent" (no "shared-"
+  # prefix) never matched any real GitLab project_path -- confirmed live via
+  # a real CI failure ("unauthorized_client: ... rejected by the attribute
+  # condition") whose checkout path was .../code-scanning-toolset/
+  # shared-salesagent/.git, not .../sales-agent/.git. Every app repo in this
+  # GitLab group actually uses the shared-* prefix, matching shared-aihub-ui
+  # below, which was already correct.
+  "code-scanning-toolset/shared-translation",
+  "code-scanning-toolset/shared-salesagent",
+  "code-scanning-toolset/shared-aihub-ui",
 ]
 
-workforce_pool = "colt-aiappsui-auth"
-ui_user_group  = "REPLACE_ME"
+# The pool that actually federates Entra for this platform. Two decoys exist
+# in the org (colt-aiappsui-auth, colt-dev-aiappsui-auth); pointing at either
+# builds a valid principalSet:// against a pool containing none of our users,
+# and IAP then denies everyone with no diagnostic.
+workforce_pool = "colt-aicoe-aihubui-auth"
+
+# Entra object ID of App-AICoE-UI-Users — an object ID, not a display name or
+# sAMAccountName. Sole entry in the groups[] claim of a live workforce-pool
+# ID token; consumed by 6a's principalSet://.../group/<id> IAP binding.
+ui_user_group = "874d0e37-2dd6-4b85-acd3-fcc2a9cc6e79"
 
 # ── 2-foundations ────────────────────────────────────────────────────────
 # The AI COE folder. Every folder-level sink and audit-log config in
@@ -65,9 +91,23 @@ folder_id = "846301442455"
 # the .auto.tfvars.json artifact handoff. A hand-typed value here is how a
 # misspelled principal silently leaves the AI gateway unenforced.
 
+# The Certificate Manager certs in 2-foundations are gated behind this flag so
+# that stage could first apply and create the empty PEM/key secret containers.
+# Those secrets are now populated and both certs exist, so the flag must stay
+# true: it defaults to false, and any plan of 2-foundations without it DESTROYS
+# cert-aihub and cert-backend and blanks the two certificate_id outputs that
+# 6c consumes. It was previously passed only as an ad-hoc
+# -var="certs_enabled=true" on the command line, which made the destroy the
+# default behaviour of a plain plan.
+certs_enabled = true
+
 # ── 6c · gclt-aicoe-dev-ingress ──────────────────────────────────────────
-# Certificate Manager certificate ids for the two load balancer frontends.
-# These become outputs of the 2-certificates stage once it exists; until
-# then they remain placeholders gated on P4 (DNS-01 automation).
-aihub_certificate_id   = "REPLACE_ME"
-backend_certificate_id = "REPLACE_ME"
+# aihub_certificate_id and backend_certificate_id are NOT set here. They are
+# created by 2-foundations (Certificate Manager) and arrive through
+# vars-handoff/2-foundations.auto.tfvars.json.
+#
+# They must not be re-declared in this file: CI copies the handoff files into
+# the stage directory and then passes -var-file=envs/dev/terraform.tfvars on
+# the command line (terraform/ci/job-templates.yml:46,53). A CLI -var-file
+# outranks an *.auto.tfvars.json, so a placeholder here silently overrides the
+# real certificate ids.

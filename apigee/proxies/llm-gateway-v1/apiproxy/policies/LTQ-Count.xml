@@ -1,0 +1,40 @@
+<LLMTokenQuota name="LTQ-Count" continueOnError="true" enabled="true">
+  <DisplayName>LLM Token Quota (count)</DisplayName>
+  <!--
+    Records what a call actually consumed, against the department's budget.
+    LTQ-Enforce checks the counter in the request flow and adds nothing; this
+    adds the real figure in the response flow, because the token count does not
+    exist until the model has answered.
+
+    USAGE SOURCE CHANGED 2026-09-15, twice over, and both changes matter.
+
+    1. It now reads a flow variable instead of an inline message template. The
+       previous value was
+         {jsonPath($.usageMetadata.candidatesTokenCount,response.content,true)}
+       which is the same message-template jsonPath() mechanism PROVEN not to
+       work against the Vertex response body in a debug session that same day
+       (see EV-TokenUsage.xml and apigee/disabled/model-armor/EV-ModelResponseText.xml).
+       If it never resolved, this policy has been counting ZERO on every call
+       and the department budget has never moved. A quota that never fills is
+       indistinguishable from a quota that is never reached, so nothing would
+       have signalled it. EV-TokenUsage now does the extraction with
+       ExtractVariables, which demonstrably works in this proxy.
+
+    2. It now counts TOTAL tokens, not output tokens. candidatesTokenCount is
+       output only: on a measured Translation job that was 87,510 of 415,000,
+       about 21% of real consumption, ignoring the larger and still billed half.
+       This moved together with the product's llmQuota value, because changing
+       the basis alone silently revalues the limit by roughly 5x.
+
+    continueOnError stays true: a counting failure must not fail a call the
+    model already answered and that is already billed. The cost of that choice
+    is that a broken extraction degrades to counting zero rather than erroring,
+    which is exactly point 1 above. VERIFY against an application's own recorded
+    token total before trusting this counter.
+  -->
+  <Operation>CountOnly</Operation>
+  <UseQuotaConfigInAPIProduct stepName="VA-ApiKey"/>
+  <Identifier ref="llm_user_department"/>
+  <LLMTokenUsageSource>{llm.total_tokens}</LLMTokenUsageSource>
+  <LLMModelSource>{llm.model}</LLMModelSource>
+</LLMTokenQuota>

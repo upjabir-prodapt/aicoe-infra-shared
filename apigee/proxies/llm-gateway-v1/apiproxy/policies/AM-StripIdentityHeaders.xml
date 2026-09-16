@@ -1,0 +1,19 @@
+<AssignMessage name="AM-StripIdentityHeaders">
+  <DisplayName>Remove gateway-only headers before the Vertex hop</DisplayName>
+  <!--
+    Runs last in the request PreFlow, after every policy that reads these.
+    x-apikey is a live Apigee credential and must never leave the proxy; the
+    Colt identity headers are internal attribution metadata that Vertex has no
+    use for. Vertex would most likely ignore them, but "the upstream probably
+    ignores our credentials" is not a control.
+  -->
+  <Remove>
+    <Headers>
+      <Header name="x-apikey"/>
+      <Header name="x-colt-user-oid"/>
+      <Header name="x-colt-user-department"/>
+    </Headers>
+  </Remove>
+  <AssignTo createNew="false" type="request"/>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

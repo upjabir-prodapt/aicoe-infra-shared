@@ -1,0 +1,48 @@
+<MessageLogging name="ML-Attribution" enabled="true">
+  <DisplayName>LLM usage attribution to Cloud Logging</DisplayName>
+  <!--
+    This replaces a StatisticsCollector policy, which docs/21 section 4.4
+    specified and which Apigee REJECTS in this org: "StatisticsCollector is
+    not a supported policy" (bundle validation, 2026-09-14). Custom analytics
+    dimensions are not available to us, so the authoritative usage meter
+    described in docs/23 section 4.5 as mechanism A is Cloud Logging, not the
+    Apigee analytics UI.
+
+    METADATA ONLY, deliberately and permanently. No prompt text, no response
+    text, no model output of any kind. docs/08's anti-pattern 3 and docs/09's
+    GDPR purpose-limitation note both apply: this log is joinable to a named
+    person via the department and app fields, so adding content here changes
+    what the log legally is. Any such addition needs its own sign-off.
+
+    department is logged; the user oid is not, for the same cardinality and
+    data-minimisation reason it is a quota key but not an analytics dimension
+    (docs/23 section 4.5). Per-user consumption detail lives in the apps' own
+    BigQuery cost tables, which are access-controlled separately.
+
+    The scan_* fields carry Model Armor's per-filter executionState. scan_* SUCCESS/NO_MATCH_FOUND means Model Armor answered and found
+    nothing. It does NOT prove the content was inspected: an oversized prompt
+    is SKIPPED per filter and still reports that way. See AM-ScanVerdict.xml.
+    A value of "unset" means the flow variable did not resolve, i.e. the
+    variable name in AM-ScanVerdict is wrong for this Apigee version and needs
+    confirming in a debug session. Both are actionable; neither is a pass.
+  -->
+  <!--
+    Token counts added 2026-09-15. Until then this log carried no usage figures
+    at all, so the only record of consumption was the LLM token quota counter,
+    which is not readable and which EV-TokenUsage.xml explains may never have
+    been incrementing. Departmental usage reporting therefore depended entirely
+    on each application self-reporting, with nothing to reconcile against.
+
+    prompt and output are logged separately, not just the total, because they
+    are billed at different rates (for gemini-3.5-flash, output is six times
+    input). A single total cannot be converted back into a cost.
+
+    Still metadata only: counts, not content. No prompt text, no response text.
+    See the note above on why that boundary is deliberate and permanent.
+  -->
+  <CloudLogging>
+    <LogName>projects/gclt-aicoe-dev-apigee/logs/llm-gateway-attribution</LogName>
+    <Message contentType="application/json">{"apiproduct":"{apiproduct.name}","app":"{verifyapikey.VA-ApiKey.client_id}","department":"{llm_user_department}","proxy_path":"{proxy.pathsuffix}","status":"{message.status.code}","scan_prompt":"{ma_prompt_result}","scan_prompt_match":"{ma_prompt_match}","scan_response":"{ma_response_result}","scan_response_match":"{ma_response_match}","scan_prompt_failed":"{ma_prompt_failed}","scan_response_failed":"{ma_response_failed}","model":"{llm.model}","prompt_tokens":"{llm.prompt_tokens}","output_tokens":"{llm.candidates_tokens}","total_tokens":"{llm.total_tokens}"}</Message>
+    <ResourceType>api</ResourceType>
+  </CloudLogging>
+</MessageLogging>

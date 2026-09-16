@@ -1,0 +1,40 @@
+<SanitizeModelResponse name="SMR-SanitizeModelResponse" continueOnError="true" enabled="true">
+  <DisplayName>Sanitize Model Response (Model Armor)</DisplayName>
+  <!--
+    continueOnError="true" since 2026-09-15, same decision and same caveats as
+    SUP-SanitizeUserPrompt — see that file's comment for the full reasoning.
+    RF-ResponseBlocked is the compensating control that keeps a genuine match
+    enforced; this attribute and that policy must move together.
+
+    Worth stating for the response side specifically: failing open here means a
+    model response reaches the caller unscanned. The prompt was still scanned
+    (or recorded as unscanned) on the way in, so this is the narrower exposure
+    of the two, but it is the one that can surface unsafe generated content
+    directly to a user. ma_response_failed in the attribution log is the only
+    signal it happened.
+  -->
+  <Source>response</Source>
+  <!--
+    Explicit for the same reason as SUP-SanitizeUserPrompt: the policy default
+    uses negative array indices, which Apigee's message-template jsonPath()
+    resolves to an empty string, and an empty prompt/response is a FATAL
+    "Template was resolved to empty string" rather than a skipped scan.
+    Note also the path must be UNQUOTED; quoting it fails the same way, which
+    cost a deploy cycle to learn. Vertex generateContent responses are shaped
+    {"candidates":[{"content":{"parts":[{"text": "..."}]}}],"usageMetadata":{}}.
+  -->
+  <LLMResponseSource>{llm.response_text}</LLMResponseSource>
+  <ModelArmor>
+    <!--
+      Template is INSPECT-only by configuration (no SDP advanced_config /
+      deidentify_template — see the long comment in
+      terraform/7-apigee-runtime/model-armor.tf). That matters specifically
+      here: a template that rewrites the response body can strip
+      groundingMetadata.groundingChunks and searchEntryPoint from a
+      Google-Search-grounded Gemini response without erroring, which
+      Sales-Agent's search agent reads to build its evidence list. The symptom
+      would be zero evidence on an HTTP 200 — no error anywhere.
+    -->
+    <TemplateName>projects/gclt-aicoe-dev-llm/locations/europe-west3/templates/aicoe-llm-gateway</TemplateName>
+  </ModelArmor>
+</SanitizeModelResponse>

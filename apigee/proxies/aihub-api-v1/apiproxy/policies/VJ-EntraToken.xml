@@ -1,0 +1,18 @@
+<VerifyJWT name="VJ-EntraToken">
+  <DisplayName>Verify Entra Access Token</DisplayName>
+  <Algorithm>RS256</Algorithm>
+  <!--
+    Do NOT add <Source>request.header.authorization</Source> here. Apigee only
+    strips the "Bearer " prefix when <Source> is OMITTED (the default source is
+    already the Authorization header). If <Source> is set explicitly, the policy
+    takes the variable verbatim and tries to parse "Bearer eyJ..." as a JWT,
+    failing before signature verification is ever attempted. That produced a
+    hard 401 on every request with a perfectly valid token - root-caused
+    2026-09-11, see docs/BUILD-LOG.md #37.
+  -->
+  <PublicKey>
+    <JWKS uri="https://login.microsoftonline.com/b859cf7e-ff8a-40bb-bd0f-da56e6dc0eb8/discovery/v2.0/keys"/>
+  </PublicKey>
+  <Issuer>https://login.microsoftonline.com/b859cf7e-ff8a-40bb-bd0f-da56e6dc0eb8/v2.0</Issuer>
+  <Audience>6d43552a-585f-4378-a25f-aae53c026a73</Audience>
+</VerifyJWT>

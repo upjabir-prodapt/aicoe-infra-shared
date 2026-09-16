@@ -62,6 +62,10 @@ resource "google_project_service" "seed" {
     "storage.googleapis.com",
     "iam.googleapis.com",
     "iamcredentials.googleapis.com",
+    # Already enabled here by hand, unlike 5 of the other 7 dev projects.
+    # Codified for consistency on 2026-09-02 — see
+    # 2-foundations/gclt-aicoe-dev-aihub-ui.tf for the full story.
+    "cloudresourcemanager.googleapis.com",
   ])
   project            = var.seed_project_id
   service            = each.value
@@ -70,9 +74,20 @@ resource "google_project_service" "seed" {
 
 # ── state bucket ────────────────────────────────────────────────────────
 resource "google_kms_key_ring" "state" {
-  project    = var.seed_project_id
-  name       = "tfstate"
-  location   = var.region
+  project = var.seed_project_id
+  name    = "tfstate"
+  # var.location, NOT var.region: the two are allowed to diverge (region is
+  # for workload resources like Cloud Run and drifted to europe-west3 in the
+  # dev tfvars) but the state bucket and its CMEK key ring must never move —
+  # see var.location's own comment. This resource read var.region until
+  # 2026-09-02, which made a plain `terraform plan` propose destroying and
+  # recreating the key ring (and, transitively, the crypto key) the moment
+  # region and location diverged. lifecycle.prevent_destroy below caught it
+  # before apply, but only because that guard exists — the key encrypts the
+  # state for every stage applied so far (0-bootstrap through at least
+  # 5-network-psc), so an actual replace here would have made all of it
+  # permanently unreadable.
+  location   = var.location
   depends_on = [google_project_service.seed]
 }
 

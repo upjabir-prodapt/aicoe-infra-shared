@@ -1,0 +1,53 @@
+<PromptTokenLimit name="PTL-PromptTokenLimit" continueOnError="false" enabled="true">
+  <DisplayName>Prompt Token Limit</DisplayName>
+  <!--
+    This policy is SpikeArrest for tokens: it throttles the RATE of prompt
+    tokens per unit time. It is not a per-request size cap. The required
+    element is <Rate>, not <Limit>; <Limit> is not in this policy's schema and
+    its absence does not fail bundle validation, it fails at DEPLOY time as a
+    NullPointerException in SpikeArrestExecution.getConstantRate, because
+    PromptTokenLimit is built on the SpikeArrest machinery. See BUILD-LOG #39.
+
+    KEYED PER DEPARTMENT AND APPLICATION since 2026-09-15 (was department
+    only). The department-wide token BUDGET is LTQ-Enforce; this is the
+    per-application RATE guard, so one application's burst cannot exhaust the
+    other's headroom. The two are complementary: a budget catches slow grinding
+    waste a rate never sees, a rate catches bursts a budget only notices after
+    the damage.
+
+    RAISED FROM 200000pm, which was a live defect. On 2026-09-15 it rejected a
+    real Sales-Agent job:
+
+      429 policies.prompttokenlimit.PromptTokenLimitViolation
+      "Allowed rate : MessageRate{capacity=200000, period=Minutes}"
+      ReportCompiler failed after 3 attempt(s)
+
+    200000pm sat BELOW a single legitimate call. Sales-Agent's ReportCompiler
+    concatenates every domain finding into one prompt, roughly 156,000 tokens
+    (601,527 chars of findings plus a 24,749-char catalog). The three retries
+    then re-sent that same prompt against an already-empty budget, which is why
+    retrying a capacity error makes it worse rather than better.
+
+    20000000pm is sized for measured multi-user load, not for one job:
+      Translation   ~124,000 prompt tokens/min per job (measured)  -> ~160 concurrent
+      Sales-Agent   ~300,000 prompt tokens/min per job (estimated) -> ~65 concurrent
+    A genuine runaway is still caught: a retry loop at the 100ps SpikeArrest
+    ceiling with ReportCompiler-sized prompts is ~900,000,000 tokens/min, 45x
+    over this limit.
+
+    The value comes from a developer-app attribute so either application can be
+    re-tuned WITHOUT redeploying this bundle. The literal is the fallback if the
+    attribute is missing or misspelled, mirroring the count/countRef pattern in
+    Q-PerUserPerMinute: a known value beats unpredictable behaviour.
+
+    VERIFY THE ref ACTUALLY APPLIES. Set one app's attribute deliberately low
+    and confirm that app, and only that app, throttles at the lower value. If
+    PromptTokenLimit ignores ref and uses the literal, the per-application
+    counters still separate correctly and this will LOOK correct while
+    enforcing the wrong number. That is the failure mode most likely to go
+    unnoticed here.
+  -->
+  <Identifier ref="llm_dept_app"/>
+  <Rate ref="verifyapikey.VA-ApiKey.developer.app.attribute.llm_prompt_tokens_per_min">20000000pm</Rate>
+  <UseEffectiveCount>true</UseEffectiveCount>
+</PromptTokenLimit>

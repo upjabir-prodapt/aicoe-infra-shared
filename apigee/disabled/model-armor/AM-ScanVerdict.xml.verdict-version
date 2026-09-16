@@ -1,0 +1,70 @@
+<AssignMessage name="AM-ScanVerdict">
+  <DisplayName>Capture Model Armor scan verdicts for logging</DisplayName>
+  <!--
+    THIS IS THE VERSION TO RESTORE when Model Armor is reinstated. It replaces
+    the "disabled"-writing stub currently in apiproxy/policies/AM-ScanVerdict.xml.
+
+    WHY THIS EXISTS. Model Armor does not fail when content is too big for it.
+    Its limits are 4 MB of text and, per filter, 65,536 tokens (prompt
+    injection/jailbreak, Responsible AI, CSAM) or 130,000 tokens (SDP)
+    - docs.cloud.google.com/model-armor/quotas. Content over a limit comes back
+    as EXECUTION_SKIPPED: a VERDICT, not an error. The API returns 200, the
+    policy sees a successful call with no match, and the oversized prompt or
+    response passes through COMPLETELY UNSCANNED. So the failure mode is silent
+    loss of safety coverage, and nothing else would signal it.
+
+    VARIABLE NAMES CONFIRMED from an Apigee debug session 2026-09-15 rather than
+    inferred. The per-filter names this policy first used
+    (raiFilterResult.executionState, piAndJailbreakFilterResult.executionState,
+    sdpFilterResult.executionState) DO exist but are null in this Apigee
+    version, so every logged field read "unset". The variables that are actually
+    populated are invocationResult and filterMatchState, so those are what get
+    logged now.
+
+    invocationResult  SUCCESS when Model Armor was reached and returned a verdict
+    filterMatchState  NO_MATCH_FOUND / MATCH_FOUND
+
+    LIMIT, stated because it matters: these two do NOT distinguish a scan that
+    was SKIPPED for size from one that ran clean; both surface as SUCCESS plus
+    NO_MATCH_FOUND. The per-filter executionState needed to tell them apart is
+    inside the raw responseFromModelArmor JSON, which would need its own
+    ExtractVariables step to reach. Worth doing before anyone relies on this log
+    to assert content was actually scanned. Until then, treat these fields as
+    "Model Armor answered", not "the content was inspected".
+
+    The ma_*_failed fields matter only if the policies are restored with
+    continueOnError="true" (fail open). With continueOnError="false" a failure
+    kills the call and is loud on its own.
+  -->
+  <AssignVariable>
+    <Name>ma_prompt_result</Name>
+    <Value>unset</Value>
+    <Ref>SanitizeUserPrompt.SUP-SanitizeUserPrompt.invocationResult</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_prompt_match</Name>
+    <Value>unset</Value>
+    <Ref>SanitizeUserPrompt.SUP-SanitizeUserPrompt.filterMatchState</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_response_result</Name>
+    <Value>unset</Value>
+    <Ref>SanitizeModelResponse.SMR-SanitizeModelResponse.invocationResult</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_response_match</Name>
+    <Value>unset</Value>
+    <Ref>SanitizeModelResponse.SMR-SanitizeModelResponse.filterMatchState</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_prompt_failed</Name>
+    <Value>unset</Value>
+    <Ref>SUP-SanitizeUserPrompt.failed</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>ma_response_failed</Name>
+    <Value>unset</Value>
+    <Ref>SMR-SanitizeModelResponse.failed</Ref>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

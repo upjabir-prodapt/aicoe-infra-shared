@@ -1,0 +1,56 @@
+<AssignMessage name="AM-Identity">
+  <DisplayName>Normalise caller identity for quota and analytics</DisplayName>
+  <!--
+    Reads the two identity headers the backends assert (docs/23 §4.2) into
+    flow variables, applying a default when absent.
+
+    AssignVariable semantics, which this depends on: <Value> is the default and
+    <Ref> wins if it resolves. So a call carrying no identity headers — warmup,
+    glossary prefetch, scheduled work, anything with no user behind it — lands
+    on "system"/"unattributed" rather than failing or, worse, resolving to
+    nothing and collapsing every such caller into one shared quota bucket
+    (docs/23 §4.4).
+
+    x-colt-user-company is deliberately absent: it is always Colt.
+
+    Header names match the platform's canonical D2 set in docs/20 §0a. Do not
+    invent new ones here — the int proxy already injects the same names
+    downstream and the reporting layer keys on them.
+  -->
+  <AssignVariable>
+    <Name>llm_user_oid</Name>
+    <Value>system</Value>
+    <Ref>request.header.x-colt-user-oid</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>llm_user_department</Name>
+    <Value>unattributed</Value>
+    <Ref>request.header.x-colt-user-department</Ref>
+  </AssignVariable>
+  <!--
+    Composite key for the per-application quota tier: department AND calling
+    application, so one application cannot consume a department's whole
+    allowance and starve the other. PTL-PromptTokenLimit keys on this; the
+    department-wide token budget (LTQ) still keys on llm_user_department alone.
+
+    Ordering dependency: this reads a verifyapikey variable, so VA-ApiKey must
+    run before AM-Identity. It does today (see proxies/default.xml), and moving
+    AM-Identity earlier would silently produce "department:" with an empty app
+    segment, collapsing BOTH applications into one bucket. That failure is
+    invisible: quotas still enforce, just on the wrong key.
+
+    client_id rather than app.name: client_id is proven to resolve in this
+    proxy, because it already populates the "app" field of the
+    llm-gateway-attribution log with a real value. app.name would read better
+    in a quota key but has never been observed resolving here, and this build
+    has repeatedly paid for assuming an Apigee name.
+
+    VERIFY on deploy that this resolves to "<department>:<client_id>" and not
+    to a partially empty string.
+  -->
+  <AssignVariable>
+    <Name>llm_dept_app</Name>
+    <Template>{llm_user_department}:{verifyapikey.VA-ApiKey.client_id}</Template>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

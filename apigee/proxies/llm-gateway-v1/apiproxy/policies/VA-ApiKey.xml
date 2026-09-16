@@ -1,0 +1,11 @@
+<VerifyAPIKey name="VA-ApiKey">
+  <DisplayName>Verify API Key</DisplayName>
+  <!--
+    API key only, no caller JWT (docs/21 D-2). Nearly every call through this
+    proxy originates in an async worker, minutes or hours after the user's
+    Entra token expired, so there is no token to verify. Identity arrives as
+    asserted headers instead — see AM-Identity, and docs/23 §4.3 for why that
+    makes these quotas a cost control and not a security boundary.
+  -->
+  <APIKey ref="request.header.x-apikey"/>
+</VerifyAPIKey>

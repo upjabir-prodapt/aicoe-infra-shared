@@ -1,0 +1,13 @@
+<Quota name="Q-PerDepartmentPerDay" type="calendar">
+  <DisplayName>Per-department request quota, per day</DisplayName>
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>day</TimeUnit>
+  <Allow count="200000" countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_day_per_department"/>
+  <!-- department is low-cardinality and therefore safe as both a quota key and
+       an analytics dimension; oid is high-cardinality and is used as a quota
+       key only (docs/23 §4.5). -->
+  <Identifier ref="llm_user_department"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

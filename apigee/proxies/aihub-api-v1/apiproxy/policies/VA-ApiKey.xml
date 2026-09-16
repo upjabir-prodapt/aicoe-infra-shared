@@ -1,0 +1,4 @@
+<VerifyAPIKey name="VA-ApiKey">
+  <DisplayName>Verify API Key</DisplayName>
+  <APIKey ref="request.header.x-apikey"/>
+</VerifyAPIKey>

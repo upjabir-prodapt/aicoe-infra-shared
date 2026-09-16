@@ -1,0 +1,83 @@
+<TargetEndpoint name="vertex-gemini-target">
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response/>
+  </PreFlow>
+
+  <!--
+    The <URL> carries the projects/.../locations/... segment the google-genai
+    client deliberately omits (see proxies/default.xml's RouteRule comment).
+    Apigee appends proxy.pathsuffix — the path minus the BasePath — so:
+
+      client sends   /v1/publishers/google/models/gemini-2.5-flash:generateContent
+      pathsuffix is      /publishers/google/models/gemini-2.5-flash:generateContent
+      target calls   https://europe-west3-aiplatform.googleapis.com
+                       /v1/projects/gclt-aicoe-dev-llm/locations/europe-west3
+                       /publishers/google/models/gemini-2.5-flash:generateContent
+
+    This is the same mechanism as aihub-api-v1's <Path>/api</Path>, expressed
+    in the URL instead because there is no Target Server / PSC hop here —
+    Vertex is a public first-party Google API, not one of our Cloud Run
+    services behind an internal load balancer.
+
+    The region appears here AND in terraform/7-apigee-runtime/model-armor.tf's
+    llm_region AND in the SUP-/SMR- policy template paths. All three must agree.
+  -->
+  <HTTPTargetConnection>
+    <!--
+      Apigee's default target read timeout is 55 seconds, which is BELOW
+      Sales-Agent's own 60s per-query deadline (SEARCH_TIMEOUT_SECONDS). That
+      inversion means Apigee would abort the call before the application's own
+      timeout could fire, so the caller gets an infrastructure 504 instead of a
+      clean app-level timeout its retry and success-rate logic can reason about.
+
+      120s here sits above the application deadline and below the load
+      balancer's 180s (terraform/5-network-psc/main.tf,
+      google_compute_region_backend_service.apigee_northbound). Read that
+      resource's comment before changing either number: they are one layered
+      budget expressed in two places, and raising only one just moves the wall.
+
+      Grounded search is what forces this. Gemini with the Google Search tool
+      does a live web search plus synthesis, which routinely exceeds the 30s
+      the load balancer used to allow (2026-09-15, BUILD-LOG #43).
+
+      Deliberately not set on vertex-claude-target: that route exists but is not
+      on the aicoe-llm allow-list and carries no traffic. Add the same block
+      there if Claude is ever enabled, or it will inherit the same 55s default.
+    -->
+    <Properties>
+      <Property name="io.timeout.millis">120000</Property>
+    </Properties>
+    <URL>https://europe-west3-aiplatform.googleapis.com/v1/projects/gclt-aicoe-dev-llm/locations/europe-west3</URL>
+    <Authentication>
+      <!--
+        GoogleAccessToken, not GoogleIDToken. An ID token proves "who I am" to
+        an audience and is what aihub-api-v1 uses to call our own Cloud Run
+        services; calling a first-party Google API needs an OAuth2 access
+        token carrying scopes. Using the wrong one here produces a 401 from
+        Vertex that reads like a proxy bug.
+
+        With no service account named, the token is minted as the environment's
+        configured runtime identity — apigee-llm-runtime, set by the service-account flag
+        on `apigeecli apis deploy` in ci/deploy-apigee-config.sh. That identity
+        is the only one anywhere holding roles/aiplatform.user in
+        gclt-aicoe-dev-llm (LLD D-30, terraform/2-foundations/gclt-aicoe-dev-llm.tf),
+        which is what makes this gateway the only working path to a model
+        rather than merely the preferred one.
+
+        Minting also requires the Apigee Service Agent to hold
+        roles/iam.serviceAccountTokenCreator ON apigee-llm-runtime — a separate
+        grant from aiplatform.user, already applied by
+        google_service_account_iam_member.apigee_runtime_token_creator in
+        terraform/2-foundations/gclt-aicoe-dev-apigee.tf. Without it every call
+        fails with GoogleTokenGenerationFailure surfacing as a bare HTTP 500,
+        which looks nothing like an IAM problem. See docs/BUILD-LOG.md #37.
+      -->
+      <GoogleAccessToken>
+        <Scopes>
+          <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+        </Scopes>
+      </GoogleAccessToken>
+    </Authentication>
+  </HTTPTargetConnection>
+</TargetEndpoint>

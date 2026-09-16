@@ -1,0 +1,31 @@
+<LLMTokenQuota name="LTQ-Enforce" continueOnError="false" enabled="true">
+  <DisplayName>LLM Token Quota (enforce)</DisplayName>
+  <Operation>EnforceOnly</Operation>
+  <!--
+    Quota values come from the aicoe-llm product's native "LLM token quota
+    limit" field and its per-model LLM Operations, NOT from elements here.
+    Per Google's own precedence rule the product wins when both are set, so
+    duplicating type/Interval/TimeUnit/Allow in this file would achieve
+    nothing except a second place to drift. See docs/21 §4.4.
+  -->
+  <UseQuotaConfigInAPIProduct stepName="VA-ApiKey"/>
+  <Identifier ref="llm_user_department"/>
+  <LLMModelSource>{llm.model}</LLMModelSource>
+  <!--
+    Required even in EnforceOnly. Omitting it does NOT mean there is no usage source:
+    the policy falls back to a response-based default and evaluates it in the
+    REQUEST flow, where no response exists yet, so every call died with
+
+      500 entities.UnresolvedVariable
+      "Unresolved variable : response.content"   (state=PROXY_REQ_FLOW)
+
+    Confirmed from an Apigee debug session 2026-09-15: every prior policy
+    passed and this one reported result=false. See docs/BUILD-LOG.md #39.
+
+    The value is a literal 0 because this instance only CHECKS the counter
+    before the call; it must add nothing to it. The actual token count is
+    recorded by LTQ-Count in the response flow, which is where the real usage
+    figure exists.
+  -->
+  <LLMTokenUsageSource>0</LLMTokenUsageSource>
+</LLMTokenQuota>

@@ -1,0 +1,23 @@
+<AssignMessage name="AM-StripAndInjectHeaders">
+  <DisplayName>Strip forged headers, inject verified identity</DisplayName>
+  <Remove>
+    <Headers>
+      <!-- Only the three headers Apigee re-derives from the verified Entra
+           token. department/company are deliberately NOT removed here —
+           see docs/20-apigee-manual-proxy-product-app-guide.md's D3
+           hybrid-trust decision record. -->
+      <Header name="Authorization"/>
+      <Header name="x-colt-user-oid"/>
+      <Header name="x-colt-user-email"/>
+      <Header name="x-colt-user-roles"/>
+    </Headers>
+  </Remove>
+  <Set>
+    <Headers>
+      <Header name="x-colt-user-oid">{jwt_oid}</Header>
+      <Header name="x-colt-user-email">{jwt_upn}</Header>
+      <Header name="x-colt-user-roles">{jwt_roles}</Header>
+    </Headers>
+  </Set>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

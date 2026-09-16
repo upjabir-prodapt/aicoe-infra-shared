@@ -1,0 +1,34 @@
+<TargetEndpoint name="vertex-claude-target">
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response/>
+  </PreFlow>
+
+  <!--
+    Bare host + version, with nothing appended — the opposite of
+    vertex-gemini-target and the whole reason there are two of these.
+
+    AnthropicVertex (Translation's providers/claude.py) always builds a
+    fully-qualified path itself:
+      /v1/projects/<project>/locations/<region>/publishers/anthropic/models/<m>:rawPredict
+    so if this URL also carried projects/.../locations/... the segment would
+    appear twice and Vertex would 404 on a path that looks superficially
+    correct.
+
+    Note the project in the client's path comes from the app's
+    LLM_GATEWAY_VERTEX_PROJECT setting, which must be gclt-aicoe-dev-llm — this
+    target does not and cannot correct it. A wrong value there reaches Vertex
+    verbatim and is rejected by IAM, since apigee-llm-runtime holds
+    aiplatform.user in that one project only.
+  -->
+  <HTTPTargetConnection>
+    <URL>https://europe-west3-aiplatform.googleapis.com/v1</URL>
+    <Authentication>
+      <GoogleAccessToken>
+        <Scopes>
+          <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+        </Scopes>
+      </GoogleAccessToken>
+    </Authentication>
+  </HTTPTargetConnection>
+</TargetEndpoint>

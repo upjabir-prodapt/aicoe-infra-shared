@@ -1,0 +1,50 @@
+<SpikeArrest name="SA-SpikeArrest">
+  <DisplayName>Spike Arrest</DisplayName>
+  <!--
+    100ps = 6,000 requests/minute. Raised 10ps -> 20ps -> 100ps on 2026-09-15,
+    matching aihub-api-v1's rate.
+
+    WHAT THIS POLICY IS FOR CHANGED, and that is the point of this note. The
+    original 10ps was derived from a downstream quota: Model Armor's 1,200 QPM,
+    divided by the two scans each gateway call cost, gave a hard ceiling of 600
+    calls/minute, and SpikeArrest existed to trip BEFORE Model Armor did so the
+    caller got a clean 429 instead of a hard scan failure.
+
+    Model Armor was removed from this proxy on 2026-09-15
+    (apigee/disabled/model-armor/), so there is no longer a downstream quota
+    for this policy to protect. At 100ps it is no longer a capacity control at
+    all: it is a runaway-client backstop, several times above any traffic
+    this platform has been observed to produce.
+
+    Measured production traffic for scale (aicoeprod logs, direct-to-Vertex):
+      one ~90,000-char Translation document   236 calls in 158s
+      2-3 concurrent large-document jobs      12-17 calls/sec in ~7s bursts
+      busiest single minute observed          191 calls
+      one Sales-Agent research job            ~34 calls over ~14.5 min
+    So 100ps sits roughly 6x above the highest burst ever measured. Nothing
+    legitimate should reach it; if it trips, treat that as a bug in a caller
+    rather than as a limit to raise.
+
+    THE REAL CEILING IS NOW VERTEX AI's own per-project/per-region quota, and
+    it has NOT been checked against 6,000/min. This policy no longer stands
+    between callers and that limit, so exceeding it surfaces as 429s from the
+    TARGET rather than from here. That is the first place to look if throttling
+    reappears, and the number to verify before assuming this proxy can pass
+    6,000 calls/minute.
+
+    ON RESTORING MODEL ARMOR: this MUST come back down. The relationship
+        max gateway calls/min = Model Armor QPM / 2
+    returns the moment the scan policies re-enter the flow, and 100ps against
+    the default 1,200 QPM over-subscribes by 10x. These are one ceiling
+    expressed in two places. See apigee/disabled/model-armor/README.md.
+
+    UseEffectiveCount is mandatory, not stylistic: without it SpikeArrest
+    counts per message processor, so the effective limit silently multiplies by
+    the number of MPs. ci/deploy-apigee-config.sh gates on its presence.
+
+    Note SpikeArrest SMOOTHS rather than bucketing: 100ps admits roughly one
+    request per 10ms, it does not allow 100 at once and then pause.
+  -->
+  <Rate>100ps</Rate>
+  <UseEffectiveCount>true</UseEffectiveCount>
+</SpikeArrest>

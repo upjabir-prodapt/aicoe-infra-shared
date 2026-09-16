@@ -1,0 +1,62 @@
+<SanitizeUserPrompt name="SUP-SanitizeUserPrompt" continueOnError="true" enabled="true">
+  <DisplayName>Sanitize User Prompt (Model Armor)</DisplayName>
+  <!--
+    continueOnError="true" since 2026-09-15 (was "false"). This REVERSES the
+    fail-closed posture this policy was built with, and it is a deliberate
+    decision, not a default: a Model Armor outage or a RESOURCE_EXHAUSTED on
+    its 1,200 QPM project quota previously took down real user LLM calls.
+
+    Read RF-PromptBlocked.xml before touching this attribute. On its own this
+    change would ALSO swallow steps.sanitize.user.prompt.FilterMatched — the
+    fault Apigee raises for a genuine prompt-injection detection — which would
+    quietly demote Model Armor from an enforcement control to a logging one.
+    RF-PromptBlocked re-raises that block from the verdict variable and is the
+    only thing preventing that. The two must be deployed and removed together.
+
+    What this now means operationally:
+      Model Armor says MATCH_FOUND   -> RF-PromptBlocked returns 400 (enforced)
+      Model Armor unreachable/quota  -> call proceeds UNSCANNED, and the
+                                        ma_prompt_failed field in the
+                                        llm-gateway-attribution log is the only
+                                        record that safety coverage was lost.
+    That second line is a real reduction in security posture, accepted
+    knowingly. Alert on ma_prompt_failed — an unscanned call is invisible
+    otherwise.
+  -->
+  <Source>request</Source>
+  <!--
+    Explicit because the policy's DEFAULT expression resolves to nothing here
+    and that is fatal, not a skip:
+
+      500 steps.sanitize.user.prompt.FailedToExtractUserPrompt
+      "Failed to evaluate user prompt
+       {jsonPath($.contents[-1].parts[-1].text,request.content)}.
+       Reason: Template was resolved to empty string"
+
+    seen live 2026-09-15 on the first call that ever reached Model Armor.
+    The default uses NEGATIVE array indices to take the most recent turn;
+    this expression uses [0] instead, which is equivalent for this gateway's
+    traffic because every call it carries is single-turn. The request body
+    google-genai builds is
+      {"contents":[{"role":"user","parts":[{"text": "..."}]}], ...}
+    If a multi-turn caller is ever added, revisit this: [0] would scan the
+    OLDEST turn rather than the newest, which would still scan something (so
+    no error) but would be scanning the wrong text. That is the failure mode
+    to watch for here, and it is silent.
+  -->
+  <UserPromptSource>{llm.prompt_text}</UserPromptSource>
+  <ModelArmor>
+    <!--
+      This literal path must equal the model_armor_template_id output of
+      terraform/7-apigee-runtime/model-armor.tf. A policy cannot read a
+      Terraform output, so the two are coupled by convention only: if the
+      template's project, region or id changes there, this line and
+      SMR-SanitizeModelResponse.xml change with it.
+
+      Pointing at a template that does not exist fails CLOSED — a policy error
+      on every single call, not a silent skip. That is the desired direction,
+      but it means this proxy must not be deployed before the Terraform apply.
+    -->
+    <TemplateName>projects/gclt-aicoe-dev-llm/locations/europe-west3/templates/aicoe-llm-gateway</TemplateName>
+  </ModelArmor>
+</SanitizeUserPrompt>

@@ -1,0 +1,14 @@
+[
+  {"name": "record_id", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "job_execution_id", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "agent_name", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "agent_type", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "latency_ms", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "tokens_input", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "tokens_output", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "model_used", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "cost_usd", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "success", "type": "BOOL", "mode": "NULLABLE"},
+  {"name": "error_message", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "created_at", "type": "TIMESTAMP", "mode": "REQUIRED"}
+]

@@ -1,0 +1,12 @@
+<AssignMessage name="AM-RateLimit429">
+  <DisplayName>Convert quota/spike-arrest faults to 429</DisplayName>
+  <Set>
+    <StatusCode>429</StatusCode>
+    <ReasonPhrase>Too Many Requests</ReasonPhrase>
+    <Headers>
+      <Header name="Retry-After">30</Header>
+    </Headers>
+    <Payload contentType="application/json">{"error":"rate_limited"}</Payload>
+  </Set>
+  <AssignTo createNew="false" type="response"/>
+</AssignMessage>

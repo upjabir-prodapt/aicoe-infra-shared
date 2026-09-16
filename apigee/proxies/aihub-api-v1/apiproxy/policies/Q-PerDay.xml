@@ -1,0 +1,13 @@
+<Quota name="Q-PerDay" type="calendar">
+  <DisplayName>Quota per day per user</DisplayName>
+  <!-- See Q-PerMinute.xml's comment — StartTime is required for
+       type="calendar", not previously caught because this proxy was never
+       actually deployed before. -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval ref="verifyapikey.VA-ApiKey.apiproduct.developer.app.attribute.req_per_day">1</Interval>
+  <TimeUnit>day</TimeUnit>
+  <Allow countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_day"/>
+  <Identifier ref="jwt_oid"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>
