@@ -1,0 +1,19 @@
+<Quota name="Q-PerUsecaseDay" type="calendar">
+  <DisplayName>Tier 1: whole calling app (use case), per day</DisplayName>
+  <!--
+    Outer tier of quota(use case) x quota(department within it) x quota(user
+    within that department). Identified by client_id alone — unlike
+    aihub-api-v1, this proxy genuinely has a distinct credential per calling
+    use case already (one developer app per calling service), so no
+    path-based Condition trick is needed here: a second MCP-calling use case
+    automatically gets its own Tier-1 counter the moment it holds its own
+    key, with no edit to this file.
+  -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>day</TimeUnit>
+  <Allow count="20000" countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_day"/>
+  <Identifier ref="verifyapikey.VA-ApiKey.client_id"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

@@ -1,0 +1,20 @@
+<Quota name="Q-Naas-UsecaseDay" type="calendar">
+  <DisplayName>Naas -- Tier 1: whole use case, per day</DisplayName>
+  <!--
+    The outer ceiling of the nested hierarchy: quota(use case) x
+    quota(department within it) x quota(user within that department).
+    Deliberately has NO Identifier — this proxy has only one calling app
+    (the BFF), so there is no client_id to key on the way mcp-v1 and
+    llm-gateway-v1 do. Separation instead comes from this policy only ever
+    running for Naas requests (see the Condition on its Step in
+    proxies/default.xml) — a structurally separate Apigee counter per use
+    case, the same mechanism RF-*RoleRequired and KVM-Get*Audience already
+    use to stay use-case-scoped without an Identifier of their own.
+  -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>day</TimeUnit>
+  <Allow count="4000" countRef="verifyapikey.VA-ApiKey.apiproduct.naas_req_per_day"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

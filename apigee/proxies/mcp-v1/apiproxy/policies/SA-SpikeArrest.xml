@@ -1,0 +1,18 @@
+<SpikeArrest name="SA-SpikeArrest">
+  <DisplayName>Spike Arrest</DisplayName>
+  <!--
+    Lower than aihub-api-v1's 100ps on purpose. A single agent turn can fan
+    out to many tool calls, but every one of them lands on a service deployed
+    with —max-instances=1: Colt On-Demand permits one session per account and
+    naas-mcp-server serialises on a process-local asyncio.Lock. Admitting
+    traffic faster than one instance can drain it converts a burst into
+    queue-timeout errors rather than throughput.
+  -->
+  <Rate>20ps</Rate>
+  <!--
+    Required by ci/deploy-apigee-config.sh's fail_on_missing_use_effective_count
+    gate. Without it each message processor enforces the rate independently,
+    so the effective limit is Rate x processors.
+  -->
+  <UseEffectiveCount>true</UseEffectiveCount>
+</SpikeArrest>

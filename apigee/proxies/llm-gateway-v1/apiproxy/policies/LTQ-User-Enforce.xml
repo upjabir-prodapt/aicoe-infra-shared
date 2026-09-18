@@ -1,0 +1,31 @@
+<LLMTokenQuota name="LTQ-User-Enforce" continueOnError="false" enabled="true">
+  <DisplayName>LLM Token Quota Tier 3 -- one user within their department within this use case (enforce)</DisplayName>
+  <Operation>EnforceOnly</Operation>
+  <!--
+    Added 2026-09-17. Innermost tier. Identified by llm_dept_app_user
+    (department:client_id:oid, built by AM-Identity.xml).
+
+    Cannot reuse UseQuotaConfigInAPIProduct here — that mechanism reads the
+    product's ONE llmQuota field, already spent on Tier 1's full-ceiling-per-
+    app design (LTQ-App-Enforce.xml). A genuinely narrower Tier-3 number
+    needs its own value, so this reads a product attribute directly instead,
+    the same Allow/countRef shape every plain Quota policy in this codebase
+    already uses (Q-PerAppDay.xml, Q-PerUser.xml on mcp-v1, etc.).
+
+    UNVERIFIED AGAINST A LIVE DEPLOY: this is the first LLMTokenQuota policy
+    in this codebase NOT using UseQuotaConfigInAPIProduct. The plain Quota
+    policy schema supports Allow/Interval/TimeUnit as an alternative to
+    reading the product config, and LLMTokenQuota is documented as an
+    extension of that schema, but nothing here has actually exercised this
+    path yet. Confirm with a debug session on first deploy that this element
+    combination is accepted and that the count/countRef pair resolves the way
+    every other Quota policy's does — do not assume it from this comment
+    alone.
+  -->
+  <Allow count="2000000" countRef="verifyapikey.VA-ApiKey.apiproduct.llm_tokens_per_hour_user"/>
+  <Interval>1</Interval>
+  <TimeUnit>hour</TimeUnit>
+  <Identifier ref="llm_dept_app_user"/>
+  <LLMModelSource>{llm.model}</LLMModelSource>
+  <LLMTokenUsageSource>0</LLMTokenUsageSource>
+</LLMTokenQuota>

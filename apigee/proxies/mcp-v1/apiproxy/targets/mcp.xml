@@ -1,0 +1,71 @@
+<TargetEndpoint name="mcp">
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response/>
+  </PreFlow>
+
+  <!--
+    Reuses the SAME env-level Target Server as aihub-api-v1 — "backends",
+    created by terraform/7-apigee-runtime (google_apigee_target_server.backends),
+    whose host is the PSC endpoint attachment's address. A new use case does
+    not need a new target server; stage 7 is unchanged by this proxy.
+
+    What it cannot reuse is aihub-api-v1's targets/backends.xml, because that
+    file hardcodes <Path>/api</Path> for the three user-facing backends. This
+    one needs /mcp, which is why a separate TargetEndpoint file exists at all.
+  -->
+  <HTTPTargetConnection>
+    <!--
+      Same 55s default trap as aihub-api-v1's backends.xml — see that file for
+      the full chain. It matters at least as much here: an MCP tool call goes
+      out to Colt On-Demand or Comcast CodeBig2 and waits on a third party,
+      and naas-mcp-server runs at max-instances=1 with a process-local lock,
+      so calls queue behind each other rather than running in parallel.
+
+      330s matches backends.xml deliberately: both sit above the 300s Cloud Run
+      timeout and below the load balancer's 360s. Keep them equal — a request
+      that is acceptable on one northbound target should not be cut short on
+      the other.
+    -->
+    <Properties>
+      <Property name="io.timeout.millis">330000</Property>
+    </Properties>
+    <LoadBalancer>
+      <Server name="backends"/>
+    </LoadBalancer>
+    <!--
+      Apigee does not forward its own BasePath: the target path is <Path> plus
+      proxy.pathsuffix, and pathsuffix excludes the BasePath. naas-mcp-server
+      serves Streamable HTTP at exactly /mcp (FastMCP's default mount), so
+      without this element the request arrives at "" and 404s after passing
+      cleanly through the whole proxy — the same class of failure as
+      BUILD-LOG #38.
+
+      Must stay in step with backend-urlmap's path_rule paths = ["/mcp",
+      "/mcp/*"] in 6c. If either side drifts, no rule matches and the request
+      is answered by the Translation service, because that url map's
+      default_service is translation. A 200 from the wrong backend, not an
+      error.
+    -->
+    <Path>/mcp</Path>
+    <Authentication>
+      <GoogleIDToken>
+        <!--
+          ref=, not inline {templating}: the Audience element rejects
+          variables in that form. The value comes from KVM-GetMcpAudience,
+          which reads the "mcp" key of the backend-audiences KVM.
+        -->
+        <Audience ref="audience"/>
+        <!--
+          naas-mcp-server's ApigeeAuthMiddleware verifies the token's audience
+          against MCP_SERVICE_URL and then its email claim against
+          APIGEE_RUNTIME_SA_EMAIL. Google omits the email claim unless it is
+          explicitly requested, so without this the middleware rejects every
+          request with an empty-email mismatch while the audience check passes
+          — the exact symptom both user-facing backends hit on 2026-09-11.
+        -->
+        <IncludeEmail>true</IncludeEmail>
+      </GoogleIDToken>
+    </Authentication>
+  </HTTPTargetConnection>
+</TargetEndpoint>

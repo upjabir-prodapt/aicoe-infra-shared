@@ -52,5 +52,27 @@
     <Name>llm_dept_app</Name>
     <Template>{llm_user_department}:{verifyapikey.VA-ApiKey.client_id}</Template>
   </AssignVariable>
+  <!--
+    Added 2026-09-17: innermost tier of the request-count quota hierarchy,
+    quota(use case) x quota(department within it) x quota(user within that
+    department). Nests llm_user_oid inside llm_dept_app rather than the
+    other way round, so it reads as "this person's share of their
+    department's share of this app" — matching Q-PerUserPerMinute's new
+    Identifier below.
+
+    Deliberately NOT plumbed into the token BUDGET (LTQ-Enforce/LTQ-Count).
+    Those two must always share one Identifier — Enforce checks a counter,
+    Count fills that same counter after the model answers — and re-keying
+    the pair onto anything narrower than department multiplies the
+    department's real approved token spend by however many apps are active,
+    since each new key value gets its own full-sized bucket rather than a
+    share of one. That is a numeric sizing decision for whoever owns the
+    budget, not a side effect of adding a request-count quota tier. See
+    BUILD-LOG.md.
+  -->
+  <AssignVariable>
+    <Name>llm_dept_app_user</Name>
+    <Template>{llm_dept_app}:{llm_user_oid}</Template>
+  </AssignVariable>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
 </AssignMessage>

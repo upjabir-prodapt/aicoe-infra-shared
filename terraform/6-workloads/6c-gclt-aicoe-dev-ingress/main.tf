@@ -26,6 +26,8 @@ variable "region" { type = string }
 variable "bff_backend_service_self_link" { type = string }
 variable "translation_backend_service_self_link" { type = string }
 variable "sales_backend_service_self_link" { type = string }
+variable "naas_backend_service_self_link" { type = string }
+variable "mcp_backend_service_self_link" { type = string }
 variable "vpc_self_link" { type = string }
 variable "subnet_ew3_self_link" { type = string }
 variable "internal_v2_subnet_self_link" { type = string }
@@ -35,6 +37,8 @@ locals {
   bff         = var.bff_backend_service_self_link
   translation = var.translation_backend_service_self_link
   sales       = var.sales_backend_service_self_link
+  naas        = var.naas_backend_service_self_link
+  mcp         = var.mcp_backend_service_self_link
   subnet      = var.subnet_ew3_self_link
 }
 
@@ -178,6 +182,38 @@ resource "google_compute_region_url_map" "backend" {
     path_rule {
       paths   = ["/api/sales/*"]
       service = local.sales
+    }
+    path_rule {
+      paths   = ["/api/naas/*"]
+      service = local.naas
+    }
+    # Per-use-case MCP routing: /mcp/naas here, /mcp/<other> for a future
+    # MCP-backed use case. BOTH forms are required and the bare "/mcp/naas" is
+    # the one that is easy to drop: MCP's Streamable HTTP transport POSTs to
+    # the use case's base path exactly, with nothing after it, and a rule of
+    # "/mcp/naas/*" alone does NOT match "/mcp/naas". Miss it and every MCP
+    # request falls through to default_service and is answered by the
+    # Translation service with a 200 -- this url map fails OPEN, unlike the
+    # mcp-v1 proxy's own RouteRule which 404s on an unknown segment.
+    #
+    # url_rewrite is what makes the per-use-case segment work at all. Apigee
+    # sends <Path>/mcp</Path> + pathsuffix, i.e. "/mcp/naas", but every MCP
+    # server mounts its endpoint at plain "/mcp" (FastMCP's default) and would
+    # 404 on "/mcp/naas". The routing segment exists only to pick a backend,
+    # so it is consumed HERE, at the layer that does the picking, rather than
+    # forcing each app to mount somewhere non-standard.
+    #
+    # A second MCP use case adds its own path_rule with its own
+    # path_prefix_rewrite back to "/mcp" -- the rewrite target is always
+    # "/mcp", never the use case's own segment.
+    path_rule {
+      paths   = ["/mcp/naas", "/mcp/naas/*"]
+      service = local.mcp
+      route_action {
+        url_rewrite {
+          path_prefix_rewrite = "/mcp"
+        }
+      }
     }
   }
 }

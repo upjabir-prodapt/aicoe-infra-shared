@@ -1,0 +1,14 @@
+<LLMTokenQuota name="LTQ-User-Count" continueOnError="true" enabled="true">
+  <DisplayName>LLM Token Quota Tier 3 -- one user within their department within this use case (count)</DisplayName>
+  <Operation>CountOnly</Operation>
+  <!--
+    Matched pair with LTQ-User-Enforce.xml — same Identifier, same Allow/
+    countRef, or this fills a different bucket than the one Enforce checks.
+  -->
+  <Allow count="2000000" countRef="verifyapikey.VA-ApiKey.apiproduct.llm_tokens_per_hour_user"/>
+  <Interval>1</Interval>
+  <TimeUnit>hour</TimeUnit>
+  <Identifier ref="llm_dept_app_user"/>
+  <LLMTokenUsageSource>{llm.total_tokens}</LLMTokenUsageSource>
+  <LLMModelSource>{llm.model}</LLMModelSource>
+</LLMTokenQuota>

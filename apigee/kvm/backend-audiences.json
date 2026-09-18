@@ -7,6 +7,14 @@
     {
       "name": "sales",
       "value": "https://sales-agent-api-ss3g75w62q-ey.a.run.app"
+    },
+    {
+      "name": "naas",
+      "value": "REPLACE_ME_AFTER_FIRST_DEPLOY"
+    },
+    {
+      "name": "naas-mcp",
+      "value": "REPLACE_ME_AFTER_FIRST_DEPLOY"
     }
   ]
 }

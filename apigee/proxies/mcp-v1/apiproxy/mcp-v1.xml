@@ -1,0 +1,4 @@
+<APIProxy revision="1" name="mcp-v1">
+  <DisplayName>NaaS MCP tool server (v1)</DisplayName>
+  <Description>Fronts naas-mcp-server for naas-agent-api. Service-to-service only: authenticates the caller with an Apigee API key on x-apikey, NOT an Entra JWT -- by the time naas-agent-api runs, aihub-api-v1 has already replaced the user's JWT with x-colt-user-* headers, so there is no token left to forward. Calls the MCP server privately over PSC through the same "backends" Target Server as aihub-api-v1, but with its own path. Deployed to the int environment by ci/deploy-apigee-config.sh. See docs/24 section 3.2 for why this is a separate proxy rather than a path inside aihub-api-v1.</Description>
+</APIProxy>

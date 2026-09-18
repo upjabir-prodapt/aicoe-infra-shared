@@ -1,12 +1,13 @@
 <LLMTokenQuota name="LTQ-Count" continueOnError="true" enabled="true">
-  <DisplayName>LLM Token Quota (count)</DisplayName>
+  <DisplayName>LLM Token Quota Tier 2 -- one department within this use case (count)</DisplayName>
   <!--
-    Records what a call actually consumed, against the department's budget.
-    LTQ-Enforce checks the counter in the request flow and adds nothing; this
-    adds the real figure in the response flow, because the token count does not
-    exist until the model has answered.
+    Matched pair with LTQ-Enforce.xml — MUST share its exact Identifier and
+    Allow/countRef, or this fills a different bucket than the one Enforce
+    checks. RE-KEYED 2026-09-17 from llm_user_department alone to
+    llm_dept_app, same reasoning as LTQ-Enforce.xml.
 
-    USAGE SOURCE CHANGED 2026-09-15, twice over, and both changes matter.
+    USAGE SOURCE CHANGED 2026-09-15, twice over, and both changes still
+    matter and are unaffected by the 2026-09-17 re-key:
 
     1. It now reads a flow variable instead of an inline message template. The
        previous value was
@@ -23,8 +24,6 @@
     2. It now counts TOTAL tokens, not output tokens. candidatesTokenCount is
        output only: on a measured Translation job that was 87,510 of 415,000,
        about 21% of real consumption, ignoring the larger and still billed half.
-       This moved together with the product's llmQuota value, because changing
-       the basis alone silently revalues the limit by roughly 5x.
 
     continueOnError stays true: a counting failure must not fail a call the
     model already answered and that is already billed. The cost of that choice
@@ -33,8 +32,10 @@
     token total before trusting this counter.
   -->
   <Operation>CountOnly</Operation>
-  <UseQuotaConfigInAPIProduct stepName="VA-ApiKey"/>
-  <Identifier ref="llm_user_department"/>
+  <Allow count="10000000" countRef="verifyapikey.VA-ApiKey.apiproduct.llm_tokens_per_hour_dept"/>
+  <Interval>1</Interval>
+  <TimeUnit>hour</TimeUnit>
+  <Identifier ref="llm_dept_app"/>
   <LLMTokenUsageSource>{llm.total_tokens}</LLMTokenUsageSource>
   <LLMModelSource>{llm.model}</LLMModelSource>
 </LLMTokenQuota>

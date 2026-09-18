@@ -1,0 +1,26 @@
+<Quota name="Q-PerUser" type="calendar">
+  <DisplayName>Tier 3: one user, within their department, within this calling app, per day</DisplayName>
+  <!--
+    RE-KEYED and RE-GRANULARISED 2026-09-17. Was "Identifier ref
+    request.header.x-colt-user-oid", TimeUnit minute, reading
+    req_per_min_per_user — a flat per-minute rate check, shared across
+    whichever app happened to call this proxy. Replaced with the innermost
+    tier of the nested daily hierarchy, keyed on mcp_dept_user_key
+    ("{client_id}:{department}:{oid}", built by AM-QuotaKeys.xml) so it is
+    generalised the same way Q-PerDepartment above is: a second MCP-calling
+    use case partitions automatically, no edit needed here.
+
+    Identifier is a raw request header pair, not a verified JWT claim —
+    there is no user token on this hop (see docs/24 section 3.2). Only as
+    trustworthy as naas-agent-api's own code, the same "asserted, not
+    proven" trust level docs/23 section 4.3 already accepts for department
+    on the browser-facing proxy.
+  -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>day</TimeUnit>
+  <Allow count="2000" countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_day_per_user"/>
+  <Identifier ref="mcp_dept_user_key"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

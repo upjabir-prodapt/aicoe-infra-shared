@@ -1,0 +1,18 @@
+<Quota name="Q-Translation-DeptDay" type="calendar">
+  <DisplayName>Translation -- Tier 2: one department, within this use case, per day</DisplayName>
+  <!--
+    Middle tier. Identified by department ALONE — the use-case scoping
+    again comes from this policy only firing on Translation paths (its own
+    Step Condition in default.xml), not from anything in the Identifier.
+    A department's Sales usage and its Translation usage are therefore
+    counted in two entirely separate buckets, even though both read the
+    same request.header.x-colt-user-department value.
+  -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>day</TimeUnit>
+  <Allow count="2000" countRef="verifyapikey.VA-ApiKey.apiproduct.translation_dept_req_per_day"/>
+  <Identifier ref="request.header.x-colt-user-department"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

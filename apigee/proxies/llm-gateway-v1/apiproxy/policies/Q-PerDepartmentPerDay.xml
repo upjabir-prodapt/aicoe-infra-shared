@@ -4,10 +4,20 @@
   <Interval>1</Interval>
   <TimeUnit>day</TimeUnit>
   <Allow count="200000" countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_day_per_department"/>
-  <!-- department is low-cardinality and therefore safe as both a quota key and
-       an analytics dimension; oid is high-cardinality and is used as a quota
-       key only (docs/23 §4.5). -->
-  <Identifier ref="llm_user_department"/>
+  <!--
+    RE-KEYED 2026-09-17 from llm_user_department alone to llm_dept_app
+    ("department:client_id"), already computed by AM-Identity.xml for
+    PTL-PromptTokenLimit. Now Tier 2 of the request-count hierarchy: a
+    department's Translation traffic and its NaaS traffic are counted in two
+    separate buckets, each still bounded by that use case's own Tier-1
+    ceiling (Q-PerAppDay) regardless of how many departments contribute to
+    it.
+
+    department is low-cardinality and therefore safe as both a quota key and
+    an analytics dimension; oid is high-cardinality and is used as a quota
+    key only (docs/23 §4.5).
+  -->
+  <Identifier ref="llm_dept_app"/>
   <Distributed>true</Distributed>
   <Synchronous>true</Synchronous>
 </Quota>

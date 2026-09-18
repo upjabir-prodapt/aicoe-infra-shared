@@ -1,0 +1,18 @@
+<AssignMessage name="AM-RateLimit429">
+  <DisplayName>Convert quota/spike-arrest faults to 429</DisplayName>
+  <!--
+    Without this FaultRule target, Apigee returns 500 on a SpikeArrest or
+    Quota violation. A 500 tells an MCP client to give up; a 429 with
+    Retry-After tells it to back off, which is what we want from an agent
+    that may be mid-turn.
+  -->
+  <Set>
+    <StatusCode>429</StatusCode>
+    <ReasonPhrase>Too Many Requests</ReasonPhrase>
+    <Headers>
+      <Header name="Retry-After">30</Header>
+    </Headers>
+    <Payload contentType="application/json">{"error":"rate_limited"}</Payload>
+  </Set>
+  <AssignTo createNew="false" type="response"/>
+</AssignMessage>

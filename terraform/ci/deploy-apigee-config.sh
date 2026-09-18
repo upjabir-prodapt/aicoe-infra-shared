@@ -43,6 +43,26 @@ echo "using apigee config dir: $APIGEE_DIR"
 # itself), confirmed live -- do not "fix" this to match the Terraform form.
 REGION="de"
 
+# Every gate below inspects bundle XML with grep. Raw grep cannot tell a real
+# element from the same text quoted inside an <!-- --> comment, and these
+# bundles comment heavily and deliberately -- each gate exists because a
+# specific mistake shipped, and the comment explaining that mistake usually
+# quotes the offending element verbatim.
+#
+# That is not hypothetical. VJ-EntraToken.xml carries a comment reading
+#   Do NOT add <Source>request.header.authorization</Source> here.
+# which made fail_on_jwt_policy_explicit_auth_source reject a file that is
+# correct, and since the gates run before the first apigeecli call, the whole
+# script exited 1 on a clean tree -- no proxy, product or KVM could be
+# deployed at all. The inverse is worse: fail_on_missing_use_effective_count
+# passes a file when the tag it wants appears only in prose, so a genuinely
+# unbounded SpikeArrest would ship reported as checked.
+#
+# So every gate greps the comment-stripped text instead of the file.
+_xml_no_comments() {
+  perl -0777 -pe 's/<!--.*?-->//gs' "$1"
+}
+
 fail_on_extensible_policy_in_base_env() {
   # A single extensible policy reclassifies the whole proxy and forces the
   # environment up a tier. int is now INTERMEDIATE (GAP-REGISTER R-12 fixed
@@ -58,18 +78,19 @@ fail_on_extensible_policy_in_base_env() {
   # is ever relied on to keep a Base environment Base, it needs
   # KeyValueMapOperations (and anything else Apigee itself classifies as
   # extensible) added, not just this hand-picked list.
-  if grep -rlE '<(JavaScript|ServiceCallout|SanitizeUserPrompt|SanitizeModelResponse|LLMTokenQuota|PromptTokenLimit)\b' \
-       "$APIGEE_DIR"/proxies/aihub-api-v1/ >/dev/null 2>&1; then
-    echo "ERROR: extensible policy found in a proxy targeted at a Base environment" >&2
-    exit 1
-  fi
+  for f in $(find "$APIGEE_DIR"/proxies/aihub-api-v1/ -name '*.xml' 2>/dev/null || true); do
+    if _xml_no_comments "$f" | grep -qE '<(JavaScript|ServiceCallout|SanitizeUserPrompt|SanitizeModelResponse|LLMTokenQuota|PromptTokenLimit)\b'; then
+      echo "ERROR: extensible policy found in a proxy targeted at a Base environment: $f" >&2
+      exit 1
+    fi
+  done
 }
 
 fail_on_missing_use_effective_count() {
   # SpikeArrest is per message processor unless UseEffectiveCount is true.
   # The default template sets it; this catches a hand-written policy.
   for f in $(grep -rl '<SpikeArrest' "$APIGEE_DIR"/proxies/ 2>/dev/null || true); do
-    grep -q '<UseEffectiveCount>true</UseEffectiveCount>' "$f" || {
+    _xml_no_comments "$f" | grep -q '<UseEffectiveCount>true</UseEffectiveCount>' || {
       echo "ERROR: $f has SpikeArrest without UseEffectiveCount=true" >&2; exit 1; }
   done
 }
@@ -87,7 +108,7 @@ fail_on_jwt_policy_explicit_auth_source() {
   # "is the token valid?" check passes while the policy never sees the token.
   # See docs/BUILD-LOG.md #37.
   for f in $(grep -rlE '<(VerifyJWT|DecodeJWT)\b' "$APIGEE_DIR"/proxies/ 2>/dev/null || true); do
-    if grep -qiE '<Source>[[:space:]]*request\.header\.authorization[[:space:]]*</Source>' "$f"; then
+    if _xml_no_comments "$f" | grep -qiE '<Source>[[:space:]]*request\.header\.authorization[[:space:]]*</Source>'; then
       echo "ERROR: $f sets <Source>request.header.authorization</Source> on a JWT policy." >&2
       echo "       Remove the element entirely -- the default source is that header AND strips 'Bearer '." >&2
       exit 1
@@ -106,7 +127,7 @@ fail_on_extractvariables_claim_copy() {
   # NOT (jwt_roles Matches "*Role*") evaluated NOT false = true and every
   # request 403'd on a role the caller actually held. See docs/BUILD-LOG.md #37.
   for f in $(grep -rl '<ExtractVariables' "$APIGEE_DIR"/proxies/ 2>/dev/null || true); do
-    if grep -qE '<(Variable|JWT)[^>]*(ref|source)="jwt\.' "$f"; then
+    if _xml_no_comments "$f" | grep -qE '<(Variable|JWT)[^>]*(ref|source)="jwt\.'; then
       echo "ERROR: $f uses ExtractVariables to copy decoded JWT claims." >&2
       echo "       ExtractVariables needs a <Pattern> to extract anything; with none it sets nothing." >&2
       echo "       Use AssignMessage with <AssignVariable><Name>/<Ref> instead." >&2
@@ -218,6 +239,21 @@ fail_on_modelarmor_template_drift
 # apiproxy folder") if you get it wrong, confirmed live 2026-09-07.
 apigeecli apis create bundle -f "$APIGEE_DIR"/proxies/aihub-api-v1/apiproxy -n aihub-api-v1 -o "$ORG" -r "$REGION" -t "$TOKEN"
 apigeecli apis deploy -n aihub-api-v1 -e int -o "$ORG" -r "$REGION" -t "$TOKEN" --ovr --wait \
+  --sa "apigee-int-runtime@${ORG}.iam.gserviceaccount.com"
+
+# mcp-v1 -- the NaaS MCP tool server's gateway (docs/24 section 3.2 for why it
+# is a separate proxy). Deployed to the SAME int environment and the same
+# aihub-int envgroup hostname as aihub-api-v1, so it needs no new environment,
+# envgroup, address, certificate or DNS record, and no change to stage 4.
+#
+# It reuses stage 7's env-level "backends" Target Server, so stage 7 is also
+# unchanged -- but it carries its own TargetEndpoint (targets/mcp.xml) because
+# aihub-api-v1's hardcodes <Path>/api</Path> and this one needs /mcp.
+#
+# Same runtime service account as aihub-api-v1: apigee-int-runtime is the
+# identity naas-mcp-server checks the minted ID token's email claim against.
+apigeecli apis create bundle -f "$APIGEE_DIR"/proxies/mcp-v1/apiproxy -n mcp-v1 -o "$ORG" -r "$REGION" -t "$TOKEN"
+apigeecli apis deploy -n mcp-v1 -e int -o "$ORG" -r "$REGION" -t "$TOKEN" --ovr --wait \
   --sa "apigee-int-runtime@${ORG}.iam.gserviceaccount.com"
 
 # llm-gateway-v1 -- the LLM gateway (docs/21 build procedure, docs/23 backend

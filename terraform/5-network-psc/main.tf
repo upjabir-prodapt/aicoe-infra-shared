@@ -179,24 +179,42 @@ resource "google_compute_region_backend_service" "apigee_northbound" {
   # TIMEOUT LAYERING, which is the actual point. Each layer outward must be
   # more generous than the one inside it, so the APPLICATION deadline is what
   # governs and callers get a clean, retryable app-level timeout instead of an
-  # opaque infrastructure 504:
+  # opaque infrastructure 504.
+  #
+  # SOUTHBOUND (llm.aicoedev-int.colt.net -> Vertex):
   #
   #   Sales-Agent SEARCH_TIMEOUT_SECONDS   60s   <- governs, fires first
   #   Apigee io.timeout.millis            120s   <- targets/vertex-gemini-target.xml
-  #   this timeout_sec                    180s   <- outermost
+  #   this timeout_sec                    360s   <- outermost
   #
-  # Raising only one of these just moves the wall: with the LB at 180s but
-  # Apigee still on its 55s default, the failure would simply reappear at 55s.
-  # Change these two together.
+  # NORTHBOUND (aihub-api.aicoedev-int.colt.net -> Cloud Run), added with NaaS:
+  #
+  #   backend Cloud Run --timeout         300s   <- app repos' .gitlab-ci.yml
+  #   Apigee io.timeout.millis            330s   <- aihub-api-v1/targets/backends.xml
+  #                                                 and mcp-v1/targets/mcp.xml
+  #   this timeout_sec                    360s   <- outermost
+  #   (BFF upstream_timeout_seconds       420s   <- outside this LB entirely)
+  #
+  # RAISED 180 -> 360 for NaaS. Its /chat turn is synchronous SSE chaining MCP
+  # tool calls against Colt On-Demand with LLM calls, and unlike Translation
+  # and Sales-Agent it has no Cloud Tasks worker to offload the slow part onto,
+  # so the whole turn sits on this path.
+  #
+  # Raising only one layer just moves the wall: until the NaaS work, this sat
+  # at 180s while BOTH northbound Apigee targets were still on Apigee's 55s
+  # default, so every northbound call — Translation and Sales-Agent included —
+  # was capped at 55s no matter what this said. Change the set together.
   #
   # SHARED BACKEND, READ BEFORE RETUNING: the url map below sends BOTH
   # aihub-api.aicoedev-int.colt.net and llm.aicoedev-int.colt.net here via a
-  # single default_service, so this value also applies to the user-facing API
-  # gateway, where 30s was arguably a reasonable ceiling. That trade was made
-  # knowingly to unblock the LLM path. If the northbound API ever needs a
-  # tighter bound than the LLM gateway, split this into two backend services
-  # and add host-based rules to the url map rather than lowering this back.
-  timeout_sec = 180
+  # single default_service, so this value applies to the user-facing API
+  # gateway AND the LLM gateway. Raising it to 360s therefore also loosens the
+  # southbound ceiling; that path stays correctly ordered because its Vertex
+  # target's 120s still governs, but the trade is deliberate and worth knowing
+  # before anyone tunes it again. If the northbound API ever needs a tighter
+  # bound than the LLM gateway, split this into two backend services and add
+  # host-based rules to the url map rather than lowering this back.
+  timeout_sec = 360
 
   backend {
     group = google_compute_region_network_endpoint_group.apigee_psc.id

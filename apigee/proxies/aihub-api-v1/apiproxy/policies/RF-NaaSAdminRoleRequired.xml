@@ -1,0 +1,36 @@
+<RaiseFault name="RF-NaaSAdminRoleRequired">
+  <DisplayName>403 — missing NaaS.Admin role</DisplayName>
+  <!--
+    The only endpoint on this platform where Apigee enforces a SECOND, finer
+    role on a sub-path. Everywhere else one role gates a whole use-case
+    prefix and the application decides the rest.
+
+    Why the exception: POST /api/naas/v1/admin/tickets/{id}/approve approves a
+    real Ethernet Port order — irreversible and commercially binding. Until
+    this policy existed, the only thing standing between a NaaS user and that
+    action was the ADMIN_ROLES value in naas-agent-api's /secrets/.env
+    payload. That fails closed if empty (an empty role intersection raises
+    403), but set WRONG — say to NaaS.User — every NaaS user silently becomes
+    an approver and nothing upstream would notice.
+
+    THE COST, STATED PLAINLY: this authorization decision now lives in two
+    places — here, and ADMIN_ROLES in the backend's secret. They must be
+    changed together. That duplication is normally the thing to avoid (see
+    the note beside RF-NaaSRoleRequired in proxies/default.xml); it is
+    accepted here only because of what the endpoint does.
+
+    Platform.Admin is deliberately NOT accepted. It can reach NaaS at all
+    (bff/app/proxy/routes.py and the frontend's ROLE_NAAS both allow it) but
+    approving circuit orders is a narrower right than platform
+    administration. Translation and Sales treat Platform.Admin as a universal
+    pass, so NaaS diverges here on purpose — see docs/25.
+  -->
+  <FaultResponse>
+    <Set>
+      <StatusCode>403</StatusCode>
+      <ReasonPhrase>Forbidden</ReasonPhrase>
+      <Payload contentType="application/json">{"error":"missing_role","required":"NaaS.Admin"}</Payload>
+    </Set>
+  </FaultResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

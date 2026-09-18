@@ -21,6 +21,35 @@
     supplies the real per-backend Cloud Run URLs via ci/deploy-apigee-config.sh).
   -->
   <HTTPTargetConnection>
+    <!--
+      WITHOUT THIS BLOCK THIS TARGET USES APIGEE'S 55s DEFAULT, and that default
+      governed every northbound call — Translation, Sales-Agent and NaaS alike —
+      because it is the tightest limit in a chain whose other layers all allow
+      more:
+
+        this target                         55s   <— was the real ceiling
+        backend Cloud Run timeout          300s
+        LB apigee-northbound timeout_sec   360s   (terraform/5-network-psc)
+        BFF upstream_timeout_seconds       420s   (aihub-ui bff/app/config.py)
+        BFF Cloud Run timeout              600s
+
+      Translation and Sales-Agent largely got away with it: their API call
+      enqueues a Cloud Tasks job and returns immediately, so the slow work
+      happens on a worker that is not on this path. NaaS has no worker — its
+      /chat turn is synchronous SSE chaining MCP tool calls and LLM calls — so
+      55s would have been hit routinely.
+
+      330s sits above the backends' own 300s Cloud Run timeout and below the
+      load balancer's 360s. Every layer outward must stay more generous than
+      the one inside it; change these together or the wall just moves. The
+      same reasoning, and the same mistake, is recorded for the southbound
+      path in terraform/5-network-psc/main.tf:168-198 and BUILD-LOG #43 —
+      that fix set vertex-gemini-target's timeout and the LB, and nobody ever
+      set this northbound equivalent.
+    -->
+    <Properties>
+      <Property name="io.timeout.millis">330000</Property>
+    </Properties>
     <LoadBalancer>
       <Server name="backends"/>
     </LoadBalancer>

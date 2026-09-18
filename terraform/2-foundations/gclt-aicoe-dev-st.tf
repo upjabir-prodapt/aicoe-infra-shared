@@ -38,7 +38,8 @@ module "gclt_aicoe_dev_st_baseline" {
     "translation-api-sa"    = { display_name = "Translation API" }
     "translation-worker-sa" = { display_name = "Translation worker" }
     "salesagent-sa"         = { display_name = "Sales research agent" }
-    "mcp-sa"                = { display_name = "MCP server (future)" }
+    "naas-api-sa"           = { display_name = "NaaS agent API" }
+    "mcp-sa"                = { display_name = "NaaS MCP tool server" }
     "worker-invoker-sa"     = { display_name = "Cloud Tasks, invokes the worker" }
   }
 }
@@ -115,6 +116,19 @@ output "translation_api_sa" {
 output "salesagent_sa" {
   description = "Enqueues to research-jobs. Consumed by stage 6b."
   value       = local.salesagent_sa
+}
+
+# NaaS. Unlike the two above these enqueue nothing -- there is no queue and no
+# worker -- but 6b still needs both emails to name the runtime identities in
+# its backend-service wiring, and the output name IS the downstream variable
+# name, so they are published the same way.
+output "naas_api_sa" {
+  description = "naas-agent-api's runtime identity. Consumed by stage 6b."
+  value       = local.naas_api_sa
+}
+output "mcp_sa" {
+  description = "naas-mcp-server's runtime identity. Consumed by stage 6b."
+  value       = local.mcp_sa
 }
 
 # ── data plane · job records and artefacts ──────────────────────────────
@@ -327,13 +341,22 @@ locals {
   translation_api_sa      = module.gclt_aicoe_dev_st_baseline.service_accounts["translation-api-sa"]
   translation_worker_sa   = module.gclt_aicoe_dev_st_baseline.service_accounts["translation-worker-sa"]
   salesagent_sa           = module.gclt_aicoe_dev_st_baseline.service_accounts["salesagent-sa"]
+  naas_api_sa             = module.gclt_aicoe_dev_st_baseline.service_accounts["naas-api-sa"]
+  mcp_sa                  = module.gclt_aicoe_dev_st_baseline.service_accounts["mcp-sa"]
   worker_invoker_sa_email = module.gclt_aicoe_dev_st_baseline.service_accounts["worker-invoker-sa"]
 
+  # NaaS has no worker: naas-agent-api answers POST /chat synchronously as an
+  # SSE stream, so there is no *-worker-env pair here the way Translation and
+  # Sales-Agent have. naas-mcp-server gets its own container because it holds
+  # the Colt On-Demand and Comcast CodeBig2 credentials, which naas-agent-api
+  # must never see -- the whole point of putting the tools behind MCP.
   gclt_aicoe_dev_st_app_secrets = {
     "translation-api-env"    = local.translation_api_sa
     "translation-worker-env" = local.translation_worker_sa
     "sales-agent-api-env"    = local.salesagent_sa
     "sales-agent-worker-env" = local.salesagent_sa
+    "naas-agent-api-env"     = local.naas_api_sa
+    "naas-mcp-server-env"    = local.mcp_sa
   }
 }
 
@@ -493,6 +516,19 @@ resource "google_project_iam_member" "translation_worker_telemetry_traces_writer
   member  = "serviceAccount:${local.translation_worker_sa}"
 }
 
+# naas-agent-api ships the same OTel setup and would fail the same way: its
+# Settings default OTEL_ENABLED to true with OTEL_EXPORTER_OTLP_ENDPOINT =
+# https://telemetry.googleapis.com/v1/traces. Granted up front rather than
+# after another silent span-dropping period.
+#
+# No equivalent grant for mcp-sa: naas-mcp-server has no OTel instrumentation
+# at all. Add one here if that changes.
+resource "google_project_iam_member" "naas_api_telemetry_traces_writer" {
+  project = var.gclt_aicoe_dev_st_project_id
+  role    = "roles/telemetry.tracesWriter"
+  member  = "serviceAccount:${local.naas_api_sa}"
+}
+
 # translation-api-sa needs to sign its own GCS download URLs on Cloud Run,
 # which has no private key -- generate_signed_url() falls back to the IAM
 # Credentials API's signBlob, delegated via iam.Signer
@@ -549,7 +585,7 @@ resource "google_project_iam_member" "st_ci_run_admin" {
   member  = "serviceAccount:${local.st_tf_deployer}"
 }
 
-# actAs on each of the three runtime identities `gcloud run deploy` targets.
+# actAs on each of the runtime identities `gcloud run deploy` targets.
 # Scoped per-SA, not project-wide: tf-deployer must not be able to run as
 # arbitrary other service accounts in this project.
 resource "google_service_account_iam_member" "st_ci_run_as" {
@@ -557,6 +593,8 @@ resource "google_service_account_iam_member" "st_ci_run_as" {
     local.translation_api_sa,
     local.translation_worker_sa,
     local.salesagent_sa,
+    local.naas_api_sa,
+    local.mcp_sa,
   ])
   service_account_id = "projects/${var.gclt_aicoe_dev_st_project_id}/serviceAccounts/${each.value}"
   role               = "roles/iam.serviceAccountUser"

@@ -1,0 +1,23 @@
+<Quota name="Q-Sales-DeptUserDay" type="calendar">
+  <DisplayName>Sales -- Tier 3: one user, within their department, within this use case, per day</DisplayName>
+  <!--
+    Innermost tier: department:oid (built once by AM-QuotaKeys.xml, shared
+    across all three use cases' Tier-3 policies), scoped to Sales by this
+    policy's own Step Condition — the same use-case-separation mechanism as
+    Tiers 1 and 2.
+
+    This REPLACES the old platform-wide Q-PerDay (removed): that policy keyed
+    on jwt_oid alone, so one person's Translation and NaaS usage shared a
+    single daily counter. Nested per use case, that is no longer true —
+    each is now its own budget, itself bounded above by this use case's
+    Tier-2 department cap and Tier-1 use-case cap regardless of how the
+    person divides their usage.
+  -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>day</TimeUnit>
+  <Allow count="400" countRef="verifyapikey.VA-ApiKey.apiproduct.sales_dept_user_req_per_day"/>
+  <Identifier ref="dept_user_key"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

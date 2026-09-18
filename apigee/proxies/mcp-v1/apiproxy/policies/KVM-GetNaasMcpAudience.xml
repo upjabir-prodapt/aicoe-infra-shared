@@ -1,0 +1,16 @@
+<KeyValueMapOperations name="KVM-GetNaasMcpAudience" mapIdentifier="backend-audiences">
+  <DisplayName>Look up naas-mcp-server's GoogleIDToken audience</DisplayName>
+  <Scope>environment</Scope>
+  <!--
+    Key is "naas-mcp", not "mcp". The backend-audiences KVM is SHARED with
+    aihub-api-v1, which already owns the key "naas" for naas-agent-api, so
+    every MCP server needs a distinct "<usecase>-mcp" key. A second
+    MCP-backed use case adds "<usecase>-mcp" here and its own copy of this
+    policy, gated on its own path segment; it never edits this file.
+  -->
+  <Get assignTo="audience" index="1">
+    <Key>
+      <Parameter>naas-mcp</Parameter>
+    </Key>
+  </Get>
+</KeyValueMapOperations>

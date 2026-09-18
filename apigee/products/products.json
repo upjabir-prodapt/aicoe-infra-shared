@@ -2,7 +2,7 @@
   {
     "name": "aicoe-standard",
     "displayName": "AI CoE Standard",
-    "description": "Gates the int (internal) proxy fronting Translation, Sales-Agent And Other Use-cases for aihub-bff. Internal service-to-service only, no developer portal.",
+    "description": "Gates the int (internal) proxy fronting Translation, Sales-Agent And Other Use-cases for aihub-bff. Internal service-to-service only, no developer portal. Per-use-case daily quota hierarchy added 2026-09-17: <usecase>_req_per_day (Tier 1, the whole use case's daily ceiling), <usecase>_dept_req_per_day (Tier 2, one department within that use case), <usecase>_dept_user_req_per_day (Tier 3, one user within that department). Read by the Q-<Case>-* policies in aihub-api-v1's PreFlow, each gated on its own path Condition -- use-case separation comes from which policy fires, not from these attribute names alone. Values are provisional defaults, not measured traffic, and their sum is deliberately higher than the old single shared req_per_day this replaces -- see BUILD-LOG.md for the sizing record. req_per_day (flat 5000/day) REMOVED 2026-09-17 -- its only consumer, Q-PerDay, was replaced by the tiered attributes above; left in place it would have been a second dead attribute nobody reads, the exact trap jwt_department turned out to be on this same proxy.",
     "approvalType": "auto",
     "environments": [
       "int"
@@ -20,12 +20,44 @@
         "value": "60"
       },
       {
-        "name": "req_per_day",
+        "name": "llm_tokens_per_day",
+        "value": "200000"
+      },
+      {
+        "name": "translation_req_per_day",
         "value": "5000"
       },
       {
-        "name": "llm_tokens_per_day",
-        "value": "200000"
+        "name": "translation_dept_req_per_day",
+        "value": "2000"
+      },
+      {
+        "name": "translation_dept_user_req_per_day",
+        "value": "500"
+      },
+      {
+        "name": "sales_req_per_day",
+        "value": "3000"
+      },
+      {
+        "name": "sales_dept_req_per_day",
+        "value": "1500"
+      },
+      {
+        "name": "sales_dept_user_req_per_day",
+        "value": "400"
+      },
+      {
+        "name": "naas_req_per_day",
+        "value": "4000"
+      },
+      {
+        "name": "naas_dept_req_per_day",
+        "value": "1500"
+      },
+      {
+        "name": "naas_dept_user_req_per_day",
+        "value": "300"
       }
     ],
     "proxies": [
@@ -33,9 +65,46 @@
     ]
   },
   {
+    "name": "aicoe-mcp",
+    "displayName": "AI CoE MCP Tool Server",
+    "description": "Gates the mcp-v1 proxy fronting naas-mcp-server. Service-to-service only, no developer portal -- the caller is naas-agent-api holding an API key, not a browser, and there is no user JWT on this hop for Apigee to verify. naas-agent-api still forwards the end user's x-colt-user-oid / x-colt-user-department as plain headers so per-user and per-department quotas are possible; treat them as asserted by that service, not proven by Apigee. Attached to one developer app per calling service (naas-agent), deliberately: a leaked key then exposes one service's quota rather than the platform's. req_per_min is read by mcp-v1's Q-PerMinute via countRef; that quota is keyed on client_id, not on a user oid, because there is no verifiable user identity here. Kept separate from aicoe-standard so that internal tool traffic and browser traffic do not draw down related counters and do not share fault-rule behaviour. Two additional Quota policies key on the raw x-colt-user-oid / x-colt-user-department headers naas-agent-api must forward (there is no user JWT on this hop to verify anything against): req_per_min_per_user caps any one end user's share of the app's overall req_per_min budget, req_per_day_per_department caps runaway spend from one business unit. Both are cost/abuse controls, not a security boundary -- same status as x-colt-user-department everywhere else on this platform (docs/23 section 4.3). Per-use-case daily quota hierarchy added 2026-09-17, generalised (not NaaS-specific): req_per_day (Tier 1, whole calling app's daily ceiling, Identifier=client_id), req_per_day_per_department (Tier 2, one department within that app, Identifier={client_id}:{department}), req_per_day_per_user (Tier 3, one user within that department within that app, Identifier={client_id}:{department}:{oid}). req_per_min_per_user REMOVED -- Q-PerUser moved from a flat per-minute rate check to the Tier-3 daily budget above; the old attribute had no remaining consumer. All three numeric limits are shared PRODUCT-level defaults today, applying identically to every calling app -- the counters are already fully separated per app via client_id in every Identifier, so a future MCP-calling use case needs no proxy or product change to get its own buckets, only its own developer app. Giving a future use case a DIFFERENT number (not just a different bucket) would mean moving these to developer-app attributes, the same technique llm-gateway-v1's PTL-PromptTokenLimit already uses -- not done here, deliberately, since only one use case exists to size against.",
+    "approvalType": "auto",
+    "environments": [
+      "int"
+    ],
+    "quota": "20000",
+    "quotaInterval": "1",
+    "quotaTimeUnit": "day",
+    "attributes": [
+      {
+        "name": "access",
+        "value": "internal"
+      },
+      {
+        "name": "req_per_min",
+        "value": "120"
+      },
+      {
+        "name": "req_per_day",
+        "value": "20000"
+      },
+      {
+        "name": "req_per_day_per_department",
+        "value": "5000"
+      },
+      {
+        "name": "req_per_day_per_user",
+        "value": "2000"
+      }
+    ],
+    "proxies": [
+      "mcp-v1"
+    ]
+  },
+  {
     "name": "aicoe-llm",
     "displayName": "AI CoE LLM Gateway",
-    "description": "Gates the llm gateway (Vertex AI via apigee-llm-runtime) for Translation's and Sales-Agent's own outbound model calls. Internal service-to-service only, no developer portal. Quota attributes here are read by llm-gateway-v1's Q-* policies. llmOperationGroup below IS the enforced model allow-list: Apigee's own credential/operation matching rejects any request whose path+method matches no entry, before any policy in the proxy runs. The vestigial allowed-models KVM enforces nothing and must not be used for this. NOTE: this product intentionally has no top-level \"proxies\" list -- Apigee rejects a product that sets both that and an llmOperationGroup; the proxy is named by apiSource instead. The three models are not a guess: they are the union actually reachable from Translation's model_selection.json in GCS (150 routes, fallback chains plus A/B variants). gemini-3.5-flash alone would reject every fallback, and fallbacks fire exactly when the primary is struggling. Claude is deliberately absent (D-C) and must also be removed from model_selection.json, or those routes fail here.",
+    "description": "Gates the llm gateway (Vertex AI via apigee-llm-runtime) for Translation's and Sales-Agent's own outbound model calls. Internal service-to-service only, no developer portal. Quota attributes here are read by llm-gateway-v1's Q-* policies. llmOperationGroup below IS the enforced model allow-list: Apigee's own credential/operation matching rejects any request whose path+method matches no entry, before any policy in the proxy runs. The vestigial allowed-models KVM enforces nothing and must not be used for this. NOTE: this product intentionally has no top-level \"proxies\" list -- Apigee rejects a product that sets both that and an llmOperationGroup; the proxy is named by apiSource instead. The three models are not a guess: they are the union actually reachable from Translation's model_selection.json in GCS (150 routes, fallback chains plus A/B variants). gemini-3.5-flash alone would reject every fallback, and fallbacks fire exactly when the primary is struggling. Claude is deliberately absent (D-C) and must also be removed from model_selection.json, or those routes fail here. Request-count quota hierarchy added 2026-09-17: Q-PerAppDay (Tier 1, whole use case's daily request ceiling, keyed on client_id, reading a DEVELOPER-APP attribute req_per_day_app -- not a product attribute, so each of Translation/Sales-Agent/NaaS can be tuned independently), Q-PerDepartmentPerDay (Tier 2, re-keyed onto llm_dept_app so one department's usage is now counted separately per use case), Q-PerUserPerMinute (Tier 3, re-keyed onto llm_dept_app_user). The TOKEN budget (llmQuota below, enforced by LTQ-Enforce/LTQ-Count) is DELIBERATELY NOT tiered the same way -- re-keying that pair onto anything narrower than department would multiply the department's real approved hourly token spend by however many apps are active, which is a numeric sizing decision requiring explicit sign-off, not a side effect of this change. See BUILD-LOG.md. Token BUDGET nested per use case 2026-09-17, on explicit request: LTQ-App-Enforce/Count (Tier 1) reuse llmQuota below verbatim via UseQuotaConfigInAPIProduct, keyed on client_id -- every use case gets its OWN FULL 25,000,000 tokens/hour, not a slice of one shared pool, so a department's real total possible hourly spend is now up to 3x this number when all three use cases are active. That increase was an explicit decision, not a side effect. LTQ-Enforce/Count (Tier 2, re-keyed onto llm_dept_app) read the new llm_tokens_per_hour_dept attribute instead of llmQuota, since UseQuotaConfigInAPIProduct can only serve one tier. LTQ-User-Enforce/Count (Tier 3, new, keyed on llm_dept_app_user) read llm_tokens_per_hour_user. All three numbers are provisional defaults, not measured traffic -- see BUILD-LOG.md.",
     "approvalType": "auto",
     "environments": [
       "llm"
@@ -55,6 +124,14 @@
       {
         "name": "req_per_day_per_department",
         "value": "200000"
+      },
+      {
+        "name": "llm_tokens_per_hour_dept",
+        "value": "10000000"
+      },
+      {
+        "name": "llm_tokens_per_hour_user",
+        "value": "2000000"
       }
     ],
     "llmOperationGroup": {

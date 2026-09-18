@@ -1,0 +1,81 @@
+<ProxyEndpoint name="default">
+  <HTTPProxyConnection>
+    <!--
+      Shares the aihub-int environment group's hostname
+      (aihub-api.aicoedev-int.colt.net), so this proxy needs no new IP,
+      certificate, DNS record, environment group or Apigee environment — and
+      no change to stage 4, which is slow and largely irreversible. The
+      backend's MCP_GATEWAY_BASE_URL is therefore
+      https://aihub-api.aicoedev-int.colt.net/mcp
+    -->
+    <BasePath>/mcp</BasePath>
+  </HTTPProxyConnection>
+
+  <FaultRules>
+    <FaultRule name="rate-limit-to-429">
+      <Step><Name>AM-RateLimit429</Name></Step>
+      <Condition>(fault.name = "SpikeArrestViolation") or (fault.name = "QuotaViolation")</Condition>
+    </FaultRule>
+  </FaultRules>
+
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step><Name>SA-SpikeArrest</Name></Step>
+      <!--
+        No VJ-EntraToken and no AM-UserClaims here, and that is the whole
+        reason this is a separate proxy rather than a path inside
+        aihub-api-v1. The caller is naas-agent-api, a service. aihub-api-v1
+        already consumed the user's Entra JWT and replaced it with
+        x-colt-user-* headers, so the backend holds no token to forward and a
+        JWT policy on this hop would reject every request. Conditional auth
+        inside the shared browser-facing proxy was the alternative and is the
+        one edit there that no CI gate would catch.
+      -->
+      <Step><Name>VA-ApiKey</Name></Step>
+      <Step><Name>AM-QuotaKeys</Name></Step>
+      <Step><Name>Q-PerMinute</Name></Step>
+      <Step><Name>Q-PerUsecaseDay</Name></Step>
+      <Step><Name>Q-PerDepartment</Name></Step>
+      <Step><Name>Q-PerUser</Name></Step>
+      <!--
+        One conditional lookup per MCP-backed use case, gated on its own path
+        segment under the shared /mcp BasePath — the same idiom aihub-api-v1
+        uses for its three KVM-Get*Audience steps. A second use case adds one
+        more Step here plus its own KVM key; nothing else in this file moves.
+
+        Both forms of the condition are required. MCP's Streamable HTTP
+        transport POSTs to the use case's base path itself with nothing after
+        it, so pathsuffix is exactly "/naas" on a real call — and
+        MatchesPath "/naas/**" does NOT match that. Dropping the equality half
+        breaks every MCP request while looking correct.
+      -->
+      <Step>
+        <Name>KVM-GetNaasMcpAudience</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/naas/**" OR proxy.pathsuffix = "/naas"</Condition>
+      </Step>
+      <Step><Name>AM-StripClientHeaders</Name></Step>
+    </Request>
+    <Response/>
+  </PreFlow>
+
+  <!--
+    Per-use-case routing under one shared BasePath: /mcp/naas for NaaS's
+    toolbox, /mcp/<other> for a future one. The proxy is NOT a catch-all —
+    an unrecognised segment falls to no-match below and 404s, which is the
+    correct fail-closed behaviour and the reason a new use case must add its
+    segment here explicitly rather than inheriting access.
+
+    Both condition forms are required: MCP posts to "/mcp/naas" exactly, so
+    pathsuffix is "/naas" with nothing after it, which MatchesPath "/naas/**"
+    does not match. The same two-form requirement appears again in the
+    ingress url map (terraform/6-workloads/6c-gclt-aicoe-dev-ingress/main.tf),
+    where it fails OPEN rather than closed.
+  -->
+  <RouteRule name="mcp">
+    <Condition>proxy.pathsuffix MatchesPath "/naas/**" OR proxy.pathsuffix = "/naas"</Condition>
+    <TargetEndpoint>mcp</TargetEndpoint>
+  </RouteRule>
+  <RouteRule name="no-match">
+    <!-- no condition = default; returns nothing -> 404 -->
+  </RouteRule>
+</ProxyEndpoint>

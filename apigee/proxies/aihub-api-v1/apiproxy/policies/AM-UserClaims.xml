@@ -28,9 +28,17 @@
     <Name>jwt_roles</Name>
     <Ref>jwt.VJ-EntraToken.claim.roles</Ref>
   </AssignVariable>
-  <AssignVariable>
-    <Name>jwt_department</Name>
-    <Ref>jwt.VJ-EntraToken.decoded.claim.department</Ref>
-  </AssignVariable>
+  <!--
+    jwt_department deliberately removed 2026-09-17. It read
+    jwt.VJ-EntraToken.decoded.claim.department, but per docs/19 (Option A,
+    the one actually implemented), Entra tokens never carry a department
+    claim at all — the BFF fetches it from Microsoft Graph separately and
+    injects it as the plain x-colt-user-department request header instead.
+    This AssignVariable therefore always resolved empty and had no
+    consumer anywhere in this bundle; it looked wired up but never was.
+    If a policy here ever needs department, read
+    request.header.x-colt-user-department directly (see mcp-v1's
+    Q-PerDepartment for the pattern) — do not resurrect this claim path.
+  -->
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
 </AssignMessage>

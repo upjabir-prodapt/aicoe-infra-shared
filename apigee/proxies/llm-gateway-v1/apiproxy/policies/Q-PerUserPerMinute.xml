@@ -12,9 +12,16 @@
        req_per_min_per_user attribute, a countRef-only Quota does not fail — it
        behaves unpredictably. This pins a known floor instead. -->
   <Allow count="60" countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_min_per_user"/>
-  <!-- Keyed on the asserted user, not the app: both repos share one app per
-       service, so an app-keyed quota could not distinguish users at all. -->
-  <Identifier ref="llm_user_oid"/>
+  <!--
+    RE-KEYED 2026-09-17 from llm_user_oid alone to llm_dept_app_user
+    ("department:client_id:oid", built by AM-Identity.xml). This is now
+    Tier 3 of a three-tier daily... actually per-minute rate hierarchy:
+    quota(use case, below in Q-PerAppDay) x quota(department within it, in
+    Q-PerDepartmentPerDay) x quota(user within that department, here).
+    Previously one person's Translation and NaaS calls shared this single
+    per-minute counter; now each use case gets its own.
+  -->
+  <Identifier ref="llm_dept_app_user"/>
   <Distributed>true</Distributed>
   <Synchronous>true</Synchronous>
 </Quota>

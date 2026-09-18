@@ -1,15 +1,28 @@
 <LLMTokenQuota name="LTQ-Enforce" continueOnError="false" enabled="true">
-  <DisplayName>LLM Token Quota (enforce)</DisplayName>
+  <DisplayName>LLM Token Quota Tier 2 -- one department within this use case (enforce)</DisplayName>
   <Operation>EnforceOnly</Operation>
   <!--
-    Quota values come from the aicoe-llm product's native "LLM token quota
-    limit" field and its per-model LLM Operations, NOT from elements here.
-    Per Google's own precedence rule the product wins when both are set, so
-    duplicating type/Interval/TimeUnit/Allow in this file would achieve
-    nothing except a second place to drift. See docs/21 §4.4.
+    RE-PURPOSED 2026-09-17 as Tier 2 of quota(use case, LTQ-App-*) x
+    quota(department within it, HERE) x quota(user within that department,
+    LTQ-User-*). Previously the ONLY token check on this proxy, Identified
+    by llm_user_department alone (one shared 25,000,000/hour ceiling per
+    department, across all three use cases combined).
+
+    Re-keyed to llm_dept_app (department:client_id, already computed by
+    AM-Identity.xml for PTL-PromptTokenLimit) and switched OFF
+    UseQuotaConfigInAPIProduct — that mechanism is now Tier 1's
+    (LTQ-App-Enforce.xml reads the product's one llmQuota field so every use
+    case gets its own full 25,000,000/hour). Tier 2 needs its own, smaller,
+    genuinely-nested number, so it reads a product ATTRIBUTE instead,
+    the same Allow/countRef shape as every plain Quota policy elsewhere in
+    this codebase. See LTQ-User-Enforce.xml's comment on this being the
+    first exercise of that element combination on an LLMTokenQuota policy —
+    unverified against a live deploy.
   -->
-  <UseQuotaConfigInAPIProduct stepName="VA-ApiKey"/>
-  <Identifier ref="llm_user_department"/>
+  <Allow count="10000000" countRef="verifyapikey.VA-ApiKey.apiproduct.llm_tokens_per_hour_dept"/>
+  <Interval>1</Interval>
+  <TimeUnit>hour</TimeUnit>
+  <Identifier ref="llm_dept_app"/>
   <LLMModelSource>{llm.model}</LLMModelSource>
   <!--
     Required even in EnforceOnly. Omitting it does NOT mean there is no usage source:

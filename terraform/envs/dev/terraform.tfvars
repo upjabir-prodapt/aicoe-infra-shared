@@ -61,6 +61,15 @@ allowed_repositories = [
   "code-scanning-toolset/shared-translation",
   "code-scanning-toolset/shared-salesagent",
   "code-scanning-toolset/shared-aihub-ui",
+  # NaaS, added 2026-09-17. Note these two do NOT carry the shared-* prefix
+  # the four above do -- they are the real paths as given by the platform
+  # team, not a guess. Lowercased to match the group path proven by the
+  # 2026-09-06 CI failure above; if either repo's first pipeline fails with
+  # "unauthorized_client: ... rejected by the attribute condition", the
+  # capitalisation of the group segment is the first thing to check, since
+  # this condition is an exact string match on attribute.project_path.
+  "code-scanning-toolset/naas-platform-agent-backend",
+  "code-scanning-toolset/naas-platform-agent-mcp",
 ]
 
 # The pool that actually federates Entra for this platform. Two decoys exist

@@ -30,14 +30,17 @@
         per-user and per-department limits would silently become global ones.
       -->
       <Step><Name>AM-Identity</Name></Step>
-      <Step><Name>Q-PerUserPerMinute</Name></Step>
+      <Step><Name>Q-PerAppDay</Name></Step>
       <Step><Name>Q-PerDepartmentPerDay</Name></Step>
+      <Step><Name>Q-PerUserPerMinute</Name></Step>
       <Step><Name>PTL-PromptTokenLimit</Name></Step>
       <!-- Must precede both LTQ policies: they need a model name and the
            request body has none (the model is in the URL). See
            EV-ModelFromPath.xml. -->
       <Step><Name>EV-ModelFromPath</Name></Step>
+      <Step><Name>LTQ-App-Enforce</Name></Step>
       <Step><Name>LTQ-Enforce</Name></Step>
+      <Step><Name>LTQ-User-Enforce</Name></Step>
       <!--
         MODEL ARMOR IS REMOVED FROM THIS FLOW (2026-09-15). Three request-flow
         steps used to sit here:
@@ -87,7 +90,9 @@
            work against the Vertex body, so it may have been counting zero on
            every call. See EV-TokenUsage.xml. -->
       <Step><Name>EV-TokenUsage</Name></Step>
+      <Step><Name>LTQ-App-Count</Name></Step>
       <Step><Name>LTQ-Count</Name></Step>
+      <Step><Name>LTQ-User-Count</Name></Step>
       <!-- Retained deliberately while Model Armor is out: it now writes
            "disabled" into every scan_* field rather than a verdict, which
            keeps the llm-gateway-attribution log schema stable and makes the

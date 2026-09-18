@@ -1,0 +1,26 @@
+<LLMTokenQuota name="LTQ-App-Enforce" continueOnError="false" enabled="true">
+  <DisplayName>LLM Token Quota Tier 1 -- whole use case (enforce)</DisplayName>
+  <Operation>EnforceOnly</Operation>
+  <!--
+    Added 2026-09-17, Tier 1 of quota(use case) x quota(department within it,
+    LTQ-Dept-*) x quota(user within that department, LTQ-User-*).
+
+    Identified by client_id alone (Translation/Sales-Agent/NaaS each hold
+    their own developer app), still reading the aicoe-llm product's ONE
+    llmQuota field (25,000,000/1/hour) via UseQuotaConfigInAPIProduct. That
+    combination is exactly what was asked for: EVERY use case gets its OWN
+    FULL 25,000,000 tokens/hour, not a slice of one shared 25M pool —
+    Apigee partitions the counter by Identifier, and the same configured
+    ceiling applies to every partition. This DELIBERATELY raises the
+    department's total possible hourly spend to up to 3x25,000,000 if all
+    three use cases are simultaneously active — an explicit, approved
+    decision, not a side effect. See BUILD-LOG.md.
+  -->
+  <UseQuotaConfigInAPIProduct stepName="VA-ApiKey"/>
+  <Identifier ref="verifyapikey.VA-ApiKey.client_id"/>
+  <LLMModelSource>{llm.model}</LLMModelSource>
+  <!-- See LTQ-Dept-Enforce.xml's comment on this element — required even in
+       EnforceOnly, or every call dies with an UnresolvedVariable fault in the
+       request flow (BUILD-LOG.md #39). -->
+  <LLMTokenUsageSource>0</LLMTokenUsageSource>
+</LLMTokenQuota>

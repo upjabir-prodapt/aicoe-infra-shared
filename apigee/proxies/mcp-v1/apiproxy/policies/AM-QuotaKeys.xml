@@ -1,0 +1,24 @@
+<AssignMessage name="AM-QuotaKeys">
+  <DisplayName>Build the per-calling-app quota composite keys</DisplayName>
+  <!--
+    GENERALISED, not NaaS-specific: client_id is whichever developer app's
+    key passed VA-ApiKey, so this needs zero changes when a second use case
+    gets its own MCP server. The identifier space naturally partitions by
+    calling app, the same way one credential per calling service already
+    keeps blast radius contained everywhere else on this platform (docs/21).
+
+    dept_key nests department INSIDE the calling app: two apps sharing one
+    department's traffic get two separate counters, not one shared department
+    total. dept_user_key nests one further: one person's usage within their
+    department within THIS app.
+  -->
+  <AssignVariable>
+    <Name>mcp_dept_key</Name>
+    <Template>{verifyapikey.VA-ApiKey.client_id}:{request.header.x-colt-user-department}</Template>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>mcp_dept_user_key</Name>
+    <Template>{mcp_dept_key}:{request.header.x-colt-user-oid}</Template>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

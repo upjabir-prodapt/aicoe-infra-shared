@@ -1,0 +1,14 @@
+<LLMTokenQuota name="LTQ-App-Count" continueOnError="true" enabled="true">
+  <DisplayName>LLM Token Quota Tier 1 -- whole use case (count)</DisplayName>
+  <Operation>CountOnly</Operation>
+  <!--
+    Matched pair with LTQ-App-Enforce.xml — MUST share its exact Identifier,
+    or this fills a different bucket than the one Enforce checks. See
+    LTQ-Dept-Count.xml's comment for why continueOnError stays true and why
+    the usage source is {llm.total_tokens} (total, not output-only tokens).
+  -->
+  <UseQuotaConfigInAPIProduct stepName="VA-ApiKey"/>
+  <Identifier ref="verifyapikey.VA-ApiKey.client_id"/>
+  <LLMTokenUsageSource>{llm.total_tokens}</LLMTokenUsageSource>
+  <LLMModelSource>{llm.model}</LLMModelSource>
+</LLMTokenQuota>

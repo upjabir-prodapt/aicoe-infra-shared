@@ -1,0 +1,30 @@
+<Quota name="Q-PerAppDay" type="calendar">
+  <DisplayName>Tier 1: whole use case (calling app), per day</DisplayName>
+  <!--
+    Outer tier of quota(use case) x quota(department within it, see
+    Q-PerDepartmentPerDay) x quota(user within that department, see
+    Q-PerUserPerMinute). Identified by client_id alone: each of Translation,
+    Sales-Agent and NaaS holds its own developer app on aicoe-llm, so this
+    partitions automatically — no path condition needed the way
+    aihub-api-v1's equivalent tier does, because this proxy's callers are
+    genuinely distinct credentials, not one shared app on different paths.
+
+    Reads a developer-app attribute, not a product attribute — same pattern
+    PTL-PromptTokenLimit already uses — so each app's own ceiling can be
+    tuned independently in the console without touching this file or the
+    shared aicoe-llm product. The literal fallback is a provisional default,
+    not measured traffic; size it against real usage before trusting it. See
+    BUILD-LOG.md.
+
+    Deliberately does NOT touch the token budget (LTQ-Enforce/LTQ-Count) —
+    see AM-Identity.xml's comment on llm_dept_app_user for why that pair
+    stays keyed on department alone for now.
+  -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>day</TimeUnit>
+  <Allow count="50000" countRef="verifyapikey.VA-ApiKey.developer.app.attribute.req_per_day_app"/>
+  <Identifier ref="verifyapikey.VA-ApiKey.client_id"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

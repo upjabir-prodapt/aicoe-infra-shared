@@ -1,0 +1,23 @@
+<AssignMessage name="AM-StripClientHeaders">
+  <DisplayName>Strip caller-supplied identity and credential headers</DisplayName>
+  <!--
+    naas-mcp-server does not read x-colt-user-* at all — it authorizes solely
+    on Apigee's Google ID token. These are removed anyway, for two reasons:
+    a caller must not be able to smuggle an identity claim to a future version
+    of the tool server that does read them, and x-apikey must not be forwarded
+    past the gateway that consumed it.
+  -->
+  <Remove>
+    <Headers>
+      <Header name="x-apikey"/>
+      <Header name="x-colt-user-oid"/>
+      <Header name="x-colt-user-email"/>
+      <Header name="x-colt-user-roles"/>
+      <Header name="x-colt-user-department"/>
+      <Header name="x-colt-user-company"/>
+      <Header name="Authorization"/>
+    </Headers>
+  </Remove>
+  <AssignTo createNew="false" type="request"/>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

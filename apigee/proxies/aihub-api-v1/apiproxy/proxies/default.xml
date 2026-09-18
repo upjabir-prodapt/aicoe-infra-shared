@@ -15,6 +15,7 @@
       <Step><Name>SA-SpikeArrest</Name></Step>
       <Step><Name>VJ-EntraToken</Name></Step>
       <Step><Name>AM-UserClaims</Name></Step>
+      <Step><Name>AM-QuotaKeys</Name></Step>
       <!--
         jwt_roles !contains "..." fails live deployment:
         "expressions.parser.OperandsShouldBeLogical: Both the operands for
@@ -33,9 +34,93 @@
         <Name>RF-SalesRoleRequired</Name>
         <Condition>proxy.pathsuffix MatchesPath "/sales/**" AND NOT (jwt_roles Matches "*SalesAgent.User*")</Condition>
       </Step>
+      <!--
+        NaaS.User gates the whole /naas/** prefix and nothing finer. The
+        admin endpoints (/naas/v1/admin/tickets/**) are gated by the
+        APPLICATION, from its ADMIN_ROLES setting, against the roles this
+        proxy forwards in x-colt-user-roles — there is deliberately no
+        RF-NaaSAdminRoleRequired step here. Adding one would put the same
+        authorization decision in two places that can disagree.
+      -->
+      <Step>
+        <Name>RF-NaaSRoleRequired</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/naas/**" AND NOT (jwt_roles Matches "*NaaS.User*")</Condition>
+      </Step>
+      <!--
+        The one place a second, finer role is enforced on a sub-path. Ordinary
+        NaaS endpoints need only NaaS.User above; the admin sub-path also needs
+        NaaS.Admin, because POST /naas/v1/admin/tickets/{id}/approve approves a
+        real, irreversible Ethernet Port order.
+
+        This duplicates a decision the application also makes (its ADMIN_ROLES
+        setting) — accepted deliberately for this endpoint only. The two must
+        change together; see RF-NaaSAdminRoleRequired.xml for the full
+        reasoning and why Platform.Admin is excluded.
+
+        Note the suffix starts at /naas/v1/... because BasePath /api is
+        stripped before pathsuffix is evaluated.
+      -->
+      <Step>
+        <Name>RF-NaaSAdminRoleRequired</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/naas/v1/admin/**" AND NOT (jwt_roles Matches "*NaaS.Admin*")</Condition>
+      </Step>
       <Step><Name>VA-ApiKey</Name></Step>
+      <!--
+        Q-PerMinute stays a flat, platform-wide, per-user RATE guard (abuse
+        protection, not a budget) — unchanged, still shared across all three
+        use cases, same role as SA-SpikeArrest one layer further up.
+
+        The daily BUDGET hierarchy below it replaces the old flat Q-PerDay.
+        Three tiers, nested: quota(use case) x quota(department within it) x
+        quota(user within that department). Only the step matching the
+        request's own path fires, exactly like RF-*RoleRequired above —
+        that Step Condition IS the use-case separation; nothing in Tier 2 or
+        Tier 3's Identifier mentions the use case at all.
+
+        THIS RAISES THE PLATFORM'S TOTAL POSSIBLE DAILY REQUEST VOLUME. The
+        old Q-PerDay was one shared 5,000/day ceiling across all three apps
+        together; the new Tier-1 ceilings are per use case and sum higher
+        than that. Deliberate — see aicoe-standard's product description and
+        BUILD-LOG.md for the sizing record — not a side effect to discover
+        later.
+      -->
       <Step><Name>Q-PerMinute</Name></Step>
-      <Step><Name>Q-PerDay</Name></Step>
+      <Step>
+        <Name>Q-Translation-UsecaseDay</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/translation/**"</Condition>
+      </Step>
+      <Step>
+        <Name>Q-Translation-DeptDay</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/translation/**"</Condition>
+      </Step>
+      <Step>
+        <Name>Q-Translation-DeptUserDay</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/translation/**"</Condition>
+      </Step>
+      <Step>
+        <Name>Q-Sales-UsecaseDay</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/sales/**"</Condition>
+      </Step>
+      <Step>
+        <Name>Q-Sales-DeptDay</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/sales/**"</Condition>
+      </Step>
+      <Step>
+        <Name>Q-Sales-DeptUserDay</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/sales/**"</Condition>
+      </Step>
+      <Step>
+        <Name>Q-Naas-UsecaseDay</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/naas/**"</Condition>
+      </Step>
+      <Step>
+        <Name>Q-Naas-DeptDay</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/naas/**"</Condition>
+      </Step>
+      <Step>
+        <Name>Q-Naas-DeptUserDay</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/naas/**"</Condition>
+      </Step>
       <!--
         Which backend's Google ID token audience to mint is now a runtime
         KVM lookup, not a build-time choice of TargetEndpoint — both paths
@@ -54,13 +139,17 @@
         <Name>KVM-GetSalesAudience</Name>
         <Condition>proxy.pathsuffix MatchesPath "/sales/**"</Condition>
       </Step>
+      <Step>
+        <Name>KVM-GetNaasAudience</Name>
+        <Condition>proxy.pathsuffix MatchesPath "/naas/**"</Condition>
+      </Step>
       <Step><Name>AM-StripAndInjectHeaders</Name></Step>
     </Request>
     <Response/>
   </PreFlow>
 
   <RouteRule name="backends">
-    <Condition>proxy.pathsuffix MatchesPath "/translation/**" OR proxy.pathsuffix MatchesPath "/sales/**"</Condition>
+    <Condition>proxy.pathsuffix MatchesPath "/translation/**" OR proxy.pathsuffix MatchesPath "/sales/**" OR proxy.pathsuffix MatchesPath "/naas/**"</Condition>
     <TargetEndpoint>backends</TargetEndpoint>
   </RouteRule>
   <RouteRule name="no-match">

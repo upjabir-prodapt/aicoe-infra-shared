@@ -9,9 +9,25 @@
        not a meaningful cutover point — calendar quotas only care about the
        time-of-day/interval phase, not the year. -->
   <StartTime>2026-01-01 00:00:00</StartTime>
-  <Interval ref="verifyapikey.VA-ApiKey.apiproduct.developer.app.attribute.req_per_min">1</Interval>
+  <!--
+    Interval is a HARDCODED 1 on purpose. It previously read
+      ref="verifyapikey.VA-ApiKey.apiproduct.developer.app.attribute.req_per_min"
+    which is a malformed mashup of two different variable namespaces
+    (apiproduct.<attr> for product attributes, developer.app.attribute.<attr>
+    for app attributes) and therefore does not resolve — so the policy fell
+    back to the literal 1 and behaved correctly BY ACCIDENT.
+
+    The trap: req_per_min is 60. Anyone "tidying up" that ref into valid
+    syntax would make Interval resolve to 60, and with TimeUnit=minute below
+    the quota silently becomes 60 requests per SIXTY minutes instead of 60 per
+    minute — a 60x tightening that reviews as a cosmetic syntax fix. An
+    interval multiplier and a request count are unrelated quantities that
+    happen to share an attribute name here; nothing should ever wire one to
+    the other.
+  -->
+  <Interval>1</Interval>
   <TimeUnit>minute</TimeUnit>
-  <Allow countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_min"/>
+  <Allow count="60" countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_min"/>
   <Identifier ref="jwt_oid"/>
   <Distributed>true</Distributed>
   <Synchronous>true</Synchronous>

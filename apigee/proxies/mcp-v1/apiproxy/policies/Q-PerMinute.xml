@@ -1,0 +1,24 @@
+<Quota name="Q-PerMinute" type="calendar">
+  <DisplayName>Quota per minute per calling app</DisplayName>
+  <!--
+    StartTime is mandatory for type="calendar" and the deploy fails without
+    it. The literal date is an arbitrary stable anchor, not a cutover point —
+    calendar quotas care about the interval phase, not the year. Same value as
+    aihub-api-v1's Q-PerMinute for consistency.
+  -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>minute</TimeUnit>
+  <Allow count="120" countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_min"/>
+  <!--
+    Keyed on the CLIENT APP, not on a user. aihub-api-v1's equivalent uses
+    Identifier ref="jwt_oid", which does not exist on this hop: there is no
+    user JWT here, and the x-colt-user-* headers that carry the end user's
+    identity downstream are asserted by the BFF, not proven — see docs/23
+    section 4.3. Keying a quota on an unverifiable header would let a caller
+    reset its own counter at will.
+  -->
+  <Identifier ref="verifyapikey.VA-ApiKey.client_id"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>

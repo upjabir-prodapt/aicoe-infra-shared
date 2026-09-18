@@ -1,0 +1,25 @@
+<AssignMessage name="AM-QuotaKeys">
+  <DisplayName>Build the department+user composite quota key</DisplayName>
+  <!--
+    One shared, use-case-agnostic key: department:oid. It does NOT need to
+    know which of /translation, /sales or /naas matched — that separation
+    comes for free from WHICH conditional Q-*-DeptUserDay policy fires below
+    (each is its own Step, gated on its own path Condition, so it is
+    automatically a separate Apigee quota counter regardless of the
+    Identifier value). This policy only has to compute the inner
+    department+user pair once, so every use case's Tier-3 step can share it
+    rather than each recomputing the same string.
+
+    department comes from the plain request header (asserted by the BFF, not
+    a verified claim — same trust level as everywhere else on this
+    platform, see AM-UserClaims.xml's note on why department is not read
+    from the JWT). oid comes from jwt_oid, set by AM-UserClaims from the
+    VERIFIED Entra token, so this key is only as trustworthy as its weaker
+    half.
+  -->
+  <AssignVariable>
+    <Name>dept_user_key</Name>
+    <Template>{request.header.x-colt-user-department}:{jwt_oid}</Template>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

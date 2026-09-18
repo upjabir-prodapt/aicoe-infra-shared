@@ -1,0 +1,26 @@
+<Quota name="Q-PerDepartment" type="calendar">
+  <DisplayName>Tier 2: one department, within this calling app, per day</DisplayName>
+  <!--
+    RE-KEYED 2026-09-17 from "request.header.x-colt-user-department" alone to
+    mcp_dept_key ("{client_id}:{department}", built by AM-QuotaKeys.xml).
+    Previously ANY calling app's traffic for one department shared a single
+    counter — with only one MCP-calling use case (NaaS) that was moot, but
+    it would have silently merged a second use case's department traffic
+    into the first's the moment one existed. Nesting client_id into the key
+    is what makes this proxy's quota model generalise to a future MCP-backed
+    use case with no further edits here.
+
+    Cost-attribution / abuse-containment control, not a security boundary —
+    same status as x-colt-user-department everywhere else on this platform.
+    A department with no header value (or one not yet onboarded) shares the
+    "unattributed" bucket for that app rather than escaping the quota
+    entirely.
+  -->
+  <StartTime>2026-01-01 00:00:00</StartTime>
+  <Interval>1</Interval>
+  <TimeUnit>day</TimeUnit>
+  <Allow count="5000" countRef="verifyapikey.VA-ApiKey.apiproduct.req_per_day_per_department"/>
+  <Identifier ref="mcp_dept_key"/>
+  <Distributed>true</Distributed>
+  <Synchronous>true</Synchronous>
+</Quota>
